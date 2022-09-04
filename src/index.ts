@@ -1,5 +1,5 @@
 // Core
-import colors from 'colors';
+import chalk from 'chalk';
 
 //Utils
 import { getSelectedItem } from './utils/getSelectedItem';
@@ -9,13 +9,13 @@ import { replaceWordCase } from './utils/replaceWordCase';
 import { addRowFiles } from './utils/addRowFiles';
 
 // Types
-import { GenerateOptionsItem } from './types';
+import { TypesGenerateOptionsItem, TypesGetSelectedName } from './types';
 
-export const generateTemplateFiles = async (options: GenerateOptionsItem[]): Promise<void> => {
+const generateTemplateFiles = async (options: TypesGenerateOptionsItem[]): Promise<void> => {
     try {
-        const selectedConfigItem: GenerateOptionsItem = await getSelectedItem(options);
+        const selectedConfigItem: TypesGenerateOptionsItem = await getSelectedItem(options);
 
-        const selectedName: string = await getSelectedName();
+        const selectedName: TypesGetSelectedName = await getSelectedName();
 
         createFiles({
             fromFolderPath: selectedConfigItem.pathTemplate,
@@ -31,7 +31,7 @@ export const generateTemplateFiles = async (options: GenerateOptionsItem[]): Pro
         });
 
         if (selectedConfigItem.addRowFiles) {
-            addRowFiles(selectedConfigItem, selectedName);
+            addRowFiles({ selectedConfigItem, selectedName });
         }
 
 
@@ -39,8 +39,9 @@ export const generateTemplateFiles = async (options: GenerateOptionsItem[]): Pro
             selectedConfigItem.onComplete();
         }
     } catch (error) {
-        console.log(colors.red('error generateTemplateFiles'));
+        console.log(chalk.red('error generateTemplateFiles'));
         console.log(error);
     }
 };
 
+exports.generateTemplateFiles = generateTemplateFiles;

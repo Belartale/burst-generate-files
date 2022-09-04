@@ -18,7 +18,7 @@
         "clean": "rm -rf node_modules"
     },
     "dependencies": {
-        "colors": "^1.4.0",
+        "chalk": "^5.0.1",
         "enquirer": "^2.3.6",
         "node-polyfill-webpack-plugin": "^2.0.1"
     },

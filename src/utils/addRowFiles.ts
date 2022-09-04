@@ -6,10 +6,29 @@ import { resolve } from 'path';
 import { replaceWordCase } from './replaceWordCase';
 
 // Types
-import { GenerateOptionsItem, optionsGenerationRow } from '../types';
+import {
+    TypesOptionsGenerationRow,
+    TypesDefineMarkerAndAddRow,
+    TypesAddRowFiles,
+} from '../types';
 
-export const addRowFiles = (selectedConfigItem: GenerateOptionsItem, selectedName: string) => {
-    selectedConfigItem.addRowFiles?.forEach((element: optionsGenerationRow) => {
+const defineMarkerAndAddRow = ({ element, dataRedFile, tabs }: TypesDefineMarkerAndAddRow) => {
+    const reg = new RegExp(element.marker, 'g');
+    let dataRedFileReplaced = dataRedFile;
+
+    if (typeof element.whereInsertRow === 'undefined'
+                || element.whereInsertRow === 'after marker') {
+        dataRedFileReplaced = dataRedFile.replace(reg, element.marker + '\n' + tabs + element.generationRow);
+    }
+    if (element.whereInsertRow === 'before marker') {
+        dataRedFileReplaced = dataRedFile.replace(reg, element.generationRow + '\n' + tabs + element.marker);
+    }
+
+    return dataRedFileReplaced;
+};
+
+export const addRowFiles = ({ selectedConfigItem, selectedName }: TypesAddRowFiles) => {
+    selectedConfigItem.addRowFiles?.forEach((element: TypesOptionsGenerationRow) => {
         const pathFile = resolve(
             replaceWordCase({
                 string:          selectedConfigItem.outputPath,
@@ -18,11 +37,27 @@ export const addRowFiles = (selectedConfigItem: GenerateOptionsItem, selectedNam
             }) + '/' + element.pathFromOutputPath,
         );
 
+        let tabs: TypesDefineMarkerAndAddRow['tabs'] = '';
+
         const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
-        const reg = new RegExp(element.marker, 'g');
-        const dataRedFileReplaced = dataRedFile.replace(reg, element.marker + ' ' + element.generationRow);
+        dataRedFile
+            .split(/\r?\n/)
+            .forEach((string: string) => {
+                if (string.includes(element.marker)) {
+                    string.split('').every((symbolOfLine) => {
+                        if (symbolOfLine === ' ') {
+                            tabs += ' ';
 
+                            return true;
+                        }
+
+                        return false;
+                    });
+                }
+            });
+
+        const dataRedFileReplaced = defineMarkerAndAddRow({ element, dataRedFile, tabs });
 
         const resultData = replaceWordCase({
             string:          dataRedFileReplaced,
