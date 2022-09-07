@@ -11,25 +11,6 @@ export const getCommonConfig = () => {
     return merge(
         {
             target: 'node',
-        },
-        // {
-        //     resolve: {
-        //         alias: {
-        //             fs: require.resolve('fs'),
-        //         },
-        //     },
-        // },
-        // {
-        //     resolve: {
-        //         fallback: {
-        //             os:     require.resolve('os-browserify/browser'),
-        //             path:   require.resolve('path-browserify'),
-        //             fs:     require.resolve('fs'),
-        //             stream: require.resolve('stream-browserify'),
-        //         },
-        //     },
-        // },
-        {
             entry:  [ SOURCE_DIRECTORY ],
             output: {
                 filename: 'index.js',
@@ -37,6 +18,18 @@ export const getCommonConfig = () => {
             },
             resolve: {
                 extensions: [ '.ts', '.js' ],
+                fallback:   {
+                    // path: require.resolve('path-browserify'),
+                },
+                // fallback:   {
+                //     path:     require.resolve('path-browserify'),
+                //     stream:   require.resolve('stream-browserify'),
+                //     assert:   false,
+                //     buffer:   require.resolve('buffer'),
+                //     fs:       false,
+                //     readline: false,
+                // },
+
             },
         },
         // modules.nodePolyfillPlugin(),

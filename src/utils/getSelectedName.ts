@@ -2,8 +2,9 @@
 import enquirer from 'enquirer';
 
 // Types
+import * as types from '../types';
 
-export const getSelectedName = async (): Promise<string> => {
+export const getSelectedName = async (): Promise<types.GetSelectedName> => {
     const replacerQuestion: any = {
         type:     'input',
         name:     'selectedName',
@@ -17,13 +18,8 @@ export const getSelectedName = async (): Promise<string> => {
 
     const answer: {selectedName: string} = await enquirer.prompt(replacerQuestion);
 
-    const arrAnswer = answer.selectedName.split(' ');
+    const arrAnswer: types.GetSelectedName = answer.selectedName.trim().split(' ');
 
-    for (let index = 1; index < arrAnswer.length; index++) {
-        const str = arrAnswer[ index ];
-        arrAnswer[ index ] = str[ 0 ].toUpperCase() + str.slice(1);
-    }
-
-    return arrAnswer.join('');
+    return arrAnswer;
 };
 

@@ -15,9 +15,5 @@ export const connectHtml = (): Configuration => ({
     ],
 });
 export const nodePolyfillPlugin = (): Configuration => ({
-    plugins: [
-        new NodePolyfillPlugin({
-            includeAliases: [ 'path', 'stream', 'os'  ],
-        }),
-    ],
+    plugins: [ new NodePolyfillPlugin() ],
 });

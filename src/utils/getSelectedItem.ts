@@ -1,15 +1,17 @@
 // Core
 import enquirer from 'enquirer';
+import { resolve } from 'path';
+import { path as PROJECT_ROOT } from 'app-root-path';
 
 // Types
-import { GenerateOptionsItem } from '../types';
+import * as types from '../types';
 
-export const getSelectedItem = async (options: GenerateOptionsItem[]): Promise<GenerateOptionsItem> => {
+export const getSelectedItem = async (options: types.GenerateOptionsItem[]): Promise<types.GenerateOptionsItem> => {
     const templateQuestions = {
         type:    'autocomplete',
         name:    'optionChoice',
         message: 'What do you want to generate?',
-        choices: options.map((configItem: GenerateOptionsItem) => configItem.name),
+        choices: options.map((configItem: types.GenerateOptionsItem) => configItem.name),
         suggest(input: string, choices: string[]) {
             return choices.filter((choice: any) => {
                 return choice.message.toLowerCase().startsWith(input.toLowerCase());
@@ -18,8 +20,14 @@ export const getSelectedItem = async (options: GenerateOptionsItem[]): Promise<G
     };
     const templateAnswers: { optionChoice: string } = await enquirer.prompt(templateQuestions);
 
-    return options.find(
-        (item: GenerateOptionsItem) => item.name === templateAnswers.optionChoice,
-    ) as GenerateOptionsItem;
+    const foundOption = options.find(
+        (item: types.GenerateOptionsItem) => item.name === templateAnswers.optionChoice,
+    ) as types.GenerateOptionsItem;
+
+    return {
+        ...foundOption,
+        pathTemplate: resolve(PROJECT_ROOT, foundOption.pathTemplate),
+        outputPath:   resolve(PROJECT_ROOT, foundOption.outputPath),
+    } as types.GenerateOptionsItem;
 };
 
