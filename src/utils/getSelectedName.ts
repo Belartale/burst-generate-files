@@ -2,9 +2,9 @@
 import enquirer from 'enquirer';
 
 // Types
-import { TypesGetSelectedName } from '../types';
+import * as types from '../types';
 
-export const getSelectedName = async (): Promise<TypesGetSelectedName> => {
+export const getSelectedName = async (): Promise<types.GetSelectedName> => {
     const replacerQuestion: any = {
         type:     'input',
         name:     'selectedName',
@@ -18,7 +18,7 @@ export const getSelectedName = async (): Promise<TypesGetSelectedName> => {
 
     const answer: {selectedName: string} = await enquirer.prompt(replacerQuestion);
 
-    const arrAnswer: TypesGetSelectedName = answer.selectedName.trim().split(' ');
+    const arrAnswer: types.GetSelectedName = answer.selectedName.trim().split(' ');
 
     return arrAnswer;
 };

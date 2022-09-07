@@ -9,13 +9,49 @@ import { replaceWordCase } from './utils/replaceWordCase';
 import { addRowFiles } from './utils/addRowFiles';
 
 // Types
-import { TypesGenerateOptionsItem, TypesGetSelectedName } from './types';
+import * as types from './types';
 
-const generateTemplateFiles = async (options: TypesGenerateOptionsItem[]): Promise<void> => {
+// Cases
+// lorem lorem =>
+// __name__(noCase) === lorem Lorem lorem
+// __name__(pascalCase) === LoremLorem
+// __name__(constantCase) === LOREM_LOREM
+// __name__(kebabCase) === lorem-lorem
+// __name__ === loremLorem
+
+// Example
+// generateTemplateFiles([
+//     {
+//         name:            'Bus: /bus/__entityName__',
+//         stringReplacers: '__entityName__',
+//         pathTemplate:    './scripts/generate/templates/busEntity',
+//         outputPath:      './src/bus/__entityName__',
+//         addRowFiles:     [
+//             {
+//                 pathFromOutputPath: '../../init/redux/index.ts',
+//                 marker:             '// Reducers MarkerGen',
+//                 whereInsertRow:     'after marker',
+//                 generationRow:      'import __entityName__ from \'../../bus/__entityName__/slice\';',
+//                 onceInsertRow:      true,
+//             },
+//             {
+//                 pathFromOutputPath: '../../init/redux/index.ts',
+//                 marker:             '// MarkerGen add reducer',
+//                 whereInsertRow:     'after marker',
+//                 generationRow:      '__entityName__,',
+//             },
+//         ],
+//         onComplete: () => {
+//             console.log(chalk.green('Created bus entity !!!'));
+//         },
+//     },
+// ]);
+
+export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]): Promise<void> => {
     try {
-        const selectedConfigItem: TypesGenerateOptionsItem = await getSelectedItem(options);
+        const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem(options);
 
-        const selectedName: TypesGetSelectedName = await getSelectedName();
+        const selectedName: types.GetSelectedName = await getSelectedName();
 
         createFiles({
             fromFolderPath: selectedConfigItem.pathTemplate,
@@ -39,9 +75,7 @@ const generateTemplateFiles = async (options: TypesGenerateOptionsItem[]): Promi
             selectedConfigItem.onComplete();
         }
     } catch (error) {
-        console.log(chalk.red('error generateTemplateFiles'));
+        console.log(chalk.red('Error generate files'));
         console.log(error);
     }
 };
-
-exports.generateTemplateFiles = generateTemplateFiles;

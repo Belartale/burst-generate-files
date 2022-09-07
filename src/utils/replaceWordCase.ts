@@ -1,7 +1,7 @@
 // Types
-import { TypesReplaceWordCase } from '../types';
+import * as types from '../types';
 
-export const replaceWordCase = ({ string, stringReplacers, selectedName }: TypesReplaceWordCase) => {
+export const replaceWordCase = ({ string, stringReplacers, selectedName }: types.ReplaceWordCase) => {
     let result = string;
 
     if (result && result.includes(`${stringReplacers}(noCase)`)) { // lorem lorem => LoremLorem

@@ -1,7 +1,7 @@
 {
-    "name": "burst-generate-files",
-    "version": "0.0.1",
-    "description": "module for burst-generate-files",
+    "name": "genfiles",
+    "version": "0.1.0",
+    "description": "module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
@@ -16,11 +16,6 @@
         "start": "cross-env-shell NODE_ENV=development ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/start\"",
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
         "clean": "rm -rf node_modules"
-    },
-    "dependencies": {
-        "chalk": "^5.0.1",
-        "enquirer": "^2.3.6",
-        "node-polyfill-webpack-plugin": "^2.0.1"
     },
     "devDependencies": {
         "@soda/friendly-errors-webpack-plugin": "^1.8.1",
@@ -43,6 +38,7 @@
         "eslint": "^8.17.0",
         "eslint-plugin-babel": "^5.3.1",
         "eslint-plugin-import": "^2.26.0",
+        "generate-template-files": "^3.2.0",
         "html-webpack-plugin": "^5.5.0",
         "react-dev-utils": "^12.0.1",
         "serve": "^13.0.2",
@@ -54,5 +50,10 @@
         "webpack-dev-server": "^4.9.2",
         "webpack-merge": "^5.8.0",
         "webpackbar": "^5.0.2"
+    },
+    "dependencies": {
+        "enquirer": "^2.3.6",
+        "lodash": "^4.17.21",
+        "node-polyfill-webpack-plugin": "^2.0.1"
     }
 }

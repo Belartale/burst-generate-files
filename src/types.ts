@@ -1,22 +1,23 @@
-export type TypesOptionsGenerationRow = {
+export type OptionsGenerateRow = {
     pathFromOutputPath: string
     marker: string
     whereInsertRow?: 'after marker' | 'before marker'
     generationRow: string
+    onceInsertRow?: boolean
 }
 
-export type TypesGenerateOptionsItem = {
+export type GenerateOptionsItem = {
     name:      string
     stringReplacers:    string
     pathTemplate:       string
     outputPath:         string
-    addRowFiles?: TypesOptionsGenerationRow[]
+    addRowFiles?: OptionsGenerateRow[]
     onComplete?:        Function
 }
 
-export type TypesGetSelectedName = string[]
+export type GetSelectedName = string[]
 
-export type TypesCreateFiles = {
+export type CreateFiles = {
     fromFolderPath: string
     toPath: string
     selectedConfigItem: {
@@ -25,21 +26,37 @@ export type TypesCreateFiles = {
         stringReplacers: string,
         outputPath: string
     }
-    selectedName: TypesGetSelectedName
+    selectedName: GetSelectedName
 };
 
-export type TypesReplaceWordCase = {
+export type ReplaceWordCase = {
     string: string
     stringReplacers: string
-    selectedName: TypesGetSelectedName
+    selectedName: GetSelectedName
 }
 
-export type TypesAddRowFiles = {
-    selectedConfigItem: TypesGenerateOptionsItem
-    selectedName: TypesGetSelectedName
+export type AddRowFiles = {
+    selectedConfigItem: GenerateOptionsItem
+    selectedName: GetSelectedName
 }
-export type TypesDefineMarkerAndAddRow = {
-    element: TypesOptionsGenerationRow
+export type DefineMarkerAndAddRow = {
+    optionsGenerateRow: OptionsGenerateRow
     dataRedFile: string
     tabs: string
+}
+export type GenerateFiles = {
+    id: {
+        pathFromOutputPath: string
+        marker: string
+        generationRow: string
+    },
+    wasInsertRow: boolean
+}
+export type AddConfigToFile = {
+    optionsGenerateRow: OptionsGenerateRow
+    fileNameConfig: string
+}
+export type CheckIsOnceInsertRow = {
+    optionsGenerateRow: OptionsGenerateRow
+    fileNameConfig: string
 }

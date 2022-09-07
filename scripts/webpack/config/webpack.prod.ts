@@ -16,7 +16,7 @@ export const getProdConfig = () => {
             mode:    'production',
             devtool: false,
             output:  {
-                library: 'mScript',
+                library: 'genfiles',
             },
         },
         modules.connectBuildProgressIndicator(),
