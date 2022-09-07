@@ -1,7 +1,7 @@
 {
     "name": "genfiles",
     "version": "0.1.0",
-    "description": "module for generate files",
+    "description": "module for genfiles",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
@@ -10,7 +10,7 @@
     "author": "belartale@gmail.com",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Belartale/burst-generate-files"
+        "url": "https://github.com/Arziburst/mScript"
     },
     "scripts": {
         "start": "cross-env-shell NODE_ENV=development ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/start\"",
@@ -50,10 +50,5 @@
         "webpack-dev-server": "^4.9.2",
         "webpack-merge": "^5.8.0",
         "webpackbar": "^5.0.2"
-    },
-    "dependencies": {
-        "enquirer": "^2.3.6",
-        "lodash": "^4.17.21",
-        "node-polyfill-webpack-plugin": "^2.0.1"
     }
 }

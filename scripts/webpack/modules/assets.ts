@@ -1,7 +1,6 @@
 // Core
 import { Configuration } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 
 // Constants
 import { STATIC_DIRECTORY, APP_NAME } from '../constants';
@@ -13,7 +12,4 @@ export const connectHtml = (): Configuration => ({
             title:    APP_NAME,
         }),
     ],
-});
-export const nodePolyfillPlugin = (): Configuration => ({
-    plugins: [ new NodePolyfillPlugin() ],
 });

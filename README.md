@@ -1,6 +1,6 @@
-### Welcome to mScript App.
+### Welcome to genfiles App.
 
-Arziburst mScript App works on Windows, Linux, macOS.<br>
+Arziburst genfiles App works on Windows, Linux, macOS.<br>
 If something doesn’t work, please [file an issue](https://github.com/Arziburst/boilerplate/issues/new).<br>
 If you have some enhancements, please [file an pull request](https://github.com/Arziburst/boilerplate/compare).<br>
 

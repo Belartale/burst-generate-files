@@ -79,3 +79,5 @@ export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]
         console.log(error);
     }
 };
+
+exports.generateTemplateFiles = generateTemplateFiles;
