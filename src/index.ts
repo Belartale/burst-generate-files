@@ -47,37 +47,52 @@ import * as types from './types';
 //     },
 // ]);
 
-export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]): Promise<void> => {
-    try {
-        const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem(options);
+var fs = require('fs');
 
-        const selectedName: types.GetSelectedName = await getSelectedName();
+export const generateTemplateFiles = () => {
+    console.log('text');
 
-        createFiles({
-            fromFolderPath: selectedConfigItem.pathTemplate,
-            toPath:         replaceWordCase(
-                {
-                    string:          selectedConfigItem.outputPath,
-                    stringReplacers: selectedConfigItem.stringReplacers,
-                    selectedName,
-                },
-            ),
-            selectedConfigItem,
-            selectedName,
-        });
 
-        if (selectedConfigItem.addRowFiles) {
-            addRowFiles({ selectedConfigItem, selectedName });
+    fs.writeFile('filename.txt', 'Текст', function(error: any) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Файл создан');
         }
-
-
-        if (selectedConfigItem.onComplete) {
-            selectedConfigItem.onComplete();
-        }
-    } catch (error) {
-        console.log(chalk.red('Error generate files'));
-        console.log(error);
-    }
+    });
 };
+
+// export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]): Promise<void> => {
+//     try {
+//         const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem(options);
+
+//         const selectedName: types.GetSelectedName = await getSelectedName();
+
+//         createFiles({
+//             fromFolderPath: selectedConfigItem.pathTemplate,
+//             toPath:         replaceWordCase(
+//                 {
+//                     string:          selectedConfigItem.outputPath,
+//                     stringReplacers: selectedConfigItem.stringReplacers,
+//                     selectedName,
+//                 },
+//             ),
+//             selectedConfigItem,
+//             selectedName,
+//         });
+
+//         if (selectedConfigItem.addRowFiles) {
+//             addRowFiles({ selectedConfigItem, selectedName });
+//         }
+
+
+//         if (selectedConfigItem.onComplete) {
+//             selectedConfigItem.onComplete();
+//         }
+//     } catch (error) {
+//         console.log(chalk.red('Error generate files'));
+//         console.log(error);
+//     }
+// };
 
 exports.generateTemplateFiles = generateTemplateFiles;
