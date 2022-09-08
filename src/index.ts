@@ -18,7 +18,6 @@ export const generateTemplateFiles = async (
         const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem({ options, PROJECT_ROOT });
 
         const selectedName: types.GetSelectedName = await getSelectedName();
-        console.log('selectedName', selectedName);
 
         createFiles({
             fromFolderPath: selectedConfigItem.pathTemplate,

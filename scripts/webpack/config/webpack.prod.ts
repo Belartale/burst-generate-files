@@ -16,7 +16,7 @@ export const getProdConfig = () => {
             mode:    'production',
             devtool: false,
             output:  {
-                library: 'genfiles',
+                library: 'burstGenerateFiles',
             },
         },
         modules.connectBuildProgressIndicator(),
