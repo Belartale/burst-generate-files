@@ -15,30 +15,33 @@ __name__ === loremLorem
 ```
 ### Example
 ```sh
-generateTemplateFiles([
-    {
-        name:            'Bus: /bus/__entityName__',
-        stringReplacers: '__entityName__',
-        pathTemplate:    './scripts/generate/templates/busEntity',
-        outputPath:      './src/bus/__entityName__',
-        addRowFiles:     [
-            {
-                pathFromOutputPath: '../../init/redux/index.ts',
-                marker:             '// Reducers MarkerGen',
-                whereInsertRow:     'after marker',
-                generationRow:      'import __entityName__ from \'../../bus/__entityName__/slice\';',
-                onceInsertRow:      true,
+generateTemplateFiles(
+    PROJECT_ROOT,
+    [
+        {
+            name:            'Bus: /bus/__entityName__',
+            stringReplacers: '__entityName__',
+            pathTemplate:    './scripts/generate/templates/busEntity',
+            outputPath:      './src/bus/__entityName__',
+            addRowFiles:     [
+                {
+                    pathFromOutputPath: '../../init/redux/index.ts',
+                    marker:             '// Reducers MarkerGen',
+                    whereInsertRow:     'after marker',
+                    generationRow:      'import __entityName__ from \'../../bus/__entityName__/slice\';',
+                    onceInsertRow:      true,
+                },
+                {
+                    pathFromOutputPath: '../../init/redux/index.ts',
+                    marker:             '// MarkerGen add reducer',
+                    whereInsertRow:     'after marker',
+                    generationRow:      '__entityName__,',
+                },
+            ],
+            onComplete: () => {
+                console.log(chalk.green('Created bus entity !!!'));
             },
-            {
-                pathFromOutputPath: '../../init/redux/index.ts',
-                marker:             '// MarkerGen add reducer',
-                whereInsertRow:     'after marker',
-                generationRow:      '__entityName__,',
-            },
-        ],
-        onComplete: () => {
-            console.log(chalk.green('Created bus entity !!!'));
         },
-    },
-]);
+    ]
+);
 ```
