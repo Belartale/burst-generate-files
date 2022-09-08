@@ -217,8 +217,12 @@ generateTemplateFiles(
                 {
                     pathFromOutputPath: '../../routes/Public.tsx',
                     marker:             '{/* MarkerGen */}',
-                    whereInsertRow:     'after marker',
-                    generationRow:      '<Route element = { <Pages.__pageName__(pascalCase) /> } path = { book.__pageName__(constantCase) } />',
+                    regExp:             {
+                        value: '....MarkerGen.Route....',
+                        flags: 'g',
+                    },
+                    whereInsertRow: 'after marker',
+                    generationRow:  '<Route element = { <Pages.__pageName__(pascalCase) /> } path = { book.__pageName__(constantCase) } />',
                 },
             ],
             onComplete: () => {

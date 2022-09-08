@@ -38,7 +38,10 @@ const addConfigToFile = ({ optionsGenerateRow, fileNameConfig }: types.AddConfig
 };
 
 const defineMarkerAndAddRow = ({ optionsGenerateRow, dataRedFile, tabs }: types.DefineMarkerAndAddRow) => {
-    const reg = new RegExp(optionsGenerateRow.marker, 'g');
+    const reg = new RegExp(
+        optionsGenerateRow.regExp?.value ? optionsGenerateRow.regExp.value : optionsGenerateRow.marker,
+        optionsGenerateRow.regExp?.flags ? optionsGenerateRow.regExp.flags : 'g',
+    );
     let dataRedFileReplaced = dataRedFile;
 
     if (typeof optionsGenerateRow.whereInsertRow === 'undefined'
