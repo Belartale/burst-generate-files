@@ -214,6 +214,12 @@ generateTemplateFiles(
                     whereInsertRow:     'after marker',
                     generationRow:      'export const __pageName__(constantCase) = \'/__pageName__(kebabCase)\';',
                 },
+                {
+                    pathFromOutputPath: '../../routes/Public.tsx',
+                    marker:             '{/* MarkerGen */}',
+                    whereInsertRow:     'after marker',
+                    generationRow:      '<Route element = { <Pages.__pageName__(pascalCase) /> } path = { book.__pageName__(constantCase) } />',
+                },
             ],
             onComplete: () => {
                 console.log(chalk.green('Created page !!!'));
