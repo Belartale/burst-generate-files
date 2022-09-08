@@ -3,9 +3,9 @@ import webpack from 'webpack';
 import chalk from 'chalk'; // Console Coloring
 
 // Config
-import { getProdConfig } from './config';
+import { getCommonConfig } from './config/webpack.common';
 
-const compiler = webpack(getProdConfig());
+const compiler = webpack(getCommonConfig());
 
 // compiler.hooks.beforeRun.tap({ name: 'start' }, () => {
 //     console.log('→ compilation started');

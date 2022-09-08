@@ -4,16 +4,11 @@ import {
     DefinePlugin,
 } from 'webpack';
 import WebpackBar from 'webpackbar';
-// @ts-ignore
-import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
+import NodeExternals from 'webpack-node-externals';
 import dotenv from 'dotenv';
 
 export const connectBuildProgressIndicator = (): Configuration => ({
     plugins: [ new WebpackBar({ basic: true }) ],
-});
-
-export const connectFriendlyErrors = (): Configuration => ({
-    plugins: [ new FriendlyErrorsWebpackPlugin() ],
 });
 
 export const defineEnvVariables = (): Configuration => {
@@ -37,3 +32,8 @@ export const defineEnvVariables = (): Configuration => {
         ],
     };
 };
+
+export const nodeExternals = (): Configuration => ({
+    externalsPresets: { node: true },
+    externals:        [ NodeExternals() ],
+});

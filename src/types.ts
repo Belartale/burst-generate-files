@@ -2,6 +2,10 @@
 export type OptionsGenerateRow = {
     pathFromOutputPath: string
     marker: string
+    regExp?: {
+        value: string
+        flags: string
+    }
     whereInsertRow?: 'after marker' | 'before marker'
     generationRow: string
     onceInsertRow?: boolean

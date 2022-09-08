@@ -36,9 +36,9 @@ generateTemplateFiles([
 ]);
 
 
-### Welcome to genfiles App.
+### Welcome to burst-generate-files App.
 
-Arziburst genfiles App works on Windows, Linux, macOS.<br>
+Arziburst burst-generate-files App works on Windows, Linux, macOS.<br>
 If something doesn’t work, please [file an issue](https://github.com/Belartale/burst-generate-files/issues/new).<br>
 If you have some enhancements, please [file an pull request](https://github.com/Belartale/burst-generate-files/compare).<br>
 
