@@ -1,7 +1,7 @@
 {
     "name": "genfiles",
     "version": "0.1.0",
-    "description": "module for generate files",
+    "description": "module for genfiles",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
@@ -10,12 +10,13 @@
     "author": "belartale@gmail.com",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Belartale/burst-generate-files"
+        "url": "https://github.com/Arziburst/mScript"
     },
     "scripts": {
         "start": "cross-env-shell NODE_ENV=development ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/start\"",
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
-        "clean": "rm -rf node_modules"
+        "clean": "rm -rf node_modules",
+        "gen": "cross-env-shell ts-node -P \"./tsconfig.generate.json\" \"./example/useGenerateFiles\""
     },
     "devDependencies": {
         "@soda/friendly-errors-webpack-plugin": "^1.8.1",
@@ -26,6 +27,7 @@
         "@types/webpack-dev-server": "^4.7.2",
         "@types/webpack-hot-middleware": "^2.25.6",
         "@types/webpack-merge": "^5.0.0",
+        "@types/webpack-node-externals": "^2.5.3",
         "@types/webpackbar": "^4.0.3",
         "@typescript-eslint/eslint-plugin": "^5.27.1",
         "@typescript-eslint/parser": "^5.27.1",
@@ -49,11 +51,7 @@
         "webpack": "^5.73.0",
         "webpack-dev-server": "^4.9.2",
         "webpack-merge": "^5.8.0",
+        "webpack-node-externals": "^3.0.0",
         "webpackbar": "^5.0.2"
-    },
-    "dependencies": {
-        "enquirer": "^2.3.6",
-        "lodash": "^4.17.21",
-        "node-polyfill-webpack-plugin": "^2.0.1"
     }
 }

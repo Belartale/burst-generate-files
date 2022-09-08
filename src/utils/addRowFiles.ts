@@ -9,20 +9,6 @@ import { replaceWordCase } from './replaceWordCase';
 // Types
 import * as types from '../types';
 
-const defineMarkerAndAddRow = ({ optionsGenerateRow, dataRedFile, tabs }: types.DefineMarkerAndAddRow) => {
-    const reg = new RegExp(optionsGenerateRow.marker, 'g');
-    let dataRedFileReplaced = dataRedFile;
-
-    if (typeof optionsGenerateRow.whereInsertRow === 'undefined'
-                || optionsGenerateRow.whereInsertRow === 'after marker') {
-        dataRedFileReplaced = dataRedFile.replace(reg, optionsGenerateRow.marker + '\n' + tabs + optionsGenerateRow.generationRow);
-    }
-    if (optionsGenerateRow.whereInsertRow === 'before marker') {
-        dataRedFileReplaced = dataRedFile.replace(reg, optionsGenerateRow.generationRow + '\n' + tabs + optionsGenerateRow.marker);
-    }
-
-    return dataRedFileReplaced;
-};
 
 const addConfigToFile = ({ optionsGenerateRow, fileNameConfig }: types.AddConfigToFile) => {
     if (optionsGenerateRow.onceInsertRow) {
@@ -50,6 +36,22 @@ const addConfigToFile = ({ optionsGenerateRow, fileNameConfig }: types.AddConfig
         fs.writeFileSync(fileNameConfig, JSON.stringify(newData));
     }
 };
+
+const defineMarkerAndAddRow = ({ optionsGenerateRow, dataRedFile, tabs }: types.DefineMarkerAndAddRow) => {
+    const reg = new RegExp(optionsGenerateRow.marker, 'g');
+    let dataRedFileReplaced = dataRedFile;
+
+    if (typeof optionsGenerateRow.whereInsertRow === 'undefined'
+                || optionsGenerateRow.whereInsertRow === 'after marker') {
+        dataRedFileReplaced = dataRedFile.replace(reg, optionsGenerateRow.marker + '\n' + tabs + optionsGenerateRow.generationRow);
+    }
+    if (optionsGenerateRow.whereInsertRow === 'before marker') {
+        dataRedFileReplaced = dataRedFile.replace(reg, optionsGenerateRow.generationRow + '\n' + tabs + optionsGenerateRow.marker);
+    }
+
+    return dataRedFileReplaced;
+};
+
 const checkIsOnceInsertRow = ({ optionsGenerateRow, fileNameConfig }: types.CheckIsOnceInsertRow) => {
     const dataFile = fs.readFileSync(fileNameConfig, { encoding: 'utf-8' });
 

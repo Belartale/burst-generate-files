@@ -1,12 +1,13 @@
 // Core
 import enquirer from 'enquirer';
 import { resolve } from 'path';
-import { path as PROJECT_ROOT } from 'app-root-path';
 
 // Types
 import * as types from '../types';
 
-export const getSelectedItem = async (options: types.GenerateOptionsItem[]): Promise<types.GenerateOptionsItem> => {
+export const getSelectedItem = async (
+    { options, PROJECT_ROOT }: types.GetSelectedItem,
+): Promise<types.GenerateOptionsItem> => {
     const templateQuestions = {
         type:    'autocomplete',
         name:    'optionChoice',

@@ -1,3 +1,4 @@
+// File index
 export type OptionsGenerateRow = {
     pathFromOutputPath: string
     marker: string
@@ -6,6 +7,18 @@ export type OptionsGenerateRow = {
     onceInsertRow?: boolean
 }
 
+// File replaceWordCase
+export type ReplaceWordCase = {
+    string: string
+    stringReplacers: string
+    selectedName: GetSelectedName
+}
+
+// File getSelectedItem
+export type GetSelectedItem = {
+    options: GenerateOptionsItem[]
+    PROJECT_ROOT: string
+}
 export type GenerateOptionsItem = {
     name:      string
     stringReplacers:    string
@@ -15,8 +28,10 @@ export type GenerateOptionsItem = {
     onComplete?:        Function
 }
 
+// File getSelectedName
 export type GetSelectedName = string[]
 
+// File createFiles
 export type CreateFiles = {
     fromFolderPath: string
     toPath: string
@@ -29,20 +44,14 @@ export type CreateFiles = {
     selectedName: GetSelectedName
 };
 
-export type ReplaceWordCase = {
-    string: string
-    stringReplacers: string
-    selectedName: GetSelectedName
-}
-
+// File addRowFiles
 export type AddRowFiles = {
     selectedConfigItem: GenerateOptionsItem
     selectedName: GetSelectedName
 }
-export type DefineMarkerAndAddRow = {
+export type CheckIsOnceInsertRow = {
     optionsGenerateRow: OptionsGenerateRow
-    dataRedFile: string
-    tabs: string
+    fileNameConfig: string
 }
 export type GenerateFiles = {
     id: {
@@ -52,11 +61,16 @@ export type GenerateFiles = {
     },
     wasInsertRow: boolean
 }
-export type AddConfigToFile = {
+
+// Function defineMarkerAndAddRow
+export type DefineMarkerAndAddRow = {
     optionsGenerateRow: OptionsGenerateRow
-    fileNameConfig: string
+    dataRedFile: string
+    tabs: string
 }
-export type CheckIsOnceInsertRow = {
+
+// Function addConfigToFile
+export type AddConfigToFile = {
     optionsGenerateRow: OptionsGenerateRow
     fileNameConfig: string
 }
