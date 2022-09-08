@@ -11,48 +11,14 @@ import { addRowFiles } from './utils/addRowFiles';
 // Types
 import * as types from './types';
 
-// Cases
-// lorem lorem =>
-// __name__(noCase) === lorem Lorem lorem
-// __name__(pascalCase) === LoremLorem
-// __name__(constantCase) === LOREM_LOREM
-// __name__(kebabCase) === lorem-lorem
-// __name__ === loremLorem
-
-// Example
-// generateTemplateFiles([
-//     {
-//         name:            'Bus: /bus/__entityName__',
-//         stringReplacers: '__entityName__',
-//         pathTemplate:    './scripts/generate/templates/busEntity',
-//         outputPath:      './src/bus/__entityName__',
-//         addRowFiles:     [
-//             {
-//                 pathFromOutputPath: '../../init/redux/index.ts',
-//                 marker:             '// Reducers MarkerGen',
-//                 whereInsertRow:     'after marker',
-//                 generationRow:      'import __entityName__ from \'../../bus/__entityName__/slice\';',
-//                 onceInsertRow:      true,
-//             },
-//             {
-//                 pathFromOutputPath: '../../init/redux/index.ts',
-//                 marker:             '// MarkerGen add reducer',
-//                 whereInsertRow:     'after marker',
-//                 generationRow:      '__entityName__,',
-//             },
-//         ],
-//         onComplete: () => {
-//             console.log(chalk.green('Created bus entity !!!'));
-//         },
-//     },
-// ]);
-
-
-export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]): Promise<void> => {
+export const generateTemplateFiles = async (
+    PROJECT_ROOT: string, options: types.GenerateOptionsItem[],
+): Promise<void> => {
     try {
-        const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem(options);
+        const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem({ options, PROJECT_ROOT });
 
         const selectedName: types.GetSelectedName = await getSelectedName();
+        console.log('selectedName', selectedName);
 
         createFiles({
             fromFolderPath: selectedConfigItem.pathTemplate,

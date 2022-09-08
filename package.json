@@ -16,7 +16,7 @@
         "start": "cross-env-shell NODE_ENV=development ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/start\"",
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
         "clean": "rm -rf node_modules",
-        "gen": "cross-env-shell ts-node -P \"./tsconfig.generate.json\" \"./example\""
+        "gen": "cross-env-shell ts-node -P \"./tsconfig.generate.json\" \"./example/useGenerateFiles\""
     },
     "devDependencies": {
         "@soda/friendly-errors-webpack-plugin": "^1.8.1",

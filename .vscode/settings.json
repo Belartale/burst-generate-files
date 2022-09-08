@@ -1,5 +1,13 @@
 {
     "better-comments.tags": [
+        {
+            "tag": "File",
+            "color": "#ffa200",
+        },
+        {
+            "tag": "Function",
+            "color": "#bc8a5f",
+        },
         // -------------------------------------------------------
         {
             "tag": "Init",
