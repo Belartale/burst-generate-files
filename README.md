@@ -1,13 +1,20 @@
+# Welcome to burst-generate-files.
 
-Cases
-lorem lorem =>
+Burst-generate-files App works on Windows, Linux, macOS.<br>
+
+This is a library for generating files and folders based on templates that the user creates.
+
+### Cases
+```sh
+(lorem lorem) =>
 __name__(noCase) === lorem Lorem lorem
 __name__(pascalCase) === LoremLorem
 __name__(constantCase) === LOREM_LOREM
 __name__(kebabCase) === lorem-lorem
 __name__ === loremLorem
-
-Example
+```
+### Example
+```sh
 generateTemplateFiles([
     {
         name:            'Bus: /bus/__entityName__',
@@ -34,41 +41,4 @@ generateTemplateFiles([
         },
     },
 ]);
-
-
-### Welcome to burst-generate-files App.
-
-Arziburst burst-generate-files App works on Windows, Linux, macOS.<br>
-If something doesn’t work, please [file an issue](https://github.com/Belartale/burst-generate-files/issues/new).<br>
-If you have some enhancements, please [file an pull request](https://github.com/Belartale/burst-generate-files/compare).<br>
-
-## Quick Overview
-
 ```
-INITIALIZING COMMANDS
-```
-
-Also you can create `.env.development` and `.env.production` by example from `.env.example`.
-
-### `npm start`
-To run project in dev mode
-
-### `npm run build`
-To create bundle
-
-## Additions
-📍 Auto formatting code with ESLint
-
-You may need to correct `settings.json` in VS Code
-```json
-"editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-},
-"eslint.format.enable": true,
-```
-
-📍 Extention for VS Code `Better Comments (id: aaron-bond.better-comments)`
-
-Best comments names:
-
-![image](https://user-images.githubusercontent.com/53538417/139050274-e7f87f9e-7d8c-4b9c-8ac2-8f65837850c2.png)
