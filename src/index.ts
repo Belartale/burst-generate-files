@@ -47,52 +47,38 @@ import * as types from './types';
 //     },
 // ]);
 
-var fs = require('fs');
 
-export const generateTemplateFiles = () => {
-    console.log('text');
+export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]): Promise<void> => {
+    try {
+        const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem(options);
 
+        const selectedName: types.GetSelectedName = await getSelectedName();
 
-    fs.writeFile('filename.txt', 'Текст', function(error: any) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Файл создан');
+        createFiles({
+            fromFolderPath: selectedConfigItem.pathTemplate,
+            toPath:         replaceWordCase(
+                {
+                    string:          selectedConfigItem.outputPath,
+                    stringReplacers: selectedConfigItem.stringReplacers,
+                    selectedName,
+                },
+            ),
+            selectedConfigItem,
+            selectedName,
+        });
+
+        if (selectedConfigItem.addRowFiles) {
+            addRowFiles({ selectedConfigItem, selectedName });
         }
-    });
+
+
+        if (selectedConfigItem.onComplete) {
+            selectedConfigItem.onComplete();
+        }
+    } catch (error) {
+        console.log(chalk.red('Error generate files'));
+        console.log(error);
+    }
 };
-
-// export const generateTemplateFiles = async (options: types.GenerateOptionsItem[]): Promise<void> => {
-//     try {
-//         const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem(options);
-
-//         const selectedName: types.GetSelectedName = await getSelectedName();
-
-//         createFiles({
-//             fromFolderPath: selectedConfigItem.pathTemplate,
-//             toPath:         replaceWordCase(
-//                 {
-//                     string:          selectedConfigItem.outputPath,
-//                     stringReplacers: selectedConfigItem.stringReplacers,
-//                     selectedName,
-//                 },
-//             ),
-//             selectedConfigItem,
-//             selectedName,
-//         });
-
-//         if (selectedConfigItem.addRowFiles) {
-//             addRowFiles({ selectedConfigItem, selectedName });
-//         }
-
-
-//         if (selectedConfigItem.onComplete) {
-//             selectedConfigItem.onComplete();
-//         }
-//     } catch (error) {
-//         console.log(chalk.red('Error generate files'));
-//         console.log(error);
-//     }
-// };
 
 exports.generateTemplateFiles = generateTemplateFiles;

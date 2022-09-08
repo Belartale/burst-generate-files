@@ -19,6 +19,8 @@ export const getCommonConfig = () => {
                 extensions: [ '.ts', '.js' ],
             },
         },
+
+        modules.nodeExternals(),
         modules.loadTypeScript(),
         modules.defineEnvVariables(),
     );

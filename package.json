@@ -27,6 +27,7 @@
         "@types/webpack-dev-server": "^4.7.2",
         "@types/webpack-hot-middleware": "^2.25.6",
         "@types/webpack-merge": "^5.0.0",
+        "@types/webpack-node-externals": "^2.5.3",
         "@types/webpackbar": "^4.0.3",
         "@typescript-eslint/eslint-plugin": "^5.27.1",
         "@typescript-eslint/parser": "^5.27.1",
@@ -50,6 +51,7 @@
         "webpack": "^5.73.0",
         "webpack-dev-server": "^4.9.2",
         "webpack-merge": "^5.8.0",
+        "webpack-node-externals": "^3.0.0",
         "webpackbar": "^5.0.2"
     }
 }
