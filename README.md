@@ -1,7 +1,5 @@
 # Welcome to burst-generate-files.
 
-Burst-generate-files App works on Windows, Linux, macOS.<br>
-
 This is a library for generating files and folders based on templates that the user creates.
 
 ## How to install
