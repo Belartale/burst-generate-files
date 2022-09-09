@@ -18,8 +18,9 @@ First file it's `template` file. In future you create many of them, but now just
 
 Create the folder `template`, then create `componentTemplate.tsx`.
 
-`componentTemplate.tsx`
 ```typescript
+// ./template/componentTemplate.tsx
+
 import React from "react";
 
 const __exampleComponentName__(pascalCase) = () => {
@@ -40,8 +41,9 @@ That function need get two parametrs, root path of your aplication and array of 
 
 **Note:** for easy way, to get root path of your aplication, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Install that: `npm i app-root-path -D`.
 
-`generate.config.ts`
 ```typescript
+// ./generate.config.ts
+
 import { generateTemplateFiles } from "burst-generate-files";
 import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 
