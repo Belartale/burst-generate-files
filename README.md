@@ -11,37 +11,55 @@ npm i burst-generate-files -D
 ```
 
 ## How to use
-### Create file
-Create file with any name and where you want, but with `.ts`.
-```
-┣━ package.json
-┣━ src
-┗━ generate.ts
-```
+For first example you can copy code below. You need create two files.
+### Create template file
 
-### Import
-```javascript
+First file it's `template` file. In future you create many of them, but now just simple example of `React` component.
+
+`componentTemplate.tsx`
+```typescript
+import React from "react";
+
+const __exampleComponentName__(pascalCase) = () => {
+    return (
+        <div>
+            This is component: __exampleComponentName__(pascalCase)
+        </div>
+     );
+};
+```
+### Create config file
+
+After you create `generate.cofig.ts` in root of your project. 
+
+First of all you need add import of `burst-generate-files`, and get `generateTemplateFiles` function. 
+
+That function need get two parametrs, root path of your aplication and array of options.
+
+**Note:** for easy way, to get root path of your aplication, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Install that: `npm i app-root-path -D`.
+
+`generate.cofig.ts`
+```typescript
 import { generateTemplateFiles } from "burst-generate-files";
-```
+import { path as ROOT_PATH_OF_YOUR_APLICATION } from 'app-root-path';
 
-### Using generate
-After imported, you have to use the function.
-```javascript
-generateTemplateFiles(
-    PROJECT_PATH_ABSOLYTE,
-    [
-        ...
-    ]
-);
+generateTemplateFiles(ROOT_PATH_OF_YOUR_APLICATION, [
+    {
+        name:            "Component: ./src/components/__exampleComponentName__",
+        stringReplacers: "__exampleComponentName__",
+        pathTemplate:    "./componentTemplate.tsx", // use js or ts extensions, whatever you like.
+        outputPath:      "./src/components/__exampleComponentName__(pascalCase)",
+        onComplete: () => {
+            console.log("Example component created!");
+        },
+    },
+]);
 ```
-
 ### The function's arguments
 | Arguments         | Types | Descriptions                                  | Examples
 | :---:             | :---: | :---:                                         | :---:
 | First argument    | string | This is absolute path to your project        | C:\projects\YourProject
 | Second argument   | array | Objects with parameters for generate files     | [ {...}, {...} ]
-
-**Note:** for absolute path, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Install that: `npm i app-root-path -D`.
 
 ### Simple example second parameter
 ```javascript
@@ -67,9 +85,7 @@ generateTemplateFiles(
 ```
 
 ### How to start
-If you are using TypeScript. You have to create file.
-
-`tsconfig.generate.json`
+If you are using TypeScript. You have to create config file `tsconfig.generate.json`.
 ```json
 {
     "compilerOptions": {
@@ -79,7 +95,9 @@ If you are using TypeScript. You have to create file.
 } 
 ```
 
-Run in terminal `ts-node -P "./tsconfig.generate.json" "./generate.ts`
+Run in terminal `ts-node -P \"./tsconfig.generate.json\" \"./generate\"`
+
+If you use just JavaScript, you can run next script: `node \"./generate\"`
 
 ## How it works
 You can transform name for files and into files. You have to choose a name for the string which will replace.
