@@ -16,6 +16,8 @@ For first example you can copy code below. You need create two files.
 
 First file it's `template` file. In future you create many of them, but now just simple example of `React` component.
 
+Create the folder `template`, then create `componentTemplate.tsx`.
+
 `componentTemplate.tsx`
 ```typescript
 import React from "react";
@@ -30,7 +32,7 @@ const __exampleComponentName__(pascalCase) = () => {
 ```
 ### Create config file
 
-After you create `generate.cofig.ts` in root of your project. 
+After you create `generate.config.ts` in root of your project. 
 
 First of all you need add import of `burst-generate-files`, and get `generateTemplateFiles` function. 
 
@@ -38,16 +40,16 @@ That function need get two parametrs, root path of your aplication and array of 
 
 **Note:** for easy way, to get root path of your aplication, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Install that: `npm i app-root-path -D`.
 
-`generate.cofig.ts`
+`generate.config.ts`
 ```typescript
 import { generateTemplateFiles } from "burst-generate-files";
-import { path as ROOT_PATH_OF_YOUR_APLICATION } from 'app-root-path';
+import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 
-generateTemplateFiles(ROOT_PATH_OF_YOUR_APLICATION, [
+generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Component: ./src/components/__exampleComponentName__",
         stringReplacers: "__exampleComponentName__",
-        pathTemplate:    "./componentTemplate.tsx", // use js or ts extensions, whatever you like.
+        pathTemplate:    "./template",
         outputPath:      "./src/components/__exampleComponentName__(pascalCase)",
         onComplete: () => {
             console.log("Example component created!");
@@ -95,9 +97,9 @@ If you are using TypeScript. You have to create config file `tsconfig.generate.j
 } 
 ```
 
-Run in terminal `ts-node -P \"./tsconfig.generate.json\" \"./generate\"`
+Insert this code in package's scripts: `"gen": "ts-node -P \"./tsconfig.generate.json\" \"./generate.config.ts\""`, then in terminal `npm run gen`
 
-If you use just JavaScript, you can run next script: `node \"./generate\"`
+If you use just JavaScript, you can run next script: `node \"./generate.config.js\"`
 
 ## How it works
 You can transform name for files and into files. You have to choose a name for the string which will replace.
