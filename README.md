@@ -64,11 +64,11 @@ generateTemplateFiles(
         onComplete: () => {
             console.log("Created component !!!");
         },
-    }
+    },
 ]
 ```
 
-### Start
+### How to start
 If you are using TypeScript. You have to create file.
 
 `tsconfig.generate.json`
@@ -82,7 +82,6 @@ If you are using TypeScript. You have to create file.
 ```
 
 Terminal `ts-node -P "./tsconfig.generate.json" "./generate.ts
-
 
 ## How it works
 You can transform name for files and into files. You have to choose a name for the string which will replace.
