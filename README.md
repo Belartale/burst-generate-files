@@ -175,5 +175,9 @@ This is the option tells the program where to insert the line. Insert line after
 - #### `generationRow`
 This is the string which will be inserted into file.
 
+- #### `onceInsertRow`
+This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
+**Note:** if you want to paste again, you need edit file `config.generate.files.json`
+
 ### `onComplete` *optional*
 this is the function that will be executed after generation
