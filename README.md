@@ -18,7 +18,7 @@ Create file with any name and where you want, but with `.ts`.
 ```
 ┣━ package.json
 ┣━ src
-┗━ anyName.ts
+┗━ generate.ts
 ```
 
 ### Import
@@ -67,6 +67,22 @@ generateTemplateFiles(
     }
 ]
 ```
+
+### Start
+If you are using TypeScript. You have to create file.
+
+`tsconfig.generate.json`
+```json
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "typeRoots": [ "node_modules/@types" ],
+    },
+} 
+```
+
+Terminal `ts-node -P "./tsconfig.generate.json" "./generate.ts
+
 
 ## How it works
 You can transform name for files and into files. You have to choose a name for the string which will replace.
