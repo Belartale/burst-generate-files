@@ -59,38 +59,12 @@ generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
     },
 ]);
 ```
-### The function's arguments
-| Arguments         | Types | Descriptions                                  | Examples
-| :---:             | :---: | :---:                                         | :---:
-| First argument    | string | This is absolute path to your project        | C:\projects\YourProject
-| Second argument   | array | Objects with parameters for generate files     | [ {...}, {...} ]
-
-### Simple example second parameter
-```javascript
-[
-    {
-        name:            "Component: /view/components/__componentName__",
-        stringReplacers: "__componentName__",
-        pathTemplate:    "./generate/templates/component",
-        outputPath:      "./src/components/__componentName__(pascalCase)",
-        addRowFiles:     [
-            {
-                pathFromOutputPath: "../index.ts",
-                marker:             "// Re-export",
-                whereInsertRow:     "after marker",
-                generationRow:      "export * from \"./__componentName__(pascalCase)\";",
-            },
-        ],
-        onComplete: () => {
-            console.log("Created component !!!");
-        },
-    },
-]
-```
 
 ### How to start
 If you are using TypeScript. You have to create config file `tsconfig.generate.json`.
-```json
+```sh
+// ./tsconfig.generate.json
+
 {
     "compilerOptions": {
         "module": "CommonJS",
