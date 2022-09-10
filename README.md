@@ -1,5 +1,7 @@
 # Welcome to burst-generate-files.
 
+<image align="right" width="160px" alt="HTML5" src="https://lh3.googleusercontent.com/pw/AL9nZEXF_kAh3tezMRxnT4GGR3YHoKo5CpSkWtRBD9_HsJ7K_KNqcpjELcsJ1OKdji9fJNIa9GKHXjeuLLshj5t-Y0QJuMn3IVxRCT1iXtm0AeSjD8s2cR1VJOpqRHEXLLZVZRgmJcw59HXUwCb2_dw1L17A=s432-no?authuser=0"/>
+
 This is a library for generating files and folders based on templates that the user creates.
 
 ## How to install
@@ -7,7 +9,7 @@ This is a library for generating files and folders based on templates that the u
 ### Using npm:
 
 ```sh
-npm i burst-generate-files -D
+npm i burst-generate-files
 ```
 
 ## Fast instructions for use
@@ -23,7 +25,7 @@ Create the folder `componentTemplate`, then create file with name `index.tsx`, b
 
 import React from "react";
 
-const __exampleComponentName__(pascalCase) = () => {
+export const __exampleComponentName__(pascalCase) = () => {
     return (
         <div>
             This is component: __exampleComponentName__
@@ -39,7 +41,7 @@ First of all you need to add import of `burst-generate-files`, and get `generate
 
 That function require two parameters, root path of your application and array of settings.
 
-**Note:** for easy way, to get root path of your application, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Try that: `npm i app-root-path -D`.
+**Note:** for easy way, to get root path of your application, you can use [app-root-path](https://www.npmjs.com/package/app-root-path).
 
 ```typescript
 // ./generate.config.ts
@@ -53,21 +55,23 @@ generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
         stringReplacers: "__exampleComponentName__",
         pathTemplate:    "./componentTemplate",
         outputPath:      "./components/__exampleComponentName__(pascalCase)",
-        onComplete: () => {
-            console.log("Example component created!");
-        },
     },
 ]);
 ```
 
 #### If you happy with TypeScript
-To start generating files, you need run `generate.config.ts`, the best way to do this use `ts-node` package.
-
-[Install](https://www.npmjs.com/package/ts-node) `npm i ts-node -D`.
+To start generating files, you need run `generate.config.ts`, the best way to do this install [ts-node](https://www.npmjs.com/package/ts-node) package globaly.
 
 In terminal you need just type next comand and magic begin... 
 ```sh
 ts-node "./generate.config.ts"
+```
+
+**Note:** also you can add new script in your `package.json`, for example 
+```json
+"scripts": {
+    "gen": "ts-node ./generate.config.ts"
+},
 ```
 
 #### If you must use JavaScript
@@ -80,18 +84,19 @@ node "./generate.config.js"
 ### Comand Line Interface 
 After running `generate.config.js`, advaced CLI started in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Press `Enter` to submit your choice, and continue.
 
-![image](https://user-images.githubusercontent.com/33392042/189484692-10ec33ee-2ced-4f1c-90d9-9060b51ebd86.png)
+![image](https://user-images.githubusercontent.com/33392042/189500538-5bc4e95e-9b05-4b49-bde2-fde162e3a1e5.png)
 
 On next step we need to type the name of entity what we generating. All strings inside templates what you use, and looks likes this: `__entityName__`, will replace with your name of entity.
 
-For example name of entity will be `wrapper`. Finaly, press `Enter` button to complete generation.
+For example name of entity will be `wrapper`. Lets press `Enter` button to complete generation.
 
-![image](https://user-images.githubusercontent.com/33392042/189484722-cb9e117d-9fe7-4149-8a07-9ee4ba5dcb3b.png)
+![image](https://user-images.githubusercontent.com/33392042/189500561-3bf47a86-6902-479f-9cab-49446033106f.png)
 
-Then the message `Example component created!` will appear in your terminal and example React component file scructure will be created.
+Finaly, example React component file scructure will be successfully created.
 
-![image](https://user-images.githubusercontent.com/33392042/189499591-eef8de67-ce33-4c7a-baa2-b6ac5b1016e5.png)
-![image](https://user-images.githubusercontent.com/33392042/189499699-d2ae324e-3ccb-4d16-be53-feb25b62da10.png)
+![image](https://user-images.githubusercontent.com/33392042/189501072-308de453-8519-4667-824e-74a79f922db1.png)
+
+Congratulations, we make our first generation together!
 
 ## Settings
 ### `name`
