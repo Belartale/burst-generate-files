@@ -1,13 +1,13 @@
 {
     "name": "burst-generate-files",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "description": "package module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
         "dist"
     ],
-    "author": "belartale@gmail.com",
+    "author": "belartale@gmail.com, arziburst@gmail.com",
     "repository": {
         "type": "git",
         "url": "https://github.com/Belartale/burst-generate-files"
