@@ -10,36 +10,36 @@ This is a library for generating files and folders based on templates that the u
 npm i burst-generate-files -D
 ```
 
-## How to use
-For first example, you can copy code below. You need to create two files.
-### Create template file
+## Fast instructions for use
+Below are the steps we will take to build our first generation together.
 
-First file, it's `template` file. In future, you create many of them, but now just simple example of `React` component.
+### Create your first template
+Template is folder with any scructure. In our case, we create simple example of `React` component.
 
-Create the folder `template`, then create `__exampleComponentName__(pascalCase).tsx`.
+Create the folder `componentTemplate`, then create file with name `index.tsx`, but also you can use another name `__exampleComponentName__(pascalCase).tsx`, in second variant we have dynamic file name with different replace modes. More information about variables in file names and replace modes you can find deeper in this docs.
 
 ```typescript
-// ./template/__exampleComponentName__(pascalCase).tsx
+// ./componentTemplate/__exampleComponentName__(pascalCase).tsx
 
 import React from "react";
 
 const __exampleComponentName__(pascalCase) = () => {
     return (
         <div>
-            This is component: __exampleComponentName__(pascalCase)
+            This is component: __exampleComponentName__
         </div>
      );
 };
 ```
 ### Create config file
 
-After you create `generate.config.ts` in root of your project. 
+Lets create `generate.config.ts` in root of your project.
 
 First of all you need to add import of `burst-generate-files`, and get `generateTemplateFiles` function. 
 
 That function require two parameters, root path of your application and array of settings.
 
-**Note:** for easy way, to get root path of your application, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Install that: `npm i app-root-path -D`.
+**Note:** for easy way, to get root path of your application, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Try that: `npm i app-root-path -D`.
 
 ```typescript
 // ./generate.config.ts
@@ -49,10 +49,10 @@ import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 
 generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
-        name:            "Component: ./src/components/__exampleComponentName__",
+        name:            "Generate new React component",
         stringReplacers: "__exampleComponentName__",
-        pathTemplate:    "./template",
-        outputPath:      "./src/components/__exampleComponentName__(pascalCase)",
+        pathTemplate:    "./componentTemplate",
+        outputPath:      "./components/__exampleComponentName__(pascalCase)",
         onComplete: () => {
             console.log("Example component created!");
         },
@@ -60,28 +60,37 @@ generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
 ]);
 ```
 
-#### If you are using TypeScript
-Install `npm i ts-node -D`.
+#### If you happy with TypeScript
+To start generating files, you need run `generate.config.ts`, the best way to do this use `ts-node` package.
 
-Next insert this code in package's scripts: `"gen": "ts-node \"./generate.config.ts\""`, then in terminal `npm run gen`
+[Install](https://www.npmjs.com/package/ts-node) `npm i ts-node -D`.
 
-#### If you are using JavaScript
-❗️ burst-generate-files doesn't work with JavaScript. In developing.
+In terminal you need just type next comand and magic begin... 
+```sh
+ts-node "./generate.config.ts"
+```
 
-If you use just JavaScript, you can run next script: `"gen": "node \"./generate.config.js\""`.
+#### If you must use JavaScript
 
-### Interface
-After running the script `npm run gen`, you will see the interface in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Next, you have to press the `Enter` button on your keyboard.
+For JavaScript all easier, in your terminal run next comand: 
+```sh
+node "./generate.config.js"
+```
+
+### Comand Line Interface 
+After running `generate.config.js`, advaced CLI started in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Press `Enter` to submit your choice, and continue.
 
 ![image](https://user-images.githubusercontent.com/33392042/189484692-10ec33ee-2ced-4f1c-90d9-9060b51ebd86.png)
 
-Next you have to write name for replacing all strings, for example name will be `wrapper`. Next, you have to press the `Enter` button.
+On next step we need to type the name of entity what we generating. All strings inside templates what you use, and looks likes this: `__entityName__`, will replace with your name of entity.
+
+For example name of entity will be `wrapper`. Finaly, press `Enter` button to complete generation.
 
 ![image](https://user-images.githubusercontent.com/33392042/189484722-cb9e117d-9fe7-4149-8a07-9ee4ba5dcb3b.png)
 
-Then the message `Example component created!` will appear in your terminal and file will create.
+Then the message `Example component created!` will appear in your terminal and example React component file scructure will be created.
 
-![image](https://user-images.githubusercontent.com/33392042/189492047-53ecf5ad-f545-42c1-87e2-c9f4bd080777.png)
+![image](https://user-images.githubusercontent.com/33392042/189498473-cfa10c1e-8e95-482d-bf5f-26682859899d.png)
 ![image](https://user-images.githubusercontent.com/33392042/189492836-c0ee2732-3aee-4db9-bca7-807f454fa175.png)
 
 ### Add new line
