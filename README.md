@@ -37,7 +37,7 @@ After you create `generate.config.ts` in root of your project.
 
 First of all you need add import of `burst-generate-files`, and get `generateTemplateFiles` function. 
 
-That function need get two parametrs, root path of your aplication and array of options.
+That function require two parameters, root path of your aplication and array of settings.
 
 **Note:** for easy way, to get root path of your aplication, you can use [app-root-path](https://www.npmjs.com/package/app-root-path). Install that: `npm i app-root-path -D`.
 
@@ -60,22 +60,31 @@ generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
 ]);
 ```
 
-### How to start
-If you are using TypeScript. You have to create config file `tsconfig.generate.json`.
-```sh
-// ./tsconfig.generate.json
+#### If you are using TypeScript
+Install `npm i ts-node -D`.
 
-{
-    "compilerOptions": {
-        "module": "CommonJS",
-        "typeRoots": [ "node_modules/@types" ],
-    },
-} 
-```
+Next insert this code in package's scripts: `"gen": "ts-node \"./generate.config.ts\""`, then in terminal `npm run gen`
 
-Insert this code in package's scripts: `"gen": "ts-node -P \"./tsconfig.generate.json\" \"./generate.config.ts\""`, then in terminal `npm run gen`
+#### If you are using JavaScript
+❗️ burst-generate-files doesn't work with JavaScript. In developing.
 
-If you use just JavaScript, you can run next script: `node \"./generate.config.js\"`
+If you use just JavaScript, you can run next script: `"gen": "node \"./generate.config.js\""`.
+
+### Interface
+After running the script `npm run gen`, you will see the interface in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Next you have to press the `Enter` button on your keyboard.
+
+![image](https://user-images.githubusercontent.com/33392042/189484692-10ec33ee-2ced-4f1c-90d9-9060b51ebd86.png)
+
+Next you have to write name for replace all strings, for example name will be `wrapper`. Next you have to press the `Enter` button.
+
+![image](https://user-images.githubusercontent.com/33392042/189484722-cb9e117d-9fe7-4149-8a07-9ee4ba5dcb3b.png)
+
+Then the message `Example component created!` will appear in the terminal and file will create.
+
+![image](https://user-images.githubusercontent.com/33392042/189484956-12e83c0f-0d37-473f-9739-d2eab1a87a7d.png) 
+![image](https://user-images.githubusercontent.com/33392042/189485724-99db4886-4436-41f7-a0ed-4e17bc06dfac.png)
+
+
 
 ## How it works
 You can transform name for files and into files. You have to choose a name for the string which will replace.
