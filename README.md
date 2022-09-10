@@ -19,7 +19,7 @@ Template is folder with any scructure. In our case, we create simple example of 
 Create the folder `componentTemplate`, then create file with name `index.tsx`, but also you can use another name `__exampleComponentName__(pascalCase).tsx`, in second variant we have dynamic file name with different replace modes. More information about variables in file names and replace modes you can find deeper in this docs.
 
 ```typescript
-// ./componentTemplate/__exampleComponentName__(pascalCase).tsx
+// ./componentTemplate/index.tsx
 
 import React from "react";
 
@@ -90,52 +90,8 @@ For example name of entity will be `wrapper`. Finaly, press `Enter` button to co
 
 Then the message `Example component created!` will appear in your terminal and example React component file scructure will be created.
 
-![image](https://user-images.githubusercontent.com/33392042/189498473-cfa10c1e-8e95-482d-bf5f-26682859899d.png)
-![image](https://user-images.githubusercontent.com/33392042/189492836-c0ee2732-3aee-4db9-bca7-807f454fa175.png)
-
-### Add new line
-If you want to insert new line for external file, you can use `addRowFiles`. For example, we insert export for `React` component.
-```typescript
-// ./generate.config.ts
-
-import { generateTemplateFiles } from "burst-generate-files";
-import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
-
-generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
-    {
-        name:            "Component: ./src/components/__exampleComponentName__",
-        stringReplacers: "__exampleComponentName__",
-        pathTemplate:    "./template",
-        outputPath:      "./src/components/__exampleComponentName__(pascalCase)",
-        
-        addRowFiles: [
-            {
-                pathFromOutputPath: '../index.ts',
-                marker:             '// Re-export',
-                whereInsertRow:     'after marker',
-                generationRow:      'export * from \"./__exampleComponentName__(pascalCase)/__exampleComponentName__(pascalCase)\";',
-            },
-        ],
-        
-        onComplete: () => {
-            console.log("Example component created!");
-        },
-    },
-]);
-```
-
-Then, in directory `./src/component` you have to create file `index.ts` and paste next code.
-
-❗️`// Re-export` is marker for generate your line, if this line different than `addRowFiles.marker`, new line will not create.
-```typescript
-// ./src/component/index.ts
-
-// Re-export
-```
-
-After generate, you can see that new line successfully generated.
-
-![image](https://user-images.githubusercontent.com/33392042/189493125-b253618b-a863-45bb-b4d9-3ecf4461b7fc.png)
+![image](https://user-images.githubusercontent.com/33392042/189499591-eef8de67-ce33-4c7a-baa2-b6ac5b1016e5.png)
+![image](https://user-images.githubusercontent.com/33392042/189499699-d2ae324e-3ccb-4d16-be53-feb25b62da10.png)
 
 ## Settings
 ### `name`
