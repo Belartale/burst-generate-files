@@ -42,9 +42,9 @@ export const generateTemplateFiles = async (
         if (selectedConfigItem.onComplete) {
             onComplete({ selectedConfigItem, selectedNames });
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error(chalk.red('Error burst-generate-files ↓'));
-        console.error(error);
+        console.error(error.message);
     }
 };
 
