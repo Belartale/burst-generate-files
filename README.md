@@ -98,6 +98,32 @@ Finaly, example React component file scructure will be successfully created.
 
 Congratulations, we make our first generation together!
 
+## Advanced use
+
+Next, we will get acquainted with the main features of the library.
+
+### Variables in file or folder names
+
+The library supports the syntax of variables in the names of files or folders that are contained in templates.\
+
+For example, we can rename `index.tsx` file in previous examle to '__exampleComponentName__(pascalCase).__exampleExtension__'.
+And also add new variable to `generate.config.ts` file
+```typescript
+// ./generate.config.ts
+
+import { generateTemplateFiles } from "burst-generate-files";
+import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
+
+generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
+    {
+        name:            "Generate new React component",
+        stringReplacers: [ "__exampleComponentName__", "__exampleExtension__" ], // <= New variable here
+        pathTemplate:    "./componentTemplate",
+        outputPath:      "./components/__exampleComponentName__(pascalCase)",
+    },
+]);
+```
+
 ## Settings
 ### `name`
 This is the name that will be displayed in the interface.
