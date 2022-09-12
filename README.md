@@ -98,6 +98,83 @@ Finaly, example React component file scructure will be successfully created.
 
 Congratulations, we make our first generation together!
 
+## Advanced use
+
+Next, we will get acquainted with the main features of the library.
+
+### Variables in file or folder names
+
+The library supports the syntax of variables in the names of files or folders that are contained in templates.
+
+For example, we can rename `index.tsx` file in previous examle to `__exampleComponentName__(pascalCase).__exampleExtension__`.
+In that case name and extension of file will be replaced, by variables what are configured in config file. 
+Lets add new variable to `generate.config.ts` file:
+```typescript
+    // ./generate.config.ts
+    {
+        // ...
+        stringReplacers: [  // <= Open new array
+            "__exampleComponentName__",
+            "__exampleExtension__", // <= New variable here
+        ], 
+        // ...
+    }
+```
+
+Run `generate.config.ts` with new changes.
+In CLI add value `wrapper` to `__exampleComponentName__`, and add value `tsx` to `__exampleExtension__`, and get result with custom file name, and custom extesion.
+
+`Screenshot of two different inputs in CLI`
+
+![image](https://user-images.githubusercontent.com/25966000/189736262-c0b179b1-739b-4332-84c0-1d667a6a41a4.png)
+
+### Extend template
+
+Size of file scructure no matter for burst generation. You can create any template, with any files and folder inside.
+For example, lets add new file in `componentTemplate`, and it will be `styles.__exampleStyleExtension__`. 
+```typescript
+    // ./generate.config.ts
+    {
+        // ...
+        stringReplacers: [ 
+            "__exampleComponentName__",
+            "__exampleExtension__",
+            "__exampleStyleExtension__" // <= New variable again here
+        ], 
+        // ...
+    }
+```
+As result we get new generated file structure based on extended template.
+
+![image](https://user-images.githubusercontent.com/25966000/189738692-03c3c6f3-3185-4302-b133-25cabd01ba11.png)
+
+### Extend config with new template
+
+The library can supports unlimited templates at the same time.
+For extend your config with new template, you need create new `template` folder with some stuff inside, and add new `settings` object to `generate.config.ts`.
+
+```typescript
+// ./generate.config.ts
+
+generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
+    {
+        name:            "Generate new React component",
+        stringReplacers: "__exampleComponentName__",
+        pathTemplate:    "./componentTemplate",
+        outputPath:      "./components/__exampleComponentName__(pascalCase)",
+    },
+    {                                // <= Page generation config
+        name:            "New page",
+        stringReplacers: "__pageName__",
+        pathTemplate:    "./pageTemplate",
+        outputPath:      "./page/__pageName__(pascalCase)",
+    },
+]);
+```
+```json
+Screnshot of two template options in CLI
+```
+
 ## Settings
 ### `name`
 This is the name that will be displayed in the interface.
