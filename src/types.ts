@@ -1,14 +1,21 @@
 // File index
-export type OptionsGenerateRow = {
-    pathFromOutputPath: string
-    marker: string
-    regExp?: {
-        value: string
-        flags: string
-    }
-    whereInsertRow?: 'after marker' | 'before marker'
-    generationRow: string
-    onceInsertRow?: boolean
+// Function mainActions
+export type MainActions = {
+    selectedConfigItem: Option
+    selectedNames: GetSelectedName[]
+}
+
+// Function generateTemplateFiles
+export type GenerateTemplateFile = {
+    PROJECT_ROOT: string,
+    option: OptionGTF,
+}
+
+export interface OptionGTF extends Omit<Option, 'stringsReplacers'> {
+    stringsReplacers: Array<{
+        string: string
+        newString: string
+    }>
 }
 
 // File replaceWordCase
@@ -22,10 +29,10 @@ export type ReplaceWordCase = {
 
 // File getSelectedItem
 export type GetSelectedItem = {
-    options: GenerateOptionsItem[]
+    options: Option[]
     PROJECT_ROOT: string
 }
-export type GenerateOptionsItem = {
+export type Option = {
     name:      string
     stringsReplacers:    string[]
     pathTemplate:       string
@@ -49,8 +56,19 @@ export type CreateFiles = {
 
 // File addRowFiles
 export type AddRowFiles = {
-    selectedConfigItem: GenerateOptionsItem
+    selectedConfigItem: Option
     selectedNames: GetSelectedName[]
+}
+export type OptionsGenerateRow = {
+    pathFromOutputPath: string
+    marker: string
+    regExp?: {
+        value: string
+        flags: string
+    }
+    whereInsertRow?: 'after marker' | 'before marker'
+    generationRow: string
+    onceInsertRow?: boolean
 }
 export type CheckIsOnceInsertRow = {
     optionsGenerateRow: OptionsGenerateRow
@@ -65,12 +83,6 @@ export type GenerateFiles = {
     wasInsertRow: boolean
 }
 
-// File onComplete
-export type OnComplete = {
-    selectedConfigItem: GenerateOptionsItem
-    selectedNames: GetSelectedName[]
-}
-
 // Function defineMarkerAndAddRow
 export type DefineMarkerAndAddRow = {
     optionsGenerateRow: OptionsGenerateRow
@@ -82,4 +94,11 @@ export type DefineMarkerAndAddRow = {
 export type AddConfigToFile = {
     optionsGenerateRow: OptionsGenerateRow
     fileNameConfig: string
+}
+
+
+// File onComplete
+export type OnComplete = {
+    selectedConfigItem: Option
+    selectedNames: GetSelectedName[]
 }

@@ -13,39 +13,89 @@ import { checkError } from './utils/checkError';
 import * as types from './types';
 import { onComplete } from './utils/onComplete';
 
-export const generateTemplateFiles = async (
-    PROJECT_ROOT: string, options: types.GenerateOptionsItem[],
+const mainActions = ({ selectedConfigItem, selectedNames }: types.MainActions) => {
+    createFiles({
+        fromFolderPath: selectedConfigItem.pathTemplate,
+        toPath:         replaceWordCase(
+            {
+                string:                  selectedConfigItem.outputPath,
+                arrayStringAndNewString: selectedNames,
+            },
+        ),
+        selectedNames,
+    });
+
+    if (selectedConfigItem.addRowFiles) {
+        addRowFiles({ selectedConfigItem, selectedNames });
+    }
+
+    if (selectedConfigItem.onComplete) {
+        onComplete({ selectedConfigItem, selectedNames });
+    }
+};
+
+// export const generateTemplateFile = (
+//     { PROJECT_ROOT, option }: types.GenerateTemplateFile,
+// ) => {
+//     const getStringsReplacers = (option: types.OptionGTF) => {
+//         let result: [] | string[] = [];
+
+//         option.stringsReplacers.forEach((obj) => {
+//             result = [ ...result, obj.string ];
+//         });
+
+//         return result;
+//     };
+//     const getNewStrings = (option: types.OptionGTF) => {
+//         let result: [] | types.GetSelectedName[] = [];
+
+//         option.stringsReplacers.forEach((obj) => {
+//             result = [
+//                 ...result, {
+//                     ...obj,
+//                     newString: obj.newString.split(' '),
+//                 },
+//             ];
+//         });
+
+//         return result;
+//     };
+
+//     try {
+//         checkError(PROJECT_ROOT, [{ ...option, stringsReplacers: getStringsReplacers(option) }]);
+
+//         mainActions({ selectedConfigItem: { ...option, stringsReplacers: getStringsReplacers(option) },
+//             selectedNames:      getNewStrings(option),
+//         });
+
+//         return true;
+//     } catch (error: any) {
+//         console.error(chalk.red('Error burst-generate-files ↓'));
+//         console.error(error.message);
+
+//         return JSON.parse(replaceWordCase({
+//             string:                  JSON.stringify(option),
+//             arrayStringAndNewString: getNewStrings(option),
+//         }));
+//     }
+// };
+
+export const generationCLI = async (
+    PROJECT_ROOT: string, options: types.Option[],
 ): Promise<void> => {
     try {
         checkError(PROJECT_ROOT, options);
 
-        const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem({ options, PROJECT_ROOT });
+        const selectedConfigItem: types.Option = await getSelectedItem({ options, PROJECT_ROOT });
 
         const selectedNames: types.GetSelectedName[] = await getSelectedName(selectedConfigItem.stringsReplacers);
 
-        createFiles({
-            fromFolderPath: selectedConfigItem.pathTemplate,
-            toPath:         replaceWordCase(
-                {
-                    string:                  selectedConfigItem.outputPath,
-                    arrayStringAndNewString: selectedNames,
-                },
-            ),
-            selectedNames,
-        });
-
-        if (selectedConfigItem.addRowFiles) {
-            addRowFiles({ selectedConfigItem, selectedNames });
-        }
-
-
-        if (selectedConfigItem.onComplete) {
-            onComplete({ selectedConfigItem, selectedNames });
-        }
+        mainActions({ selectedConfigItem, selectedNames });
     } catch (error: any) {
         console.error(chalk.red('Error burst-generate-files ↓'));
         console.error(error.message);
     }
 };
 
-exports.generateTemplateFiles = generateTemplateFiles;
+// exports.generateTemplateFile = generateTemplateFile;
+exports.generationCLI = generationCLI;

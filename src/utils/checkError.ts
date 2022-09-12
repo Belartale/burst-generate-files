@@ -4,7 +4,7 @@ import * as yup from 'yup';
 // Types
 import * as types from '../types';
 
-export const checkError = (PROJECT_ROOT: string, options: types.GenerateOptionsItem[]) => {
+export const checkError = (PROJECT_ROOT: string, options: types.Option[]) => {
     const schemaRoot = yup.string()
         .test({
             name:    'firstArgument',
