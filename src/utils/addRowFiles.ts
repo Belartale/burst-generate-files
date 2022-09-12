@@ -72,7 +72,7 @@ const checkIsOnceInsertRow = ({ optionsGenerateRow, fileNameConfig }: types.Chec
     return false;
 };
 
-export const addRowFiles = ({ selectedConfigItem, selectedName }: types.AddRowFiles) => {
+export const addRowFiles = ({ selectedConfigItem, selectedNames }: types.AddRowFiles) => {
     const fileNameConfig = 'config.generate.files.json';
 
     if (
@@ -96,9 +96,8 @@ export const addRowFiles = ({ selectedConfigItem, selectedName }: types.AddRowFi
 
         const pathFile = resolve(
             replaceWordCase({
-                string:          selectedConfigItem.outputPath,
-                stringReplacers: selectedConfigItem.stringReplacers,
-                selectedName:    selectedName,
+                string:                  selectedConfigItem.outputPath,
+                arrayStringAndNewString: selectedNames,
             }) + '/' + optionsGenerateRow.pathFromOutputPath,
         );
 
@@ -125,9 +124,8 @@ export const addRowFiles = ({ selectedConfigItem, selectedName }: types.AddRowFi
         const dataRedFileReplaced = defineMarkerAndAddRow({ optionsGenerateRow, dataRedFile, tabs });
 
         const resultData = replaceWordCase({
-            string:          dataRedFileReplaced,
-            stringReplacers: selectedConfigItem.stringReplacers,
-            selectedName:    selectedName,
+            string:                  dataRedFileReplaced,
+            arrayStringAndNewString: selectedNames,
         });
         fs.writeFileSync(
             pathFile,

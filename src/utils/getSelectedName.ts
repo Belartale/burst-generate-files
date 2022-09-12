@@ -4,22 +4,28 @@ import enquirer from 'enquirer';
 // Types
 import * as types from '../types';
 
-export const getSelectedName = async (): Promise<types.GetSelectedName> => {
-    const replacerQuestion: any = {
-        type:     'input',
-        name:     'selectedName',
-        message:  'Replace name on >>> ',
-        validate: (replacerSlotValue: string) => {
-            const isValid: boolean = Boolean(replacerSlotValue.trim());
+export const getSelectedName = async (strings: string[]): Promise<types.GetSelectedName[]> => {
+    let result: [] | types.GetSelectedName[] = [];
 
-            return isValid || 'You must provide an answer.';
-        },
-    };
+    for await (const string of strings) {
+        const replacerQuestion: any = {
+            type:     'input',
+            name:     'selectedName',
+            message:  `Replace ${string} on >>> `,
+            validate: (value: string) => {
+                const isValid: boolean = Boolean(value.trim());
 
-    const answer: {selectedName: string} = await enquirer.prompt(replacerQuestion);
+                return isValid || 'You must provide an answer!!!';
+            },
+        };
 
-    const arrAnswer: types.GetSelectedName = answer.selectedName.trim().split(' ');
+        const gotValue: {selectedName: string} = await enquirer.prompt(replacerQuestion);
 
-    return arrAnswer;
+        result = [
+            ...result, { string:    string,
+                newString: gotValue.selectedName.trim().split(' ') },
+        ];
+    }
+
+    return result;
 };
-

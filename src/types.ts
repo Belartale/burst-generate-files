@@ -14,8 +14,10 @@ export type OptionsGenerateRow = {
 // File replaceWordCase
 export type ReplaceWordCase = {
     string: string
-    stringReplacers: string
-    selectedName: GetSelectedName
+    arrayStringAndNewString: Array<{
+        string: string
+        newString: string[]
+    }>
 }
 
 // File getSelectedItem
@@ -25,7 +27,7 @@ export type GetSelectedItem = {
 }
 export type GenerateOptionsItem = {
     name:      string
-    stringReplacers:    string
+    stringsReplacers:    string[]
     pathTemplate:       string
     outputPath:         string
     addRowFiles?: OptionsGenerateRow[]
@@ -33,25 +35,22 @@ export type GenerateOptionsItem = {
 }
 
 // File getSelectedName
-export type GetSelectedName = string[]
+export type GetSelectedName = {
+    string: string,
+    newString: string[]
+}
 
 // File createFiles
 export type CreateFiles = {
     fromFolderPath: string
     toPath: string
-    selectedConfigItem: {
-        pathTemplate: string,
-        name: string,
-        stringReplacers: string,
-        outputPath: string
-    }
-    selectedName: GetSelectedName
-};
+    selectedNames: GetSelectedName[]
+}
 
 // File addRowFiles
 export type AddRowFiles = {
     selectedConfigItem: GenerateOptionsItem
-    selectedName: GetSelectedName
+    selectedNames: GetSelectedName[]
 }
 export type CheckIsOnceInsertRow = {
     optionsGenerateRow: OptionsGenerateRow
@@ -64,6 +63,12 @@ export type GenerateFiles = {
         generationRow: string
     },
     wasInsertRow: boolean
+}
+
+// File onComplete
+export type OnComplete = {
+    selectedConfigItem: GenerateOptionsItem
+    selectedNames: GetSelectedName[]
 }
 
 // Function defineMarkerAndAddRow

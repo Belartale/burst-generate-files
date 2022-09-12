@@ -52,7 +52,7 @@ import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
-        stringReplacers: "__exampleComponentName__",
+        stringsReplacers: "__exampleComponentName__",
         pathTemplate:    "./componentTemplate",
         outputPath:      "./components/__exampleComponentName__(pascalCase)",
     },
@@ -104,7 +104,7 @@ This is the name that will be displayed in the interface.
 
 ![Image interface](https://user-images.githubusercontent.com/33392042/189359666-be15cce3-133a-444d-a57d-33fb16033f78.png)
 
-### `stringReplacers`
+### `stringsReplacers`
 This is the string which will replace.
 #### Types of string replacements
 ```sh

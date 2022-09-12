@@ -7,42 +7,44 @@ import { getSelectedName } from './utils/getSelectedName';
 import { createFiles } from './utils/createFiles';
 import { replaceWordCase } from './utils/replaceWordCase';
 import { addRowFiles } from './utils/addRowFiles';
+import { checkError } from './utils/checkError';
 
 // Types
 import * as types from './types';
+import { onComplete } from './utils/onComplete';
 
 export const generateTemplateFiles = async (
     PROJECT_ROOT: string, options: types.GenerateOptionsItem[],
 ): Promise<void> => {
     try {
+        checkError(PROJECT_ROOT, options);
+
         const selectedConfigItem: types.GenerateOptionsItem = await getSelectedItem({ options, PROJECT_ROOT });
 
-        const selectedName: types.GetSelectedName = await getSelectedName();
+        const selectedNames: types.GetSelectedName[] = await getSelectedName(selectedConfigItem.stringsReplacers);
 
         createFiles({
             fromFolderPath: selectedConfigItem.pathTemplate,
             toPath:         replaceWordCase(
                 {
-                    string:          selectedConfigItem.outputPath,
-                    stringReplacers: selectedConfigItem.stringReplacers,
-                    selectedName,
+                    string:                  selectedConfigItem.outputPath,
+                    arrayStringAndNewString: selectedNames,
                 },
             ),
-            selectedConfigItem,
-            selectedName,
+            selectedNames,
         });
 
         if (selectedConfigItem.addRowFiles) {
-            addRowFiles({ selectedConfigItem, selectedName });
+            addRowFiles({ selectedConfigItem, selectedNames });
         }
 
 
         if (selectedConfigItem.onComplete) {
-            selectedConfigItem.onComplete();
+            onComplete({ selectedConfigItem, selectedNames });
         }
     } catch (error) {
-        console.log(chalk.red('Error generate files'));
-        console.log(error);
+        console.error(chalk.red('Error burst-generate-files ↓'));
+        console.error(error);
     }
 };
 
