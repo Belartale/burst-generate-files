@@ -34,6 +34,22 @@ const mainActions = ({ selectedConfigItem, selectedNames }: types.MainActions) =
     }
 };
 
+const optionsMutate = (options: types.OptionO[]): types.Option[] => {
+    const result = options.map((option) =>  {
+        if (!Array.isArray(option.stringsReplacers) && typeof option.stringsReplacers === 'string') {
+            return {
+                ...option,
+                stringsReplacers: [ option.stringsReplacers ],
+            };
+        }
+
+        return option;
+    });
+
+    return result as types.Option[];
+};
+
+
 // export const generateTemplateFile = (
 //     { PROJECT_ROOT, option }: types.GenerateTemplateFile,
 // ) => {
@@ -81,12 +97,13 @@ const mainActions = ({ selectedConfigItem, selectedNames }: types.MainActions) =
 // };
 
 export const generationCLI = async (
-    PROJECT_ROOT: string, options: types.Option[],
+    PROJECT_ROOT: string, options: types.OptionO[],
 ): Promise<void> => {
     try {
-        checkError(PROJECT_ROOT, options);
+        const optionsMutated = optionsMutate(options);
+        checkError(PROJECT_ROOT, optionsMutated);
 
-        const selectedConfigItem: types.Option = await getSelectedItem({ options, PROJECT_ROOT });
+        const selectedConfigItem: types.Option = await getSelectedItem({ options: optionsMutated, PROJECT_ROOT });
 
         const selectedNames: types.GetSelectedName[] = await getSelectedName(selectedConfigItem.stringsReplacers);
 

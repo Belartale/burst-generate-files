@@ -32,6 +32,9 @@ export type GetSelectedItem = {
     options: Option[]
     PROJECT_ROOT: string
 }
+export interface OptionO extends Omit<Option, 'stringsReplacers'> {
+    stringsReplacers: string | string[]
+}
 export type Option = {
     name:      string
     stringsReplacers:    string[]
