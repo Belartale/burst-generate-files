@@ -11,7 +11,7 @@ import * as types from '../types';
 import { replaceWordCase } from './replaceWordCase';
 
 export const createFiles = (
-    { fromFolderPath, toPath, selectedConfigItem, selectedName }: types.CreateFiles,
+    { fromFolderPath, toPath, selectedNames }: types.CreateFiles,
 ) => {
     try {
         const copyDir = (src: string, dest: string, callback: Function) => {
@@ -35,9 +35,8 @@ export const createFiles = (
                                     fs.createReadStream(curSrc).pipe(new Transform({
                                         transform(chunk, encoding, callback) {
                                             this.push(replaceWordCase({
-                                                string:          chunk.toString(),
-                                                stringReplacers: selectedConfigItem.stringReplacers,
-                                                selectedName,
+                                                string:                  chunk.toString(),
+                                                arrayStringAndNewString: selectedNames,
                                             }));
                                             callback();
                                         },
@@ -54,9 +53,8 @@ export const createFiles = (
                                             curDest,
                                             replaceWordCase(
                                                 {
-                                                    string:          curDest,
-                                                    stringReplacers: selectedConfigItem.stringReplacers,
-                                                    selectedName,
+                                                    string:                  curDest,
+                                                    arrayStringAndNewString: selectedNames,
                                                 },
                                             ),
                                             (error) => {

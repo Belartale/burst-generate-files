@@ -7,12 +7,12 @@ import * as types from '../types';
 
 export const getSelectedItem = async (
     { options, PROJECT_ROOT }: types.GetSelectedItem,
-): Promise<types.GenerateOptionsItem> => {
+): Promise<types.Option> => {
     const templateQuestions = {
         type:    'autocomplete',
         name:    'optionChoice',
         message: 'What do you want to generate?',
-        choices: options.map((configItem: types.GenerateOptionsItem) => configItem.name),
+        choices: options.map((configItem: types.Option) => configItem.name),
         suggest(input: string, choices: string[]) {
             return choices.filter((choice: any) => {
                 return choice.message.toLowerCase().startsWith(input.toLowerCase());
@@ -22,13 +22,13 @@ export const getSelectedItem = async (
     const templateAnswers: { optionChoice: string } = await enquirer.prompt(templateQuestions);
 
     const foundOption = options.find(
-        (item: types.GenerateOptionsItem) => item.name === templateAnswers.optionChoice,
-    ) as types.GenerateOptionsItem;
+        (item: types.Option) => item.name === templateAnswers.optionChoice,
+    ) as types.Option;
 
     return {
         ...foundOption,
         pathTemplate: resolve(PROJECT_ROOT, foundOption.pathTemplate),
         outputPath:   resolve(PROJECT_ROOT, foundOption.outputPath),
-    } as types.GenerateOptionsItem;
+    } as types.Option;
 };
 
