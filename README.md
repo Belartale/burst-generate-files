@@ -16,9 +16,9 @@ npm i burst-generate-files
 Below are the steps we will take to build our first generation together.
 
 ### Create your first template
-Template is folder with any scructure. In our case, we create simple example of `React` component.
+Template is a folder with any structure. In our case, we create a simple example of `React` component.
 
-Create the folder `componentTemplate`, then create file with name `index.tsx`, but also you can use another name `__exampleComponentName__(pascalCase).tsx`, in second variant we have dynamic file name with different replace modes. More information about variables in file names and replace modes you can find deeper in this docs.
+Create the folder `componentTemplate`, then create file with name `index.tsx`, but also you can use another name `__exampleComponentName__(pascalCase).tsx`, in second variant we have dynamic file name with different replace modes. More information about variables in file names and replace modes you can find deeper in these docs.
 
 ```typescript
 // ./componentTemplate/index.tsx
@@ -35,9 +35,9 @@ export const __exampleComponentName__(pascalCase) = () => {
 ```
 ### Create config file
 
-Lets create `generate.config.ts` in root of your project.
+Let's create `generate.config.ts` in the root of your project.
 
-First of all you need to add import of `burst-generate-files`, and get `generateTemplateFiles` function. 
+First of all you need to add import of `burst-generate-files`, and get `generationCLI` function. 
 
 That function require two parameters, root path of your application and array of settings.
 
@@ -46,10 +46,10 @@ That function require two parameters, root path of your application and array of
 ```typescript
 // ./generate.config.ts
 
-import { generateTemplateFiles } from "burst-generate-files";
+import { generationCLI } from "burst-generate-files";
 import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 
-generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
+generationCLI(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
         stringsReplacers: "__exampleComponentName__",
@@ -60,9 +60,9 @@ generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
 ```
 
 #### If you happy with TypeScript
-To start generating files, you need run `generate.config.ts`, the best way to do this install [ts-node](https://www.npmjs.com/package/ts-node) package globaly.
+To start generating files, you need to run `generate.config.ts`, the best way to do this install [ts-node](https://www.npmjs.com/package/ts-node) package globally.
 
-In terminal you need just type next comand and magic begin... 
+In terminal, you need just type next command and magic begin... 
 ```sh
 ts-node "./generate.config.ts"
 ```
@@ -76,23 +76,23 @@ ts-node "./generate.config.ts"
 
 #### If you must use JavaScript
 
-For JavaScript all easier, in your terminal run next comand: 
+For JavaScript all easier, in your terminal run next command: 
 ```sh
 node "./generate.config.js"
 ```
 
-### Comand Line Interface 
-After running `generate.config.js`, advaced CLI started in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Press `Enter` to submit your choice, and continue.
+### Command Line Interface 
+After running `generate.config.js`, advanced CLI started in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Press `Enter` to submit your choice, and continue.
 
 ![image](https://user-images.githubusercontent.com/33392042/189500538-5bc4e95e-9b05-4b49-bde2-fde162e3a1e5.png)
 
-On next step we need to type the name of entity what we generating. All strings inside templates what you use, and looks likes this: `__entityName__`, will replace with your name of entity.
+On next step we need to type the name of entity what we are generating. All strings inside templates what you use, and looks like this: `__entityName__`, will replace with your name of entity.
 
-For example name of entity will be `wrapper`. Lets press `Enter` button to complete generation.
+For example, the name of the entity will be `wrapper`. Let's press `Enter` button to complete generation.
 
 ![image](https://user-images.githubusercontent.com/33392042/189500561-3bf47a86-6902-479f-9cab-49446033106f.png)
 
-Finaly, example React component file scructure will be successfully created.
+Finely, example React component file structure will be successfully created.
 
 ![image](https://user-images.githubusercontent.com/33392042/189501072-308de453-8519-4667-824e-74a79f922db1.png)
 
@@ -106,9 +106,9 @@ Next, we will get acquainted with the main features of the library.
 
 The library supports the syntax of variables in the names of files or folders that are contained in templates.
 
-For example, we can rename `index.tsx` file in previous examle to `__exampleComponentName__(pascalCase).__exampleExtension__`.
-In that case name and extension of file will be replaced, by variables what are configured in config file. 
-Lets add new variable to `generate.config.ts` file:
+For example, we can rename `index.tsx` file in previous example to `__exampleComponentName__(pascalCase).__exampleExtension__`.
+In that case, name and extension of file will be replaced, by variables what are configured in config file. 
+Let's add new variable to `generate.config.ts` file:
 ```typescript
     // ./generate.config.ts
     {
@@ -122,16 +122,16 @@ Lets add new variable to `generate.config.ts` file:
 ```
 
 Run `generate.config.ts` with new changes.
-In CLI add value `wrapper` to `__exampleComponentName__`, and add value `tsx` to `__exampleExtension__`, and get result with custom file name, and custom extesion.
+In CLI add value `wrapper` to `__exampleComponentName__`, and add value `tsx` to `__exampleExtension__`, and get result with custom file name, and custom extension.
 
-`Screenshot of two different inputs in CLI`
+![image](https://user-images.githubusercontent.com/33392042/189850848-aceeefbf-e864-4fc3-8e61-c2107d5a5181.png)
 
 ![image](https://user-images.githubusercontent.com/25966000/189736262-c0b179b1-739b-4332-84c0-1d667a6a41a4.png)
 
 ### Extend template
 
-Size of file scructure no matter for burst generation. You can create any template, with any files and folder inside.
-For example, lets add new file in `componentTemplate`, and it will be `styles.__exampleStyleExtension__`. 
+Size of file structure no matter for burst generation. You can create any template, with any files and folder inside.
+For example, let's add new file in `componentTemplate`, and it will be `styles.__exampleStyleExtension__`. 
 ```typescript
     // ./generate.config.ts
     {
@@ -144,19 +144,19 @@ For example, lets add new file in `componentTemplate`, and it will be `styles.__
         // ...
     }
 ```
-As result we get new generated file structure based on extended template.
+As result, we get new generated file structure based on extended template.
 
 ![image](https://user-images.githubusercontent.com/25966000/189738692-03c3c6f3-3185-4302-b133-25cabd01ba11.png)
 
 ### Extend config with new template
 
-The library can supports unlimited templates at the same time.
-For extend your config with new template, you need create new `template` folder with some stuff inside, and add new `settings` object to `generate.config.ts`.
+The library can support unlimited templates at the same time.
+For extend your config with new template, you need to create new `template` folder with some stuff inside, and add new `settings` object to `generate.config.ts`.
 
 ```typescript
 // ./generate.config.ts
 
-generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
+generationCLI(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
         stringsReplacers: "__exampleComponentName__",
@@ -171,9 +171,8 @@ generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
     },
 ]);
 ```
-```json
-Screnshot of two template options in CLI
-```
+
+![image](https://user-images.githubusercontent.com/33392042/189851222-ed4c7a8b-156e-4a5c-bc79-965b48462a33.png)
 
 ## Settings
 ### `name`
