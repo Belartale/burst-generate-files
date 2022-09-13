@@ -113,7 +113,7 @@ Lets add new variable to `generate.config.ts` file:
     // ./generate.config.ts
     {
         // ...
-        stringReplacers: [  // <= Open new array
+        stringsReplacers: [  // <= Open new array
             "__exampleComponentName__",
             "__exampleExtension__", // <= New variable here
         ], 
@@ -136,7 +136,7 @@ For example, lets add new file in `componentTemplate`, and it will be `styles.__
     // ./generate.config.ts
     {
         // ...
-        stringReplacers: [ 
+        stringsReplacers: [ 
             "__exampleComponentName__",
             "__exampleExtension__",
             "__exampleStyleExtension__" // <= New variable again here
@@ -159,13 +159,13 @@ For extend your config with new template, you need create new `template` folder 
 generateTemplateFiles(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
-        stringReplacers: "__exampleComponentName__",
+        stringsReplacers: "__exampleComponentName__",
         pathTemplate:    "./componentTemplate",
         outputPath:      "./components/__exampleComponentName__(pascalCase)",
     },
     {                                // <= Page generation config
         name:            "New page",
-        stringReplacers: "__pageName__",
+        stringsReplacers: "__pageName__",
         pathTemplate:    "./pageTemplate",
         outputPath:      "./page/__pageName__(pascalCase)",
     },
