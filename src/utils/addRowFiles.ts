@@ -26,7 +26,7 @@ const addConfigToFile = ({ optionsGenerateRow, fileNameConfig }: types.AddConfig
             newData.push({
                 id: {
                     pathFromOutputPath: optionsGenerateRow.pathFromOutputPath,
-                    marker:             optionsGenerateRow.marker,
+                    marker:             typeof optionsGenerateRow.marker === 'object' ? optionsGenerateRow.marker.value : optionsGenerateRow.marker,
                     generationRow:      optionsGenerateRow.generationRow,
                 },
                 wasInsertRow: true,
@@ -38,9 +38,13 @@ const addConfigToFile = ({ optionsGenerateRow, fileNameConfig }: types.AddConfig
 };
 
 const defineMarkerAndAddRow = ({ optionsGenerateRow, dataRedFile, tabs }: types.DefineMarkerAndAddRow) => {
+    console.log('defineMarkerAndAddRow => optionsGenerateRow', optionsGenerateRow);
+
+
     const reg = new RegExp(
-        optionsGenerateRow.regExp?.value ? optionsGenerateRow.regExp.value : optionsGenerateRow.marker,
-        optionsGenerateRow.regExp?.flags ? optionsGenerateRow.regExp.flags : 'g',
+        typeof optionsGenerateRow.marker === 'object' && optionsGenerateRow.marker.value
+            ? optionsGenerateRow.marker.value as string : optionsGenerateRow.marker as string,
+        typeof optionsGenerateRow.marker === 'object' && optionsGenerateRow.marker.flags ? optionsGenerateRow.marker.flags : 'g',
     );
     let dataRedFileReplaced = dataRedFile;
 
@@ -108,7 +112,9 @@ export const addRowFiles = ({ addRowFiles, outputPath, selectedNames }: types.Ad
         dataRedFile
             .split(/\r?\n/)
             .forEach((string: string) => {
-                if (string.includes(optionsGenerateRow.marker)) {
+                if (string.includes(
+                    typeof optionsGenerateRow.marker === 'string' ? optionsGenerateRow.marker : optionsGenerateRow.marker.value,
+                )) {
                     string.split('').every((symbolOfLine) => {
                         if (symbolOfLine === ' ') {
                             tabs += ' ';

@@ -65,10 +65,10 @@ export type AddRowFiles = {
     outputPath: Option['outputPath']
     selectedNames: GetSelectedName[]
 }
+
 export type OptionsGenerateRow = {
     pathFromOutputPath: string
-    marker: string
-    regExp?: {
+    marker: string | {
         value: string
         flags: string
     }
