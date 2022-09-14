@@ -22,7 +22,7 @@ export type OptionGStringsReplacers = {
     newString: string
 }
 
-export interface OptionOG extends Omit<Option, 'stringsReplacers'> {
+export interface OptionOG extends Omit<Option, 'name' | 'stringsReplacers'> {
     stringsReplacers: OptionGStringsReplacers | Array<OptionGStringsReplacers>
 }
 
