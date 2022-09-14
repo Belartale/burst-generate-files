@@ -72,21 +72,21 @@ const checkIsOnceInsertRow = ({ optionsGenerateRow, fileNameConfig }: types.Chec
     return false;
 };
 
-export const addRowFiles = ({ selectedConfigItem, selectedNames }: types.AddRowFiles) => {
+export const addRowFiles = ({ addRowFiles, outputPath, selectedNames }: types.AddRowFiles) => {
     const fileNameConfig = 'config.generate.files.json';
 
     if (
-        (selectedConfigItem.addRowFiles
-        && selectedConfigItem.addRowFiles.find((el) => el.onceInsertRow === true)
+        (addRowFiles
+        && addRowFiles.find((el) => el.onceInsertRow === true)
         && !fs.existsSync(fileNameConfig))
-        || (selectedConfigItem.addRowFiles
-        && selectedConfigItem.addRowFiles.find((el) => el.onceInsertRow === true)
+        || (addRowFiles
+        && addRowFiles.find((el) => el.onceInsertRow === true)
         && fs.readFileSync(fileNameConfig, { encoding: 'utf-8' }) === '')
     ) {
         fs.writeFileSync(fileNameConfig, JSON.stringify([]));
     }
 
-    selectedConfigItem.addRowFiles?.forEach((optionsGenerateRow: types.OptionsGenerateRow) => {
+    addRowFiles?.forEach((optionsGenerateRow: types.OptionsGenerateRow) => {
         if (optionsGenerateRow.onceInsertRow && checkIsOnceInsertRow({ optionsGenerateRow, fileNameConfig })) {
             console.log(chalk.yellow('This row previously inserted !!!'));
             console.table(optionsGenerateRow);
@@ -96,8 +96,8 @@ export const addRowFiles = ({ selectedConfigItem, selectedNames }: types.AddRowF
 
         const pathFile = resolve(
             replaceWordCase({
-                string:                  selectedConfigItem.outputPath,
-                arrayStringAndNewString: selectedNames,
+                string:            outputPath,
+                stringsForReplace: selectedNames,
             }) + '/' + optionsGenerateRow.pathFromOutputPath,
         );
 
@@ -124,8 +124,8 @@ export const addRowFiles = ({ selectedConfigItem, selectedNames }: types.AddRowF
         const dataRedFileReplaced = defineMarkerAndAddRow({ optionsGenerateRow, dataRedFile, tabs });
 
         const resultData = replaceWordCase({
-            string:                  dataRedFileReplaced,
-            arrayStringAndNewString: selectedNames,
+            string:            dataRedFileReplaced,
+            stringsForReplace: selectedNames,
         });
         fs.writeFileSync(
             pathFile,

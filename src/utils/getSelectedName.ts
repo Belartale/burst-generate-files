@@ -22,8 +22,10 @@ export const getSelectedName = async (strings: string[]): Promise<types.GetSelec
         const gotValue: {selectedName: string} = await enquirer.prompt(replacerQuestion);
 
         result = [
-            ...result, { string:    string,
-                newString: gotValue.selectedName.trim().split(' ') },
+            ...result, {
+                string:    string,
+                newString: gotValue.selectedName.trim(),
+            },
         ];
     }
 

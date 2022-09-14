@@ -1,40 +1,5 @@
 // File index
-// Function mainActions
-export type MainActions = {
-    selectedConfigItem: Option
-    selectedNames: GetSelectedName[]
-}
-
-// Function generateTemplateFiles
-export type GenerateTemplateFile = {
-    PROJECT_ROOT: string,
-    option: OptionGTF,
-}
-
-export interface OptionGTF extends Omit<Option, 'stringsReplacers'> {
-    stringsReplacers: Array<{
-        string: string
-        newString: string
-    }>
-}
-
-// File replaceWordCase
-export type ReplaceWordCase = {
-    string: string
-    arrayStringAndNewString: Array<{
-        string: string
-        newString: string[]
-    }>
-}
-
-// File getSelectedItem
-export type GetSelectedItem = {
-    options: Option[]
-    PROJECT_ROOT: string
-}
-export interface OptionO extends Omit<Option, 'stringsReplacers'> {
-    stringsReplacers: string | string[]
-}
+// Common types
 export type Option = {
     name:      string
     stringsReplacers:    string[]
@@ -44,10 +9,47 @@ export type Option = {
     onComplete?:        Function
 }
 
+// Function mainActions
+export type MainActions = {
+    configItem: Option | OptionOG
+    selectedNames: GetSelectedName[]
+    PROJECT_ROOT: string
+}
+
+// Function generation
+export type OptionGStringsReplacers = {
+    string: string
+    newString: string
+}
+
+export interface OptionOG extends Omit<Option, 'stringsReplacers'> {
+    stringsReplacers: OptionGStringsReplacers | Array<OptionGStringsReplacers>
+}
+
+// Function generationCLI
+export interface OptionOCLI extends Omit<Option, 'stringsReplacers'> {
+    stringsReplacers: string | string[]
+}
+
+// File makeAbsolutePath
+export type MakeAbsolutePath = {
+    PROJECT_ROOT: string
+    option: Option | OptionOG | OptionOCLI
+}
+
+// File replaceWordCase
+export type ReplaceWordCase = {
+    string: string
+    stringsForReplace: Array<GetSelectedName>
+}
+
+// File getSelectedItem
+export type GetSelectedItem = OptionOCLI[]
+
 // File getSelectedName
 export type GetSelectedName = {
-    string: string,
-    newString: string[]
+    string: string
+    newString: string
 }
 
 // File createFiles
@@ -59,7 +61,8 @@ export type CreateFiles = {
 
 // File addRowFiles
 export type AddRowFiles = {
-    selectedConfigItem: Option
+    addRowFiles: OptionsGenerateRow[]
+    outputPath: Option['outputPath']
     selectedNames: GetSelectedName[]
 }
 export type OptionsGenerateRow = {
@@ -102,6 +105,6 @@ export type AddConfigToFile = {
 
 // File onComplete
 export type OnComplete = {
-    selectedConfigItem: Option
+    configItem: Option | OptionOG | OptionOCLI
     selectedNames: GetSelectedName[]
 }

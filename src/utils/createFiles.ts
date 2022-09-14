@@ -35,8 +35,8 @@ export const createFiles = (
                                     fs.createReadStream(curSrc).pipe(new Transform({
                                         transform(chunk, encoding, callback) {
                                             this.push(replaceWordCase({
-                                                string:                  chunk.toString(),
-                                                arrayStringAndNewString: selectedNames,
+                                                string:            chunk.toString(),
+                                                stringsForReplace: selectedNames,
                                             }));
                                             callback();
                                         },
@@ -45,22 +45,18 @@ export const createFiles = (
 
                                     fs.access(dest, (error) => {
                                         if (error) {
-                                            console.log(chalk.red('error access copy file'));
-                                            console.log(error);
                                             throw error;
                                         }
                                         fs.rename(
                                             curDest,
                                             replaceWordCase(
                                                 {
-                                                    string:                  curDest,
-                                                    arrayStringAndNewString: selectedNames,
+                                                    string:            curDest,
+                                                    stringsForReplace: selectedNames,
                                                 },
                                             ),
                                             (error) => {
                                                 if (error) {
-                                                    console.log(chalk.red('error rename file'));
-                                                    console.log(error);
                                                     throw error;
                                                 }
                                             },
