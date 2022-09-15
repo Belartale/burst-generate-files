@@ -1,6 +1,6 @@
 {
     "name": "burst-generate-files",
-    "version": "0.3.9",
+    "version": "0.3.10",
     "description": "package module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -17,6 +17,23 @@
         "build:link": "npm run build && npm link",
         "clean": "rm -rf node_modules"
     },
+    "keywords": [
+        "generate",
+        "generation",
+        "typescript",
+        "node",
+        "generate-files",
+        "generation-files",
+        "custom-files",
+        "generate-code",
+        "generation-code",
+        "template",
+        "generate-template",
+        "generation-template",
+        "generator",
+        "generator-files"
+    ],
+    "license": "MIT",
     "devDependencies": {
         "@types/app-root-path": "^1.2.4",
         "@types/node": "^17.0.41",
