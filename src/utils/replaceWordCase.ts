@@ -4,7 +4,7 @@ import * as types from '../types';
 const cases = ({ stringReplace, result }: types.Cases) => {
     const newString = stringReplace.value.split(' ');
     let newResult = result;
-    if (result && result.includes(`${stringReplace.replaceVar}(noCase)`)) { // lorem lorem => LoremLorem
+    if (result && result.includes(`${stringReplace.replaceVar}(noCase)`)) { // lorem lorem => loremlorem
         const re = new RegExp(`${stringReplace.replaceVar}.noCase.`, 'g');
         const modifiedToPascalCase = newString.join(' ');
 
