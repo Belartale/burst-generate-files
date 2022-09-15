@@ -64,7 +64,6 @@ export const CLIGen = async (
         const selectedConfigItem: types.OptionCLIGenO = await getSelectedItem(options);
 
         const selectedNames: types.GetSelectedName[] = await getSelectedName(selectedConfigItem.stringsReplacers);
-        console.log('selectedNames', selectedNames);
 
         mainActions({ configItem: selectedConfigItem, selectedNames, PROJECT_ROOT });
     } catch (error: any) {
