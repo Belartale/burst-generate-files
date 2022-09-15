@@ -37,7 +37,7 @@ export const __exampleComponentName__(pascalCase) = () => {
 
 Let's create `generate.config.ts` in the root of your project.
 
-First of all you need to add import of `burst-generate-files`, and get `generationCLI` function. 
+First of all you need to add import of `burst-generate-files`, and get `CLIGen` function. 
 
 That function require two parameters, root path of your application and array of settings.
 
@@ -46,10 +46,10 @@ That function require two parameters, root path of your application and array of
 ```typescript
 // ./generate.config.ts
 
-import { generationCLI } from "burst-generate-files";
+import { CLIGen } from "burst-generate-files";
 import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 
-generationCLI(ROOT_PATH_OF_YOUR_APPLICATION, [
+CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
         stringsReplacers: "__exampleComponentName__",
@@ -156,7 +156,7 @@ For extend your config with new template, you need to create new `template` fold
 ```typescript
 // ./generate.config.ts
 
-generationCLI(ROOT_PATH_OF_YOUR_APPLICATION, [
+CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
         stringsReplacers: "__exampleComponentName__",
