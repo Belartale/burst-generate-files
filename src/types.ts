@@ -3,108 +3,113 @@
 export type Option = {
     name:      string
     stringsReplacers:    string[]
-    pathTemplate:       string
+    pathToTemplate:       string
     outputPath:         string
-    addRowFiles?: OptionsGenerateRow[]
+    markers?: OptionsMarker[]
     onComplete?:        Function
 }
 
 // Function mainActions
 export type MainActions = {
-    configItem: Option | OptionOG
-    selectedNames: GetSelectedName[]
+    configItem: Option | OptionCustomGenO
+    selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }
 
-// Function generation
-export type OptionGStringsReplacers = {
-    string: string
-    newString: string
+// Function customGen
+export type OptionStringsReplacersCustomGen = {
+    replaceVar: string
+    value: string
 }
 
-export interface OptionOG extends Omit<Option, 'name' | 'stringsReplacers'> {
-    stringsReplacers: OptionGStringsReplacers | Array<OptionGStringsReplacers>
+export interface OptionCustomGenO extends Omit<Option, 'name' | 'stringsReplacers'> {
+    stringsReplacers: OptionStringsReplacersCustomGen | Array<OptionStringsReplacersCustomGen>
 }
 
-// Function generationCLI
-export interface OptionOCLI extends Omit<Option, 'stringsReplacers'> {
+// Function CLIGen
+export interface OptionCLIGenO extends Omit<Option, 'stringsReplacers'> {
     stringsReplacers: string | string[]
 }
 
 // File makeAbsolutePath
 export type MakeAbsolutePath = {
     PROJECT_ROOT: string
-    option: Option | OptionOG | OptionOCLI
+    option: Option | OptionCustomGenO | OptionCLIGenO
 }
 
 // File replaceWordCase
+export type Cases = {
+    stringReplace: GetSelectedName
+    result: string
+}
+
 export type ReplaceWordCase = {
     string: string
-    stringsForReplace: Array<GetSelectedName>
+    stringsForReplace: GetSelectedName | GetSelectedName[]
 }
 
 // File getSelectedItem
-export type GetSelectedItem = OptionOCLI[]
+export type GetSelectedItem = OptionCLIGenO[]
 
 // File getSelectedName
 export type GetSelectedName = {
-    string: string
-    newString: string
+    replaceVar: string
+    value: string
 }
 
 // File createFiles
 export type CreateFiles = {
     fromFolderPath: string
     toPath: string
-    selectedNames: GetSelectedName[]
+    selectedNames: GetSelectedName | GetSelectedName[]
 }
 
-// File addRowFiles
-export type AddRowFiles = {
-    addRowFiles: OptionsGenerateRow[]
-    outputPath: Option['outputPath']
-    selectedNames: GetSelectedName[]
+// File markers
+export type AddMarkerFiles = {
+    markers: OptionsMarker[]
+    selectedNames: GetSelectedName | GetSelectedName[]
+    PROJECT_ROOT: string
 }
 
-export type OptionsGenerateRow = {
-    pathFromOutputPath: string
+export type OptionsMarker = {
+    pathToMarker: string
     marker: string | {
         value: string
-        flags: string
+        regExpValue: string
+        regExpFlags?: string
     }
-    whereInsertRow?: 'after marker' | 'before marker'
-    generationRow: string
-    onceInsertRow?: boolean
+    whereInsertMarker?: 'after marker' | 'before marker'
+    markerTemplate: string
+    onceInsert?: boolean
 }
-export type CheckIsOnceInsertRow = {
-    optionsGenerateRow: OptionsGenerateRow
+export type CheckIsOnceInsertMarker = {
+    optionsMarker: OptionsMarker
     fileNameConfig: string
 }
 export type GenerateFiles = {
     id: {
-        pathFromOutputPath: string
+        pathToMarker: string
         marker: string
-        generationRow: string
+        markerTemplate: string
     },
-    wasInsertRow: boolean
+    wasInsertMarker: boolean
 }
 
-// Function defineMarkerAndAddRow
-export type DefineMarkerAndAddRow = {
-    optionsGenerateRow: OptionsGenerateRow
+// Function defineMarkerAndAdd
+export type DefineMarkerAndAdd = {
+    optionsMarker: OptionsMarker
     dataRedFile: string
     tabs: string
 }
 
 // Function addConfigToFile
 export type AddConfigToFile = {
-    optionsGenerateRow: OptionsGenerateRow
+    optionsMarker: OptionsMarker
     fileNameConfig: string
 }
 
-
 // File onComplete
 export type OnComplete = {
-    configItem: Option | OptionOG | OptionOCLI
-    selectedNames: GetSelectedName[]
+    configItem: Option | OptionCustomGenO | OptionCLIGenO
+    selectedNames: GetSelectedName | GetSelectedName[]
 }

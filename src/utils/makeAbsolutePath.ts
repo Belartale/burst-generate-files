@@ -7,7 +7,7 @@ import * as types from '../types';
 export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePath) => {
     return {
         ...option,
-        pathTemplate: resolve(PROJECT_ROOT, option.pathTemplate),
+        pathToTemplate: resolve(PROJECT_ROOT, option.pathToTemplate),
         outputPath:   resolve(PROJECT_ROOT, option.outputPath),
     };
 };

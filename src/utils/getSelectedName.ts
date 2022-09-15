@@ -23,8 +23,8 @@ export const getSelectedName = async (strings: string[]): Promise<types.GetSelec
 
         result = [
             ...result, {
-                string:    string,
-                newString: gotValue.selectedName.trim(),
+                replaceVar: string,
+                value:      gotValue.selectedName.trim(),
             },
         ];
     }

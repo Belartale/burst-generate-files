@@ -7,7 +7,7 @@ import { getSelectedItem } from './utils/getSelectedItem';
 import { getSelectedName } from './utils/getSelectedName';
 import { createFiles } from './utils/createFiles';
 import { replaceWordCase } from './utils/replaceWordCase';
-import { addRowFiles } from './utils/addRowFiles';
+import { markers } from './utils/markers';
 import { onComplete } from './utils/onComplete';
 
 // Types
@@ -17,7 +17,7 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: types.MainActi
     const configItemWithAbsolutePath = makeAbsolutePath({ PROJECT_ROOT, option: configItem });
 
     createFiles({
-        fromFolderPath: configItemWithAbsolutePath.pathTemplate,
+        fromFolderPath: configItemWithAbsolutePath.pathToTemplate,
         toPath:         replaceWordCase({
             string:            configItemWithAbsolutePath.outputPath,
             stringsForReplace: selectedNames,
@@ -25,11 +25,11 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: types.MainActi
         selectedNames,
     });
 
-    if (configItemWithAbsolutePath.addRowFiles) {
-        addRowFiles({
-            addRowFiles: configItemWithAbsolutePath.addRowFiles,
-            outputPath:  configItemWithAbsolutePath.outputPath,
+    if (configItemWithAbsolutePath.markers) {
+        markers({
+            markers: configItemWithAbsolutePath.markers,
             selectedNames,
+            PROJECT_ROOT,
         });
     }
 
@@ -38,29 +38,18 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: types.MainActi
     }
 };
 
-export const generation = (
-    PROJECT_ROOT: string, options: types.OptionOG[],
+export const customGen = (
+    PROJECT_ROOT: string, options: types.OptionCustomGenO[],
 ) => {
     try {
         options.forEach((option) => {
-            if (!Array.isArray(option.stringsReplacers) && typeof option.stringsReplacers === 'object') {
-                mainActions(
-                    {
-                        configItem:    option,
-                        selectedNames: [ option.stringsReplacers ],
-                        PROJECT_ROOT,
-                    },
-                );
-            }
-            if (Array.isArray(option.stringsReplacers)) {
-                mainActions(
-                    {
-                        configItem:    option,
-                        selectedNames: option.stringsReplacers,
-                        PROJECT_ROOT,
-                    },
-                );
-            }
+            mainActions(
+                {
+                    configItem:    option,
+                    selectedNames: option.stringsReplacers,
+                    PROJECT_ROOT,
+                },
+            );
         });
     } catch (error: any) {
         console.error(chalk.red('Error burst-generate-files ↓'));
@@ -68,8 +57,8 @@ export const generation = (
     }
 };
 
-export const generationCLI = async (
-    PROJECT_ROOT: string, options: types.OptionOCLI[],
+export const CLIGen = async (
+    PROJECT_ROOT: string, options: types.OptionCLIGenO[],
 ): Promise<void> => {
     try {
         const selectedConfigItem: types.Option = await getSelectedItem(options);
@@ -83,5 +72,5 @@ export const generationCLI = async (
     }
 };
 
-exports.generation = generation;
-exports.generationCLI = generationCLI;
+exports.customGen = customGen;
+exports.CLIGen = CLIGen;
