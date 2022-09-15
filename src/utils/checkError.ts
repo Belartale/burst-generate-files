@@ -18,27 +18,27 @@ export const checkError = (PROJECT_ROOT: string, options: types.Option[]) => {
         const schemaOption = yup.object({
             name:             yup.string().required(),
             stringsReplacers: yup.array().required(),
-            pathTemplate:     yup.string().required(),
+            pathToTemplate:   yup.string().required(),
             outputPath:       yup.string().required(),
-            addRowFiles:      yup.array(),
+            markers:          yup.array(),
             onComplete:       yup.object(),
         });
         schemaOption.validateSync(option, { abortEarly: false });
 
-        if (option.addRowFiles) {
-            option.addRowFiles.forEach((addRowFilesObject) => {
-                const schemaDddRowFiles = yup.object({
-                    pathFromOutputPath: yup.string().required(),
-                    marker:             yup.string().required(),
-                    regExp:             yup.object({
+        if (option.markers) {
+            option.markers.forEach((markersObject) => {
+                const schemaDddMarkerFiles = yup.object({
+                    pathToMarker: yup.string().required(),
+                    marker:       yup.string().required(),
+                    regExp:       yup.object({
                         value: yup.string(),
                         flags: yup.string(),
                     }),
-                    whereInsertRow: yup.string(),
-                    generationRow:  yup.string().required(),
-                    onceInsertRow:  yup.boolean(),
+                    whereInsertMarker: yup.string(),
+                    markerTemplate:    yup.string().required(),
+                    onceInsert:        yup.boolean(),
                 });
-                schemaDddRowFiles.validateSync(addRowFilesObject, { abortEarly: false });
+                schemaDddMarkerFiles.validateSync(markersObject, { abortEarly: false });
             });
         }
     });

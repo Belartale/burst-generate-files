@@ -53,7 +53,7 @@ generationCLI(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
         stringsReplacers: "__exampleComponentName__",
-        pathTemplate:    "./componentTemplate",
+        pathToTemplate:    "./componentTemplate",
         outputPath:      "./components/__exampleComponentName__(pascalCase)",
     },
 ]);
@@ -160,13 +160,13 @@ generationCLI(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
         stringsReplacers: "__exampleComponentName__",
-        pathTemplate:    "./componentTemplate",
+        pathToTemplate:    "./componentTemplate",
         outputPath:      "./components/__exampleComponentName__(pascalCase)",
     },
     {                                // <= Page generation config
         name:            "New page",
         stringsReplacers: "__pageName__",
-        pathTemplate:    "./pageTemplate",
+        pathToTemplate:    "./pageTemplate",
         outputPath:      "./page/__pageName__(pascalCase)",
     },
 ]);
@@ -191,15 +191,15 @@ __componentName__(kebabCase) === lorem-lorem
 __componentName__ === loremLorem
 ```
 
-### `pathTemplate`
+### `pathToTemplate`
 This is the path for your template that will create.
 
 ### `outputPath`
 This is the path for output files.
 
-### `addRowFiles` *optional*
+### `markers` *optional*
 This is the array to create lines into files.
-- #### `pathFromOutputPath`
+- #### `pathToMarker`
 This is the path to the file to insert the line.
 
 - #### `marker`
@@ -212,15 +212,15 @@ This is the marker for insert line.
     - ##### `flags`
     The flags for RegExp.
 
-- #### `whereInsertRow` *optional*
+- #### `whereInsertMarker` *optional*
 This is the option tells the program where to insert the line. Insert line after marker or before marker.
 
 **Note:** if not exists, then default value `after maker`.
 
-- #### `generationRow`
+- #### `markerTemplate`
 This is the string which will be inserted into file.
 
-- #### `onceInsertRow`
+- #### `onceInsert`
 This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
 **Note:** if you want to paste again, you need edit file `config.generate.files.json`
 
