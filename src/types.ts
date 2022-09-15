@@ -11,7 +11,7 @@ export type Option = {
 
 // Function mainActions
 export type MainActions = {
-    configItem: Option | OptionCustomGenO
+    configItem: Option | OptionCustomGenO | OptionCLIGenO
     selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }
@@ -52,6 +52,13 @@ export type ReplaceWordCase = {
 export type GetSelectedItem = OptionCLIGenO[]
 
 // File getSelectedName
+// Function getName
+export type GetName = {
+    replaceVar: string
+    result: GetSelectedName[]
+}
+
+// Function getSelectedName
 export type GetSelectedName = {
     replaceVar: string
     value: string

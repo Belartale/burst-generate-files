@@ -4,7 +4,7 @@ import enquirer from 'enquirer';
 // Types
 import * as types from '../types';
 
-export const getSelectedItem = async (options: types.GetSelectedItem): Promise<types.Option> => {
+export const getSelectedItem = async (options: types.GetSelectedItem): Promise<types.OptionCLIGenO> => {
     const templateQuestions = {
         type:    'autocomplete',
         name:    'optionChoice',
@@ -20,6 +20,6 @@ export const getSelectedItem = async (options: types.GetSelectedItem): Promise<t
 
     return options.find(
         (item: types.OptionCLIGenO) => item.name === templateAnswers.optionChoice,
-    ) as types.Option;
+    ) as types.OptionCLIGenO;
 };
 

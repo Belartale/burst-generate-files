@@ -4,30 +4,61 @@ import enquirer from 'enquirer';
 // Types
 import * as types from '../types';
 
-export const getSelectedName = async (strings: string[]): Promise<types.GetSelectedName[]> => {
+const getName = async ({ replaceVar, result }: types.GetName) => {
+    const replacerQuestion: any = {
+        type:     'input',
+        name:     'selectedName',
+        message:  `Replace ${replaceVar} on >>> `,
+        validate: (value: string) => {
+            const isValid: boolean = Boolean(value.trim());
+
+            return isValid || 'You must provide an answer!!!';
+        },
+    };
+
+    const gotValue: {selectedName: string} = await enquirer.prompt(replacerQuestion);
+
+    return [
+        ...result, {
+            replaceVar,
+            value: gotValue.selectedName.trim(),
+        },
+    ];
+};
+
+export const getSelectedName = async (strings: string | string[]): Promise<types.GetSelectedName[]> => {
     let result: [] | types.GetSelectedName[] = [];
 
-    for await (const string of strings) {
-        const replacerQuestion: any = {
-            type:     'input',
-            name:     'selectedName',
-            message:  `Replace ${string} on >>> `,
-            validate: (value: string) => {
-                const isValid: boolean = Boolean(value.trim());
-
-                return isValid || 'You must provide an answer!!!';
-            },
-        };
-
-        const gotValue: {selectedName: string} = await enquirer.prompt(replacerQuestion);
-
-        result = [
-            ...result, {
-                replaceVar: string,
-                value:      gotValue.selectedName.trim(),
-            },
-        ];
+    if (Array.isArray(strings)) {
+        for await (const string of strings) {
+            result = await getName({ replaceVar: string, result });
+        }
     }
+    if (!Array.isArray(strings)) {
+        result = await getName({ replaceVar: strings, result });
+    }
+
+    // for await (const string of strings) {
+    //     const replacerQuestion: any = {
+    //         type:     'input',
+    //         name:     'selectedName',
+    //         message:  `Replace ${string} on >>> `,
+    //         validate: (value: string) => {
+    //             const isValid: boolean = Boolean(value.trim());
+
+    //             return isValid || 'You must provide an answer!!!';
+    //         },
+    //     };
+
+    //     const gotValue: {selectedName: string} = await enquirer.prompt(replacerQuestion);
+
+    //     result = [
+    //         ...result, {
+    //             replaceVar: string,
+    //             value:      gotValue.selectedName.trim(),
+    //         },
+    //     ];
+    // }
 
     return result;
 };
