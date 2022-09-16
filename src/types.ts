@@ -21,7 +21,6 @@ export type OptionStringsReplacersCustomGen = {
     replaceVar: string
     value: string
 }
-
 export interface OptionCustomGenO extends Omit<Option, 'name' | 'stringsReplacers'> {
     stringsReplacers: OptionStringsReplacersCustomGen | Array<OptionStringsReplacersCustomGen>
 }
@@ -91,7 +90,7 @@ export type OptionsMarker = {
 }
 export type CheckIsOnceInsertMarker = {
     optionsMarker: OptionsMarker
-    fileNameConfig: string
+    configGenerateNameForOnceInsert: string
 }
 export type GenerateFiles = {
     id: {
@@ -112,7 +111,7 @@ export type DefineMarkerAndAdd = {
 // Function addConfigToFile
 export type AddConfigToFile = {
     optionsMarker: OptionsMarker
-    fileNameConfig: string
+    configGenerateNameForOnceInsert: string
 }
 
 // File onComplete

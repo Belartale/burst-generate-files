@@ -3,16 +3,18 @@ import fs from 'fs';
 import { resolve } from 'path';
 import chalk from 'chalk';
 
+// Constants
+import { configGenerateNameForOnceInsert } from '../constants';
+
 // Utils
 import { replaceWordCase } from './replaceWordCase';
 
 // Types
 import * as types from '../types';
 
-
-const addConfigToFile = ({ optionsMarker, fileNameConfig }: types.AddConfigToFile) => {
+const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert }: types.AddConfigToFile) => {
     if (optionsMarker.onceInsert) {
-        const configGenerateFile = fs.readFileSync(fileNameConfig, { encoding: 'utf-8' });
+        const configGenerateFile = fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' });
 
         const parsedData: types.GenerateFiles[] = JSON.parse(configGenerateFile);
 
@@ -33,7 +35,7 @@ const addConfigToFile = ({ optionsMarker, fileNameConfig }: types.AddConfigToFil
             });
         }
 
-        fs.writeFileSync(fileNameConfig, JSON.stringify(newData));
+        fs.writeFileSync(configGenerateNameForOnceInsert, JSON.stringify(newData));
     }
 };
 
@@ -46,6 +48,19 @@ const defineMarkerAndAdd = ({ optionsMarker, dataRedFile, tabs }: types.DefineMa
         return optionsMarker.marker as string;
     };
 
+    const isLineOrTemplate = (markerTemplate: types.OptionsMarker['markerTemplate'], tabs: string) => {
+        if (fs.existsSync(markerTemplate)) {
+            const redFileMarker = fs.readFileSync(markerTemplate, { encoding: 'utf-8' });
+
+
+            // todo remove two tabs on first line
+            return redFileMarker.split(/\r?\n/).map((line) => tabs + line)
+                .join('\n');
+        }
+
+        return markerTemplate;
+    };
+
     const reg = new RegExp(
         typeof optionsMarker.marker === 'object' && optionsMarker.marker.regExpValue ? optionsMarker.marker.regExpValue : optionsMarker.marker as string,
         typeof optionsMarker.marker === 'object' && optionsMarker.marker.regExpFlags ? optionsMarker.marker.regExpFlags : 'g',
@@ -53,17 +68,17 @@ const defineMarkerAndAdd = ({ optionsMarker, dataRedFile, tabs }: types.DefineMa
     let dataRedFileReplaced = dataRedFile;
 
     if (typeof optionsMarker.whereInsertMarker === 'undefined' || optionsMarker.whereInsertMarker === 'after marker') {
-        dataRedFileReplaced = dataRedFile.replace(reg, getOptionMarkerValue() + '\n' + tabs + optionsMarker.markerTemplate);
+        dataRedFileReplaced = dataRedFile.replace(reg, getOptionMarkerValue() + '\n' + tabs + isLineOrTemplate(optionsMarker.markerTemplate, tabs));
     }
     if (optionsMarker.whereInsertMarker === 'before marker') {
-        dataRedFileReplaced = dataRedFile.replace(reg, optionsMarker.markerTemplate + '\n' + tabs + getOptionMarkerValue());
+        dataRedFileReplaced = dataRedFile.replace(reg, isLineOrTemplate(optionsMarker.markerTemplate, tabs) + '\n' + tabs + getOptionMarkerValue());
     }
 
     return dataRedFileReplaced;
 };
 
-const checkIsOnceInsertMarker = ({ optionsMarker, fileNameConfig }: types.CheckIsOnceInsertMarker) => {
-    const dataFile = fs.readFileSync(fileNameConfig, { encoding: 'utf-8' });
+const checkIsOnceInsertMarker = ({ optionsMarker, configGenerateNameForOnceInsert }: types.CheckIsOnceInsertMarker) => {
+    const dataFile = fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' });
 
     const parsedData = JSON.parse(dataFile);
 
@@ -80,21 +95,19 @@ const checkIsOnceInsertMarker = ({ optionsMarker, fileNameConfig }: types.CheckI
 };
 
 export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
-    const fileNameConfig = 'config.generate.files.json';
-
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
-        && !fs.existsSync(fileNameConfig))
+        && !fs.existsSync(configGenerateNameForOnceInsert))
         || (markers
         && markers.find((el) => el.onceInsert === true)
-        && fs.readFileSync(fileNameConfig, { encoding: 'utf-8' }) === '')
+        && fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' }) === '')
     ) {
-        fs.writeFileSync(fileNameConfig, JSON.stringify([]));
+        fs.writeFileSync(configGenerateNameForOnceInsert, JSON.stringify([]));
     }
 
-    markers?.forEach((optionsMarker: types.OptionsMarker) => {
-        if (optionsMarker.onceInsert && checkIsOnceInsertMarker({ optionsMarker, fileNameConfig })) {
+    markers.forEach((optionsMarker: types.OptionsMarker) => {
+        if (optionsMarker.onceInsert && checkIsOnceInsertMarker({ optionsMarker, configGenerateNameForOnceInsert })) {
             console.log(chalk.yellow('This marker previously inserted !!!'));
             console.table(optionsMarker);
 
@@ -137,7 +150,7 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
         );
 
         if (optionsMarker.onceInsert) {
-            addConfigToFile({ optionsMarker, fileNameConfig });
+            addConfigToFile({ optionsMarker, configGenerateNameForOnceInsert });
         }
     });
 };

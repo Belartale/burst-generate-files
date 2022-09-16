@@ -4,11 +4,14 @@ import path from 'path';
 import fs from 'fs';
 import { Transform } from 'stream';
 
-// Types
-import * as types from '../types';
+// Constants
+import { folderNameForMarkers } from '../constants';
 
 // Utils
 import { replaceWordCase } from './replaceWordCase';
+
+// Types
+import * as types from '../types';
 
 export const createFiles = (
     { fromFolderPath, toPath, selectedNames }: types.CreateFiles,
@@ -62,7 +65,7 @@ export const createFiles = (
                                             },
                                         );
                                     });
-                                } else if (stat.isDirectory()) {
+                                } else if (stat.isDirectory() && path.basename(curSrc) !== folderNameForMarkers) {
                                     fs.mkdirSync(curDest, { recursive: true });
                                     copy(curSrc, curDest);
                                 }

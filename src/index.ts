@@ -1,6 +1,3 @@
-// Core
-import chalk from 'chalk';
-
 //Utils
 import { makeAbsolutePath } from './utils/makeAbsolutePath';
 import { getSelectedItem } from './utils/getSelectedItem';
@@ -9,6 +6,8 @@ import { createFiles } from './utils/createFiles';
 import { replaceWordCase } from './utils/replaceWordCase';
 import { markers } from './utils/markers';
 import { onComplete } from './utils/onComplete';
+import { checkError } from './utils/checkError';
+import { catchErrors } from './utils/catchErrors';
 
 // Types
 import * as types from './types';
@@ -42,6 +41,7 @@ export const customGen = (
     PROJECT_ROOT: string, options: types.OptionCustomGenO[],
 ) => {
     try {
+        checkError(PROJECT_ROOT, options, 'customGen');
         options.forEach((option) => {
             mainActions(
                 {
@@ -52,8 +52,7 @@ export const customGen = (
             );
         });
     } catch (error: any) {
-        console.error(chalk.red('Error burst-generate-files ↓'));
-        console.error(error.message);
+        catchErrors(error);
     }
 };
 
@@ -61,14 +60,14 @@ export const CLIGen = async (
     PROJECT_ROOT: string, options: types.OptionCLIGenO[],
 ): Promise<void> => {
     try {
+        checkError(PROJECT_ROOT, options, 'CLIGen');
         const selectedConfigItem: types.OptionCLIGenO = await getSelectedItem(options);
 
         const selectedNames: types.GetSelectedName[] = await getSelectedName(selectedConfigItem.stringsReplacers);
 
         mainActions({ configItem: selectedConfigItem, selectedNames, PROJECT_ROOT });
     } catch (error: any) {
-        console.error(chalk.red('Error burst-generate-files ↓'));
-        console.error(error.message);
+        catchErrors(error);
     }
 };
 

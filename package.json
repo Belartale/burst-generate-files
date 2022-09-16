@@ -62,7 +62,6 @@
     },
     "dependencies": {
         "chalk": "^2.4.2",
-        "enquirer": "^2.3.6",
-        "yup": "^0.32.11"
+        "enquirer": "^2.3.6"
     }
 }
