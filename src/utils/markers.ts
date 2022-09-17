@@ -20,18 +20,26 @@ const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert }: typ
 
         const data: types.GenerateFiles[] = [ ...parsedData ];
 
-        const newData = data.map((el) => ({ ...el, wasInsertMarker: optionsMarker.onceInsert }));
+        const newData = data.map((el) => ({ ...el, onceInsert: optionsMarker.onceInsert }));
 
-        if (!parsedData.some((el) => el.id.marker === optionsMarker.marker
+        const convertIfRegExpToString = (pattern: types.OptionsMarker['pattern']) => {
+            if (pattern === RegExp(pattern)) {
+                return String(pattern);
+            }
+
+            return String(pattern);
+        };
+
+        if (!parsedData.some((el) => el.id.pattern === optionsMarker.pattern
         && el.id.pathToMarker === optionsMarker.pathToMarker
         && el.id.markerTemplate === optionsMarker.markerTemplate)) {
             newData.push({
                 id: {
                     pathToMarker:   optionsMarker.pathToMarker,
-                    marker:         typeof optionsMarker.marker === 'object' ? optionsMarker.marker.value : optionsMarker.marker,
+                    pattern:        convertIfRegExpToString(optionsMarker.pattern),
                     markerTemplate: optionsMarker.markerTemplate,
                 },
-                wasInsertMarker: true,
+                onceInsert: true,
             });
         }
 
@@ -39,42 +47,55 @@ const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert }: typ
     }
 };
 
-const defineMarkerAndAdd = ({ optionsMarker, dataRedFile, tabs }: types.DefineMarkerAndAdd) => {
-    const getOptionMarkerValue = (): string => {
-        if (typeof optionsMarker.marker === 'object' && optionsMarker.marker.value) {
-            return optionsMarker.marker.value;
-        }
-
-        return optionsMarker.marker as string;
-    };
-
+const defineMarkerAndAdd = ({ optionsMarker, dataRedFile }: types.DefineMarkerAndAdd) => {
     const isLineOrTemplate = (markerTemplate: types.OptionsMarker['markerTemplate'], tabs: string) => {
         if (fs.existsSync(markerTemplate)) {
             const redFileMarker = fs.readFileSync(markerTemplate, { encoding: 'utf-8' });
 
+            const newString = redFileMarker.split(/\r?\n/).map((line) => tabs + line)
+                .join('\n')
+                .trim();
 
-            // todo remove two tabs on first line
-            return redFileMarker.split(/\r?\n/).map((line) => tabs + line)
-                .join('\n');
+            return tabs + newString;
         }
 
         return markerTemplate;
     };
 
-    const reg = new RegExp(
-        typeof optionsMarker.marker === 'object' && optionsMarker.marker.regExpValue ? optionsMarker.marker.regExpValue : optionsMarker.marker as string,
-        typeof optionsMarker.marker === 'object' && optionsMarker.marker.regExpFlags ? optionsMarker.marker.regExpFlags : 'g',
-    );
-    let dataRedFileReplaced = dataRedFile;
+    const newDataRedFile: string = dataRedFile.split(/\r?\n/).map((line: string) => {
+        const reg = new RegExp(`^.*(${optionsMarker.pattern})$`, 'g');
 
-    if (typeof optionsMarker.whereInsertMarker === 'undefined' || optionsMarker.whereInsertMarker === 'after marker') {
-        dataRedFileReplaced = dataRedFile.replace(reg, getOptionMarkerValue() + '\n' + tabs + isLineOrTemplate(optionsMarker.markerTemplate, tabs));
-    }
-    if (optionsMarker.whereInsertMarker === 'before marker') {
-        dataRedFileReplaced = dataRedFile.replace(reg, isLineOrTemplate(optionsMarker.markerTemplate, tabs) + '\n' + tabs + getOptionMarkerValue());
-    }
+        if (
+            (typeof optionsMarker.pattern === 'string' && line.match(reg))
+            || (optionsMarker.pattern === RegExp(optionsMarker.pattern) && line.match(optionsMarker.pattern))
+        ) {
+            let tabs: string = '';
 
-    return dataRedFileReplaced;
+            line.split('').every((symbolOfLine) => {
+                if (symbolOfLine === ' ') {
+                    tabs += ' ';
+
+                    return true;
+                }
+
+                return false;
+            });
+
+            if (typeof optionsMarker.genDirection === 'undefined' || optionsMarker.genDirection === 'after') {
+                return line + '\n' + isLineOrTemplate(optionsMarker.markerTemplate, tabs);
+            }
+            if (optionsMarker.genDirection === 'before') {
+                console.log(`tabs >>> ${ tabs.length }`);
+
+                return isLineOrTemplate(optionsMarker.markerTemplate, tabs) + '\n' + line;
+            }
+        }
+
+        return line;
+    })
+        .join('\n');
+
+    return newDataRedFile;
 };
 
 const checkIsOnceInsertMarker = ({ optionsMarker, configGenerateNameForOnceInsert }: types.CheckIsOnceInsertMarker) => {
@@ -83,12 +104,12 @@ const checkIsOnceInsertMarker = ({ optionsMarker, configGenerateNameForOnceInser
     const parsedData = JSON.parse(dataFile);
 
     const foundElement: types.GenerateFiles = parsedData.find(
-        (el: types.GenerateFiles) => el.id.marker === optionsMarker.marker
+        (el: types.GenerateFiles) => el.id.pattern === String(optionsMarker.pattern)
         && el.id.pathToMarker === optionsMarker.pathToMarker
         && el.id.markerTemplate === optionsMarker.markerTemplate,
     );
     if (typeof foundElement === 'object') {
-        return foundElement.wasInsertMarker;
+        return foundElement.onceInsert;
     }
 
     return false;
@@ -116,29 +137,9 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
 
         const pathFile = resolve(PROJECT_ROOT, optionsMarker.pathToMarker);
 
-        let tabs: types.DefineMarkerAndAdd['tabs'] = '';
-
         const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
-        dataRedFile
-            .split(/\r?\n/)
-            .forEach((string: string) => {
-                if (string.includes(
-                    typeof optionsMarker.marker === 'string' ? optionsMarker.marker : optionsMarker.marker.value,
-                )) {
-                    string.split('').every((symbolOfLine) => {
-                        if (symbolOfLine === ' ') {
-                            tabs += ' ';
-
-                            return true;
-                        }
-
-                        return false;
-                    });
-                }
-            });
-
-        const dataRedFileReplaced = defineMarkerAndAdd({ optionsMarker, dataRedFile, tabs });
+        const dataRedFileReplaced = defineMarkerAndAdd({ optionsMarker, dataRedFile });
 
         const resultData = replaceWordCase({
             string:            dataRedFileReplaced,

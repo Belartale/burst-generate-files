@@ -8,6 +8,6 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePat
     return {
         ...option,
         pathToTemplate: resolve(PROJECT_ROOT, option.pathToTemplate),
-        outputPath:   resolve(PROJECT_ROOT, option.outputPath),
+        outputPath:     resolve(PROJECT_ROOT, option.outputPath),
     };
 };

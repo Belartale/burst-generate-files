@@ -76,15 +76,10 @@ export type AddMarkerFiles = {
     selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }
-
 export type OptionsMarker = {
     pathToMarker: string
-    marker: string | {
-        value: string
-        regExpValue: string
-        regExpFlags?: string
-    }
-    whereInsertMarker?: 'after marker' | 'before marker'
+    pattern: string | RegExp
+    genDirection?: 'after' | 'before'
     markerTemplate: string
     onceInsert?: boolean
 }
@@ -95,17 +90,16 @@ export type CheckIsOnceInsertMarker = {
 export type GenerateFiles = {
     id: {
         pathToMarker: string
-        marker: string
+        pattern: string
         markerTemplate: string
     },
-    wasInsertMarker: boolean
+    onceInsert: boolean
 }
 
 // Function defineMarkerAndAdd
 export type DefineMarkerAndAdd = {
     optionsMarker: OptionsMarker
     dataRedFile: string
-    tabs: string
 }
 
 // Function addConfigToFile

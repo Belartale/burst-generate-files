@@ -212,7 +212,7 @@ This is the marker for insert line.
     - ##### `flags`
     The flags for RegExp.
 
-- #### `whereInsertMarker` *optional*
+- #### `genDirection` *optional*
 This is the option tells the program where to insert the line. Insert line after marker or before marker.
 
 **Note:** if not exists, then default value `after maker`.
