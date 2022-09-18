@@ -199,7 +199,7 @@ This is the path for output files.
 
 ### `markers` *optional*
 This is the array to create lines into files.
-- #### `pathToMarker`
+- #### `pathMarker`
 This is the path to the file to insert the line.
 
 - #### `marker`

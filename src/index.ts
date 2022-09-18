@@ -6,7 +6,7 @@ import { createFiles } from './utils/createFiles';
 import { replaceWordCase } from './utils/replaceWordCase';
 import { markers } from './utils/markers';
 import { onComplete } from './utils/onComplete';
-// import { checkError } from './utils/checkError';
+import { checkError } from './utils/checkError';
 import { catchErrors } from './utils/catchErrors';
 
 // Types
@@ -41,7 +41,7 @@ export const customGen = (
     PROJECT_ROOT: string, options: types.OptionCustomGenO[],
 ) => {
     try {
-        // checkError(PROJECT_ROOT, options, 'customGen');
+        checkError(PROJECT_ROOT, options, 'customGen');
         options.forEach((option) => {
             mainActions(
                 {
@@ -60,7 +60,7 @@ export const CLIGen = async (
     PROJECT_ROOT: string, options: types.OptionCLIGenO[],
 ): Promise<void> => {
     try {
-        // checkError(PROJECT_ROOT, options, 'CLIGen');
+        checkError(PROJECT_ROOT, options, 'CLIGen');
         const selectedConfigItem: types.OptionCLIGenO = await getSelectedItem(options);
 
         const selectedNames: types.GetSelectedName[] = await getSelectedName(selectedConfigItem.stringsReplacers);

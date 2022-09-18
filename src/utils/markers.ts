@@ -31,11 +31,11 @@ const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert }: typ
         };
 
         if (!parsedData.some((el) => el.id.pattern === optionsMarker.pattern
-        && el.id.pathToMarker === optionsMarker.pathToMarker
+        && el.id.pathMarker === optionsMarker.pathMarker
         && el.id.markerTemplate === optionsMarker.markerTemplate)) {
             newData.push({
                 id: {
-                    pathToMarker:   optionsMarker.pathToMarker,
+                    pathMarker:     optionsMarker.pathMarker,
                     pattern:        convertIfRegExpToString(optionsMarker.pattern),
                     markerTemplate: optionsMarker.markerTemplate,
                 },
@@ -105,7 +105,7 @@ const checkIsOnceInsertMarker = ({ optionsMarker, configGenerateNameForOnceInser
 
     const foundElement: types.GenerateFiles = parsedData.find(
         (el: types.GenerateFiles) => el.id.pattern === String(optionsMarker.pattern)
-        && el.id.pathToMarker === optionsMarker.pathToMarker
+        && el.id.pathMarker === optionsMarker.pathMarker
         && el.id.markerTemplate === optionsMarker.markerTemplate,
     );
     if (typeof foundElement === 'object') {
@@ -135,7 +135,7 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
             return;
         }
 
-        const pathFile = resolve(PROJECT_ROOT, optionsMarker.pathToMarker);
+        const pathFile = resolve(PROJECT_ROOT, optionsMarker.pathMarker);
 
         const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
