@@ -59,7 +59,7 @@ const defineMarkerAndAdd = ({ optionsMarker, dataRedFile }: types.DefineMarkerAn
             return tabs + newString;
         }
 
-        return markerTemplate;
+        return tabs + markerTemplate;
     };
 
     const newDataRedFile: string = dataRedFile.split(/\r?\n/).map((line: string) => {
