@@ -1,12 +1,14 @@
 // File index
 // Common types
-export type Option = {
-    name:      string
-    stringsReplacers:    string[]
-    pathToTemplate:       string
-    outputPath:         string
+interface OptionCommonTypes {
+    pathToTemplate: string
+    outputPath: string
     markers?: OptionsMarker[]
-    onComplete?:        Function
+    onComplete?: Function
+}
+export interface Option extends OptionCommonTypes {
+    name: string
+    stringsReplacers: string[]
 }
 
 // Function mainActions
@@ -21,13 +23,13 @@ export type OptionStringsReplacersCustomGen = {
     replaceVar: string
     value: string
 }
-
-export interface OptionCustomGenO extends Omit<Option, 'name' | 'stringsReplacers'> {
-    stringsReplacers: OptionStringsReplacersCustomGen | Array<OptionStringsReplacersCustomGen>
+export interface OptionCustomGenO extends OptionCommonTypes {
+    stringsReplacers: OptionStringsReplacersCustomGen | OptionStringsReplacersCustomGen[]
 }
 
 // Function CLIGen
-export interface OptionCLIGenO extends Omit<Option, 'stringsReplacers'> {
+export interface OptionCLIGenO extends OptionCommonTypes {
+    name: string
     stringsReplacers: string | string[]
 }
 
@@ -66,8 +68,8 @@ export type GetSelectedName = {
 
 // File createFiles
 export type CreateFiles = {
-    fromFolderPath: string
-    toPath: string
+    pathToTemplate: string
+    outputPath: string
     selectedNames: GetSelectedName | GetSelectedName[]
 }
 
@@ -77,42 +79,36 @@ export type AddMarkerFiles = {
     selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }
-
 export type OptionsMarker = {
+    pattern: string | RegExp
     pathToMarker: string
-    marker: string | {
-        value: string
-        regExpValue: string
-        regExpFlags?: string
-    }
-    whereInsertMarker?: 'after marker' | 'before marker'
-    markerTemplate: string
+    markerTemplate: string | string[]
+    genDirection?: 'after' | 'before'
     onceInsert?: boolean
 }
 export type CheckIsOnceInsertMarker = {
     optionsMarker: OptionsMarker
-    fileNameConfig: string
+    configGenerateNameForOnceInsert: string
 }
 export type GenerateFiles = {
     id: {
         pathToMarker: string
-        marker: string
-        markerTemplate: string
+        pattern: string
+        markerTemplate: string | string[]
     },
-    wasInsertMarker: boolean
+    onceInsert: boolean
 }
 
 // Function defineMarkerAndAdd
 export type DefineMarkerAndAdd = {
     optionsMarker: OptionsMarker
     dataRedFile: string
-    tabs: string
 }
 
 // Function addConfigToFile
 export type AddConfigToFile = {
     optionsMarker: OptionsMarker
-    fileNameConfig: string
+    configGenerateNameForOnceInsert: string
 }
 
 // File onComplete
