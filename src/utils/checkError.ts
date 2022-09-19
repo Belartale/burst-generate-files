@@ -26,7 +26,7 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
                 errors.push(new Error(`Number ${indexOption} value of array in second argument must be object! But you use ${typeof obj}`));
             }
         });
-        options.forEach((option: types.OptionCustomGenO | types.OptionCLIGenO, indexOption: number) => {
+        options.forEach((option: types.OptionCustomGenO | types.OptionCLIGenO | any, indexOption: number) => {
             // Setting name
             if (whichFunction === 'CLIGen') {
                 if (typeof option.name !== 'string') {
@@ -48,7 +48,7 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
                     }
                 }
                 if (Array.isArray(option.stringsReplacers)) {
-                    option.stringsReplacers.forEach((obj) => {
+                    option.stringsReplacers.forEach((obj: string | types.OptionStringsReplacersCustomGen) => {
                         if (typeof obj === 'object' && !Array.isArray(obj)) {
                             if (typeof obj.replaceVar !== 'string') {
                                 errors.push(new Error(`"replaceVar" of "stringsReplacers" in number ${indexOption} object must be string! But you use ${typeof obj.replaceVar}!`));
@@ -63,10 +63,9 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
             if (whichFunction === 'CLIGen') {
                 if (typeof option.stringsReplacers !== 'string' && !Array.isArray(option.stringsReplacers)) {
                     errors.push(new Error(`"stringsReplacers" of number ${indexOption} object must be string or array! But you use ${typeof option.stringsReplacers}!`));
-                    console.log('text');
                 }
                 if (Array.isArray(option.stringsReplacers)) {
-                    option.stringsReplacers.forEach((string) => {
+                    option.stringsReplacers.forEach((string: string | types.OptionStringsReplacersCustomGen) => {
                         if (typeof string !== 'string') {
                             errors.push(new Error(`value of "stringsReplacers" in number ${indexOption} object must be string! But you use ${typeof string}!`));
                         }
@@ -99,14 +98,25 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
                         errors.push(new Error(`"pattern" of number ${indexMarker} "markers" in number ${indexOption} object must be string or object! But you use ${typeof objectMarker.pattern}!`));
                     }
 
-                    // Setting pathMarker
-                    if (typeof objectMarker.pathMarker !== 'string') {
-                        errors.push(new Error(`"pathMarker" of number ${indexMarker} "markers" in number ${indexOption} object must be string! But you use ${typeof objectMarker.pathMarker}!`));
+                    // Setting pathToMarker
+                    if (typeof objectMarker.pathToMarker !== 'string') {
+                        errors.push(new Error(`"pathToMarker" of number ${indexMarker} "markers" in number ${indexOption} object must be string! But you use ${typeof objectMarker.pathToMarker}!`));
+                    }
+
+                    if (typeof objectMarker.pathToMarker === 'string' && !fs.existsSync(objectMarker.pathToMarker)) {
+                        errors.push(new Error(`"pathToMarker" of number ${indexOption} "markers" in number ${indexOption}, ${objectMarker.pathToMarker} no such directory! But you use ${objectMarker.pathToMarker}!`));
                     }
 
                     // Setting markerTemplate
-                    if (typeof objectMarker.markerTemplate !== 'string') {
-                        errors.push(new Error(`"markerTemplate" of number ${indexMarker} "markers" in number ${indexOption} object must be string! But you use ${typeof objectMarker.markerTemplate}!`));
+                    if (typeof objectMarker.markerTemplate !== 'string' && !Array.isArray(objectMarker.markerTemplate)) {
+                        errors.push(new Error(`"markerTemplate" of number ${indexMarker} "markers" in number ${indexOption} object must be string or array! But you use ${typeof objectMarker.markerTemplate}!`));
+                    }
+                    if (Array.isArray(objectMarker.markerTemplate)) {
+                        objectMarker.markerTemplate.forEach((string, indexMarkerTemplate: number) => {
+                            if (typeof string !== 'string') {
+                                errors.push(new Error(`value of number ${indexMarkerTemplate} "markerTemplate" of number ${indexMarker} "markers" in number ${indexOption} object must be string or array! But you use ${typeof string}!`));
+                            }
+                        });
                     }
 
                     // Setting genDirection

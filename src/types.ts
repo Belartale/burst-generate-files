@@ -1,14 +1,14 @@
 // File index
 // Common types
 interface OptionCommonTypes {
-    name: string
     pathToTemplate: string
     outputPath: string
     markers?: OptionsMarker[]
     onComplete?: Function
 }
 export interface Option extends OptionCommonTypes {
-    stringsReplacers:    string[]
+    name: string
+    stringsReplacers: string[]
 }
 
 // Function mainActions
@@ -29,6 +29,7 @@ export interface OptionCustomGenO extends OptionCommonTypes {
 
 // Function CLIGen
 export interface OptionCLIGenO extends OptionCommonTypes {
+    name: string
     stringsReplacers: string | string[]
 }
 
@@ -80,8 +81,8 @@ export type AddMarkerFiles = {
 }
 export type OptionsMarker = {
     pattern: string | RegExp
-    pathMarker: string
-    markerTemplate: string
+    pathToMarker: string
+    markerTemplate: string | string[]
     genDirection?: 'after' | 'before'
     onceInsert?: boolean
 }
@@ -91,9 +92,9 @@ export type CheckIsOnceInsertMarker = {
 }
 export type GenerateFiles = {
     id: {
-        pathMarker: string
+        pathToMarker: string
         pattern: string
-        markerTemplate: string
+        markerTemplate: string | string[]
     },
     onceInsert: boolean
 }
