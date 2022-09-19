@@ -80,6 +80,13 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
             if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
                 errors.push(new Error(`"pathToTemplate" of number ${indexOption} object, ${option.pathToTemplate} no such directory! But you use ${option.pathToTemplate}!`));
             }
+            if (Array.isArray(option.pathToTemplate)) {
+                option.pathToTemplate.forEach((element: string, indexPathToTemplate: number) => {
+                    if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
+                        errors.push(new Error(`Value of "pathToTemplate" in number ${indexPathToTemplate} object, in number ${indexOption} object, ${element} no such directory! But you use ${element}!`));
+                    }
+                });
+            }
 
             // Setting outputPath
             if (typeof option.outputPath !== 'string') {

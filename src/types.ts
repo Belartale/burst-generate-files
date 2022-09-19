@@ -68,8 +68,8 @@ export type GetSelectedName = {
 
 // File createFiles
 export type CreateFiles = {
-    fromFolderPath: string
-    toPath: string
+    pathToTemplate: string
+    outputPath: string
     selectedNames: GetSelectedName | GetSelectedName[]
 }
 

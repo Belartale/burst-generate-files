@@ -16,8 +16,8 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: types.MainActi
     const configItemWithAbsolutePath = makeAbsolutePath({ PROJECT_ROOT, option: configItem });
 
     createFiles({
-        fromFolderPath: configItemWithAbsolutePath.pathToTemplate,
-        toPath:         replaceWordCase({
+        pathToTemplate: configItemWithAbsolutePath.pathToTemplate,
+        outputPath:     replaceWordCase({
             string:            configItemWithAbsolutePath.outputPath,
             stringsForReplace: selectedNames,
         }),

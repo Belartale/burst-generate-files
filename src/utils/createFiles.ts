@@ -13,7 +13,7 @@ import { replaceWordCase } from './replaceWordCase';
 import * as types from '../types';
 
 export const createFiles = (
-    { fromFolderPath, toPath, selectedNames }: types.CreateFiles,
+    { pathToTemplate, outputPath, selectedNames }: types.CreateFiles,
 ) => {
     const copyDir = (src: string, dest: string, callback: Function) => {
         const copy = (copySrc: string, copyDest: string) => {
@@ -82,7 +82,17 @@ export const createFiles = (
     };
 
 
-    copyDir(fromFolderPath, toPath, (error: any) => {
+    if (Array.isArray(pathToTemplate)) {
+        pathToTemplate.forEach((path) => {
+            copyDir(path, outputPath, (error: any) => {
+                throw error;
+            });
+        });
+
+        return;
+    }
+
+    copyDir(pathToTemplate, outputPath, (error: any) => {
         throw error;
     });
 };
