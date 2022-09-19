@@ -2,7 +2,7 @@
 import { resolve } from 'path';
 
 // Types
-import * as types from '../types';
+import * as types from './types';
 
 export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePath) => {
     return {

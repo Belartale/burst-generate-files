@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Types
-import * as types from '../../types';
+import * as types from './types';
 
 export const checkIsOnceInsertMarker = (
     { optionsMarker, configGenerateNameForOnceInsert }: types.CheckIsOnceInsertMarker,

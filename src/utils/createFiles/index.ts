@@ -4,13 +4,13 @@ import fs from 'fs';
 import { Transform } from 'stream';
 
 // Constants
-import { folderNameForMarkers } from '../constants';
+import { folderNameForMarkers } from '../../constants';
 
 // Utils
-import { replaceWordCase } from './replaceWordCase';
+import { replaceWordCase } from '../replaceWordCase';
 
 // Types
-import * as types from '../types';
+import * as types from './types';
 
 export const createFiles = (
     { pathToTemplate, outputPath, selectedNames }: types.CreateFiles,

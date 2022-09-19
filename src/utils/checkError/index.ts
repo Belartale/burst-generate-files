@@ -2,9 +2,10 @@
 import fs from 'fs';
 
 // Types
+import * as typesCommon from '../../types';
 import * as types from '../types';
 
-export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO[] | types.OptionCLIGenO[], whichFunction: 'customGen' | 'CLIGen') => {
+export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCustomGenO[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
     let errors = [];
 
     // Setting First param
@@ -26,7 +27,9 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
                 errors.push(new Error(`Number ${indexOption} value of array in second argument must be object! But you use ${typeof obj}`));
             }
         });
-        options.forEach((option: types.OptionCustomGenO | types.OptionCLIGenO | any, indexOption: number) => {
+        options.forEach((
+            option: typesCommon.OptionCustomGenO | typesCommon.OptionCLIGen | any, indexOption: number,
+        ) => {
             // Setting name
             if (whichFunction === 'CLIGen') {
                 if (typeof option.name !== 'string') {
@@ -48,7 +51,7 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
                     }
                 }
                 if (Array.isArray(option.stringsReplacers)) {
-                    option.stringsReplacers.forEach((obj: string | types.OptionStringsReplacersCustomGen) => {
+                    option.stringsReplacers.forEach((obj: string | typesCommon.OptionStringsReplacersCustomGen) => {
                         if (typeof obj === 'object' && !Array.isArray(obj)) {
                             if (typeof obj.replaceVar !== 'string') {
                                 errors.push(new Error(`"replaceVar" of "stringsReplacers" in number ${indexOption} object must be string! But you use ${typeof obj.replaceVar}!`));
@@ -65,7 +68,7 @@ export const checkError = (PROJECT_ROOT: string, options: types.OptionCustomGenO
                     errors.push(new Error(`"stringsReplacers" of number ${indexOption} object must be string or array! But you use ${typeof option.stringsReplacers}!`));
                 }
                 if (Array.isArray(option.stringsReplacers)) {
-                    option.stringsReplacers.forEach((string: string | types.OptionStringsReplacersCustomGen) => {
+                    option.stringsReplacers.forEach((string: string | typesCommon.OptionStringsReplacersCustomGen) => {
                         if (typeof string !== 'string') {
                             errors.push(new Error(`value of "stringsReplacers" in number ${indexOption} object must be string! But you use ${typeof string}!`));
                         }

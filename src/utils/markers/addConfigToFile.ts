@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Types
-import * as types from '../../types';
+import * as types from './types';
 
 export const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert }: types.AddConfigToFile) => {
     if (optionsMarker.onceInsert) {

@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Types
-import * as types from '../../types';
+import * as types from './types';
 
 export const isLineOrTemplate = (markerTemplate: types.OptionsMarker['markerTemplate'], tabs: string) => {
     const checkIsFile = (element: string) => {

@@ -2,7 +2,7 @@
 import { isLineOrTemplate } from './isLineOrTemplate';
 
 // Types
-import * as types from '../../types';
+import * as types from './types';
 
 export const defineMarkerAndAdd = ({ optionsMarker, dataRedFile }: types.DefineMarkerAndAdd) => {
     const newDataRedFile: string = dataRedFile.split(/\r?\n/).map((line: string) => {

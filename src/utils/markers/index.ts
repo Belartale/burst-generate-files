@@ -13,7 +13,7 @@ import { defineMarkerAndAdd } from './defineMarkerAndAdd';
 import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 
 // Types
-import * as types from '../../types';
+import * as types from './types';
 
 export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
     if (

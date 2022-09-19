@@ -2,7 +2,7 @@
 import enquirer from 'enquirer';
 
 // Types
-import * as types from '../types';
+import * as types from './types';
 
 const getName = async ({ replaceVar, result }: types.GetName) => {
     const replacerQuestion: any = {
