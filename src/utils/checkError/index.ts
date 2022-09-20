@@ -5,7 +5,7 @@ import fs from 'fs';
 import * as typesCommon from '../../types';
 import * as types from '../types';
 
-export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCustomGenO[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
+export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
     let errors = [];
 
     // Setting First param
@@ -28,7 +28,7 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
             }
         });
         options.forEach((
-            option: typesCommon.OptionCustomGenO | typesCommon.OptionCLIGen | any, indexOption: number,
+            option: typesCommon.OptionCustomGen | typesCommon.OptionCLIGen | any, indexOption: number,
         ) => {
             // Setting name
             if (whichFunction === 'CLIGen') {

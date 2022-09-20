@@ -4,11 +4,10 @@ import * as types from '../types';
 export type AddMarkerFiles = {
     markers: OptionsMarker[]
     selectedNames: types.GetSelectedName | types.GetSelectedName[]
-    PROJECT_ROOT: string
 }
 export type OptionsMarker = {
     pattern: string | RegExp
-    pathToMarker: string
+    pathToMarker: string | string[]
     markerTemplate: string | string[]
     genDirection?: 'after' | 'before'
     onceInsert?: boolean
@@ -19,9 +18,9 @@ export type CheckIsOnceInsertMarker = {
 }
 export type GenerateFiles = {
     id: {
-        pathToMarker: string
-        pattern: string
-        markerTemplate: string | string[]
+        pathToMarker: types.OptionsMarker['pathToMarker']
+        pattern: types.OptionsMarker['pattern']
+        markerTemplate: types.OptionsMarker['markerTemplate']
     },
     onceInsert: boolean
 }

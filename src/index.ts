@@ -3,7 +3,6 @@ import { makeAbsolutePath } from './utils/makeAbsolutePath';
 import { getSelectedItem } from './utils/getSelectedItem';
 import { getSelectedName } from './utils/getSelectedName';
 import { createFiles } from './utils/createFiles';
-import { replaceWordCase } from './utils/replaceWordCase';
 import { markers } from './utils/markers';
 import { onComplete } from './utils/onComplete';
 // import { checkError } from './utils/checkError';
@@ -18,10 +17,7 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: typesCommon.Ma
 
     createFiles({
         pathToTemplate: configItemWithAbsolutePath.pathToTemplate,
-        outputPath:     replaceWordCase({
-            string:            configItemWithAbsolutePath.outputPath,
-            stringsForReplace: selectedNames,
-        }),
+        outputPath:     configItemWithAbsolutePath.outputPath,
         selectedNames,
     });
 
@@ -29,7 +25,6 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: typesCommon.Ma
         markers({
             markers: configItemWithAbsolutePath.markers,
             selectedNames,
-            PROJECT_ROOT,
         });
     }
 
@@ -38,24 +33,24 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: typesCommon.Ma
     }
 };
 
-// export const customGen = (
-//     PROJECT_ROOT: string, options: types.OptionCustomGenO[],
-// ) => {
-//     try {
-//         // checkError(PROJECT_ROOT, options, 'customGen');
-//         options.forEach((option) => {
-//             mainActions(
-//                 {
-//                     configItem:    option,
-//                     selectedNames: option.stringsReplacers,
-//                     PROJECT_ROOT,
-//                 },
-//             );
-//         });
-//     } catch (error: any) {
-//         catchErrors(error);
-//     }
-// };
+export const customGen = (
+    PROJECT_ROOT: string, options: typesCommon.OptionCustomGen[],
+) => {
+    try {
+        // checkError(PROJECT_ROOT, options, 'customGen');
+        options.forEach((option) => {
+            mainActions(
+                {
+                    configItem:    option,
+                    selectedNames: option.stringsReplacers,
+                    PROJECT_ROOT,
+                },
+            );
+        });
+    } catch (error: any) {
+        catchErrors(error);
+    }
+};
 
 export const CLIGen = async (
     PROJECT_ROOT: string, options: typesCommon.OptionCLIGen[],
@@ -74,5 +69,5 @@ export const CLIGen = async (
     }
 };
 
-// exports.customGen = customGen;
+exports.customGen = customGen;
 exports.CLIGen = CLIGen;

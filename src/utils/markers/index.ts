@@ -1,6 +1,5 @@
 // Core
 import fs from 'fs';
-import { resolve } from 'path';
 import chalk from 'chalk';
 
 // Constants
@@ -15,7 +14,7 @@ import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 // Types
 import * as types from './types';
 
-export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
+export const markers = ({ markers, selectedNames }: types.AddMarkerFiles) => {
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
@@ -35,23 +34,31 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
             return;
         }
 
-        const pathFile = resolve(PROJECT_ROOT, optionsMarker.pathToMarker);
+        const mainActionsWithMarkers = (pathFile: string) => {
+            const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
-        const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
+            const dataRedFileAddedMarkers = defineMarkerAndAdd({ optionsMarker, dataRedFile });
 
-        const dataRedFileReplaced = defineMarkerAndAdd({ optionsMarker, dataRedFile });
+            const resultData = replaceWordCase({
+                string:            dataRedFileAddedMarkers,
+                stringsForReplace: selectedNames,
+            });
+            fs.writeFileSync(
+                pathFile,
+                resultData,
+            );
 
-        const resultData = replaceWordCase({
-            string:            dataRedFileReplaced,
-            stringsForReplace: selectedNames,
-        });
-        fs.writeFileSync(
-            pathFile,
-            resultData,
-        );
+            if (optionsMarker.onceInsert) {
+                addConfigToFile({ optionsMarker, configGenerateNameForOnceInsert });
+            }
+        };
 
-        if (optionsMarker.onceInsert) {
-            addConfigToFile({ optionsMarker, configGenerateNameForOnceInsert });
+        if (Array.isArray(optionsMarker.pathToMarker)) {
+            optionsMarker.pathToMarker.forEach((element) => mainActionsWithMarkers(element));
+
+            return;
         }
+
+        mainActionsWithMarkers(optionsMarker.pathToMarker);
     });
 };

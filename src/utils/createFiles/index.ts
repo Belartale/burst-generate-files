@@ -15,11 +15,11 @@ import * as types from './types';
 export const createFiles = (
     { pathToTemplate, outputPath, selectedNames }: types.CreateFiles,
 ) => {
-    const copyDir = (src: string, dest: string, callback: Function) => {
+    const copyDir = (copyDirSrc: string, copyDirDest: string | string[], copyDirCallback: Function) => {
         const copy = (copySrc: string, copyDest: string) => {
             fs.readdir(copySrc, (error, list) => {
                 if (error) {
-                    callback(error);
+                    copyDirCallback(error);
 
                     return;
                 }
@@ -27,10 +27,13 @@ export const createFiles = (
                     const ss = path.resolve(copySrc, item);
                     fs.stat(ss, (error, stat) => {
                         if (error) {
-                            callback(error);
+                            copyDirCallback(error);
                         } else {
                             const curSrc = path.resolve(copySrc, item);
-                            const curDest = path.resolve(copyDest, item);
+                            const curDest = replaceWordCase({
+                                string:            path.resolve(copyDest, item),
+                                stringsForReplace: selectedNames,
+                            });
 
                             if (stat.isFile()) {
                                 fs.createReadStream(curSrc).pipe(new Transform({
@@ -43,26 +46,6 @@ export const createFiles = (
                                     },
                                 }))
                                     .pipe(fs.createWriteStream(curDest));
-
-                                fs.access(dest, (error) => {
-                                    if (error) {
-                                        throw error;
-                                    }
-                                    fs.rename(
-                                        curDest,
-                                        replaceWordCase(
-                                            {
-                                                string:            curDest,
-                                                stringsForReplace: selectedNames,
-                                            },
-                                        ),
-                                        (error) => {
-                                            if (error) {
-                                                throw error;
-                                            }
-                                        },
-                                    );
-                                });
                             } else if (stat.isDirectory() && path.basename(curSrc) !== folderNameForMarkers) {
                                 fs.mkdirSync(curDest, { recursive: true });
                                 copy(curSrc, curDest);
@@ -73,12 +56,32 @@ export const createFiles = (
             });
         };
 
-        fs.access(dest, (error) => {
-            if (error) {
-                fs.mkdirSync(dest, { recursive: true });
-            }
-            copy(src, dest);
-        });
+
+        if (Array.isArray(copyDirDest)) {
+            copyDirDest.map((string) => replaceWordCase({
+                string,
+                stringsForReplace: selectedNames,
+            })).forEach((dest) => {
+                fs.access(dest, (error) => {
+                    if (error) {
+                        fs.mkdirSync(dest, { recursive: true });
+                    }
+                    copy(copyDirSrc, dest);
+                });
+            });
+        }
+        if (typeof copyDirDest === 'string') {
+            const rightDest = replaceWordCase({
+                string:            copyDirDest,
+                stringsForReplace: selectedNames,
+            });
+            fs.access(rightDest, (error) => {
+                if (error) {
+                    fs.mkdirSync(rightDest, { recursive: true });
+                }
+                copy(copyDirSrc, rightDest);
+            });
+        }
     };
 
 
