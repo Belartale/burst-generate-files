@@ -14,7 +14,7 @@ import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 // Types
 import * as types from './types';
 
-export const markers = ({ markers, selectedNames }: types.AddMarkerFiles) => {
+export const markers = ({ pathToTemplate, markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
@@ -37,7 +37,9 @@ export const markers = ({ markers, selectedNames }: types.AddMarkerFiles) => {
         const mainActionsWithMarkers = (pathFile: string) => {
             const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
-            const dataRedFileAddedMarkers = defineMarkerAndAdd({ optionsMarker, dataRedFile });
+            const dataRedFileAddedMarkers = defineMarkerAndAdd(
+                { pathToTemplate, optionsMarker, dataRedFile, PROJECT_ROOT },
+            );
 
             const resultData = replaceWordCase({
                 string:            dataRedFileAddedMarkers,

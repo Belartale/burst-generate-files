@@ -38,15 +38,6 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePat
                 newMarker.pathToMarker = resolve(PROJECT_ROOT, newMarker.pathToMarker);
             }
 
-            //Setting markerTemplate
-            if (Array.isArray(newMarker.markerTemplate)) {
-                newMarker.markerTemplate = newMarker.markerTemplate.map((path) => resolve(PROJECT_ROOT, path));
-            }
-
-            if (typeof newMarker.markerTemplate === 'string') {
-                newMarker.markerTemplate = resolve(PROJECT_ROOT, newMarker.markerTemplate);
-            }
-
             return newMarker;
         });
     }
