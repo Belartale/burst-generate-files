@@ -1,5 +1,6 @@
 // Core
 import fs from 'fs';
+import { resolve } from 'path';
 import chalk from 'chalk';
 
 // Constants
@@ -15,21 +16,27 @@ import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 import * as types from './types';
 
 export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
+    const configGenerateNameForOnceInsertResolvedPath = resolve(PROJECT_ROOT, configGenerateNameForOnceInsert);
+
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
-        && !fs.existsSync(configGenerateNameForOnceInsert))
+        && !fs.existsSync(configGenerateNameForOnceInsertResolvedPath))
         || (markers
         && markers.find((el) => el.onceInsert === true)
-        && fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' }) === '')
+        && fs.readFileSync(configGenerateNameForOnceInsertResolvedPath, { encoding: 'utf-8' }) === '')
     ) {
-        fs.writeFileSync(configGenerateNameForOnceInsert, JSON.stringify([]));
+        fs.writeFileSync(configGenerateNameForOnceInsertResolvedPath, JSON.stringify([]));
     }
 
     markers.forEach((optionsMarker: types.OptionsMarker) => {
-        if (optionsMarker.onceInsert && checkIsOnceInsertMarker({ optionsMarker, configGenerateNameForOnceInsert })) {
+        if (
+            optionsMarker.onceInsert
+            && checkIsOnceInsertMarker(
+                { optionsMarker, configGenerateNameForOnceInsert: configGenerateNameForOnceInsertResolvedPath },
+            )) {
             console.log(chalk.yellow('This marker previously inserted !!!'));
-            console.table(optionsMarker);
+            console.log(optionsMarker);
 
             return;
         }
@@ -38,7 +45,7 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
             const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
             const dataRedFileAddedMarkers = defineMarkerAndAddMarkerTemplate(
-                { optionsMarker, dataRedFile, PROJECT_ROOT },
+                { optionsMarker, dataRedFile },
             );
 
             const resultData = replaceWordCase({
@@ -49,18 +56,20 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
                 pathFile,
                 resultData,
             );
-
-            if (optionsMarker.onceInsert) {
-                addConfigToFile({ optionsMarker, configGenerateNameForOnceInsert });
-            }
         };
 
         if (Array.isArray(optionsMarker.pathToMarker)) {
             optionsMarker.pathToMarker.forEach((element) => mainActionsWithMarkers(element));
-
-            return;
         }
 
-        mainActionsWithMarkers(optionsMarker.pathToMarker);
+        if (typeof optionsMarker.pathToMarker === 'string' && !Array.isArray(optionsMarker.pathToMarker)) {
+            mainActionsWithMarkers(optionsMarker.pathToMarker);
+        }
+
+        if (optionsMarker.onceInsert) {
+            addConfigToFile(
+                { optionsMarker, configGenerateNameForOnceInsert: configGenerateNameForOnceInsertResolvedPath },
+            );
+        }
     });
 };

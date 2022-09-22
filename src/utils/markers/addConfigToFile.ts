@@ -10,25 +10,13 @@ export const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert
 
         const parsedData: types.GenerateFiles[] = JSON.parse(configGenerateFile);
 
-        const data: types.GenerateFiles[] = [ ...parsedData ];
+        const newData = parsedData.map((el) => ({ ...el, onceInsert: optionsMarker.onceInsert }));
 
-        const newData = data.map((el) => ({ ...el, onceInsert: optionsMarker.onceInsert }));
-
-        const convertIfRegExpToString = (pattern: types.OptionsMarker['pattern']) => {
-            if (pattern === RegExp(pattern)) {
-                return String(pattern);
-            }
-
-            return String(pattern);
-        };
-
-        if (!parsedData.some((el) => el.id.pattern === optionsMarker.pattern
-        && el.id.pathToMarker === optionsMarker.pathToMarker
-        && el.id.markerTemplate === optionsMarker.markerTemplate)) {
+        if (!parsedData.some((el) => String(el.id.pathToMarker) === String(optionsMarker.pathToMarker)
+        && String(el.id.markerTemplate) === String(optionsMarker.markerTemplate))) {
             newData.push({
                 id: {
                     pathToMarker:   optionsMarker.pathToMarker,
-                    pattern:        convertIfRegExpToString(optionsMarker.pattern),
                     markerTemplate: optionsMarker.markerTemplate,
                 },
                 onceInsert: true,

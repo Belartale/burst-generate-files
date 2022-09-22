@@ -23,7 +23,6 @@ export type CheckIsOnceInsertMarker = {
 export type GenerateFiles = {
     id: {
         pathToMarker: types.OptionsMarker['pathToMarker']
-        pattern: types.OptionsMarker['pattern']
         markerTemplate: types.OptionsMarker['markerTemplate']
     },
     onceInsert: boolean
@@ -33,7 +32,6 @@ export type GenerateFiles = {
 export type DefineMarkerAndAddMarkerTemplate = {
     optionsMarker: OptionsMarker
     dataRedFile: string
-    PROJECT_ROOT: string
 }
 
 // Function addConfigToFile

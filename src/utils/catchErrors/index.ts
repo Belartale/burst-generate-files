@@ -11,6 +11,5 @@ export const catchErrors = (error: any) => {
         return;
     }
     console.error(chalk.red('Error burst-generate-files ↓'));
-    // console.error(error.message);
-    console.error(error);
+    console.error(error.message);
 };
