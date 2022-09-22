@@ -23,15 +23,14 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: typesCommon.Ma
 
     if (configItemWithAbsolutePath.markers) {
         markers({
-            pathToTemplate: configItemWithAbsolutePath.pathToTemplate,
-            markers:        configItemWithAbsolutePath.markers,
+            markers: configItemWithAbsolutePath.markers,
             selectedNames,
             PROJECT_ROOT,
         });
     }
 
     if (configItemWithAbsolutePath.onComplete) {
-        onComplete({ configItem: configItemWithAbsolutePath, selectedNames });
+        onComplete({ configItem: configItemWithAbsolutePath });
     }
 };
 

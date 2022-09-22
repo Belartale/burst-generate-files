@@ -1,17 +1,18 @@
 // utils
-import { collectorPatternFileAndTemplates } from './collectorPatternFileAndTemplates';
+import { collectorTemplates } from './collectorTemplates';
 
 // Types
 import * as types from './types';
 
-export const defineMarkerAndAdd = (
-    { pathToTemplate, optionsMarker, dataRedFile, PROJECT_ROOT }: types.DefineMarkerAndAdd,
+export const defineMarkerAndAddMarkerTemplate = (
+    { optionsMarker, dataRedFile, PROJECT_ROOT }: types.DefineMarkerAndAddMarkerTemplate,
 ) => {
     const newDataRedFile: string = dataRedFile.split(/\r?\n/).map((line: string) => {
-        const reg = new RegExp(`^.*(${optionsMarker.pattern})$`, 'g'); //? todo // and /* add???????
+        const reg = new RegExp(`^.*(${optionsMarker.pattern})$`, 'g');
 
         if (
-            typeof optionsMarker.pattern === 'string' && line.match(reg)
+            (typeof optionsMarker.pattern === 'string' && line.match(reg))
+            || (optionsMarker.pattern === RegExp(optionsMarker.pattern) && optionsMarker.pattern.test(line))
         ) {
             let tabs: string = '';
 
@@ -26,10 +27,10 @@ export const defineMarkerAndAdd = (
             });
 
             if (typeof optionsMarker.genDirection === 'undefined' || optionsMarker.genDirection === 'after') {
-                return line + '\n' + collectorPatternFileAndTemplates({ pathToTemplate, optionsMarker, tabs, PROJECT_ROOT });
+                return line + '\n' + collectorTemplates({ optionsMarker, tabs, PROJECT_ROOT });
             }
             if (optionsMarker.genDirection === 'before') {
-                return collectorPatternFileAndTemplates({ pathToTemplate, optionsMarker, tabs, PROJECT_ROOT }) + '\n' + line;
+                return collectorTemplates({ optionsMarker, tabs, PROJECT_ROOT }) + '\n' + line;
             }
         }
 

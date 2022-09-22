@@ -8,13 +8,13 @@ import { configGenerateNameForOnceInsert } from '../../constants';
 // Utils
 import { replaceWordCase } from '../replaceWordCase';
 import { addConfigToFile } from './addConfigToFile';
-import { defineMarkerAndAdd } from './defineMarkerAndAdd';
+import { defineMarkerAndAddMarkerTemplate } from './defineMarkerAndAddMarkerTemplate';
 import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 
 // Types
 import * as types from './types';
 
-export const markers = ({ pathToTemplate, markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
+export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
@@ -37,8 +37,8 @@ export const markers = ({ pathToTemplate, markers, selectedNames, PROJECT_ROOT }
         const mainActionsWithMarkers = (pathFile: string) => {
             const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
-            const dataRedFileAddedMarkers = defineMarkerAndAdd(
-                { pathToTemplate, optionsMarker, dataRedFile, PROJECT_ROOT },
+            const dataRedFileAddedMarkers = defineMarkerAndAddMarkerTemplate(
+                { optionsMarker, dataRedFile, PROJECT_ROOT },
             );
 
             const resultData = replaceWordCase({

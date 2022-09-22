@@ -1,12 +1,10 @@
 // Re-export
-export * from './collectorPatternFileAndTemplates/types';
+export * from './collectorTemplates/types';
 
 // Types
-import * as typesCommon from '../../types';
 import * as types from '../types';
 
 export type AddMarkerFiles = {
-    pathToTemplate: typesCommon.OptionCommonTypes['pathToTemplate']
     markers: OptionsMarker[]
     selectedNames: types.GetSelectedName | types.GetSelectedName[]
     PROJECT_ROOT: string
@@ -31,9 +29,8 @@ export type GenerateFiles = {
     onceInsert: boolean
 }
 
-// Function defineMarkerAndAdd
-export type DefineMarkerAndAdd = {
-    pathToTemplate: typesCommon.OptionCommonTypes['pathToTemplate']
+// Function defineMarkerAndAddMarkerTemplate
+export type DefineMarkerAndAddMarkerTemplate = {
     optionsMarker: OptionsMarker
     dataRedFile: string
     PROJECT_ROOT: string

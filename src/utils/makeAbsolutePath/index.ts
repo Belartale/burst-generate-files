@@ -6,7 +6,8 @@ import * as typesCommon from '../../types';
 import * as types from '../types';
 
 export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePath) => {
-    let newOption: typesCommon.OptionCustomGen | typesCommon.OptionCLIGenTemplate = JSON.parse(JSON.stringify(option));
+    // let newOption: typesCommon.OptionCustomGen | typesCommon.OptionCLIGenTemplate = JSON.parse(JSON.stringify(option));
+    let newOption: typesCommon.OptionCustomGen | typesCommon.OptionCLIGenTemplate = option;
 
     // Setting pathToTemplate
     if (Array.isArray(newOption.pathToTemplate)) {
@@ -27,7 +28,8 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePat
     // Setting markers
     if (Array.isArray(newOption.markers)) {
         newOption.markers = newOption.markers.map((marker) => {
-            let newMarker: types.OptionsMarker = JSON.parse(JSON.stringify(marker));
+            // let newMarker: types.OptionsMarker = JSON.parse(JSON.stringify(marker));
+            let newMarker: types.OptionsMarker = marker;
 
             //Setting pathToMarker
             if (Array.isArray(newMarker.pathToMarker)) {
