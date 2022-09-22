@@ -8,7 +8,6 @@ import * as types from '../types';
 export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
     let errors = [];
 
-
     // Setting First param
     if (!PROJECT_ROOT || typeof PROJECT_ROOT !== 'string') {
         errors.push(new Error(`First argument of ${whichFunction} function must be string and must be root path of your application! But you use ${typeof PROJECT_ROOT}!`));
@@ -21,8 +20,6 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
     if (!options || !Array.isArray(options)) {
         errors.push(new Error(`Second argument of ${whichFunction} argument must be array with objects! But you use ${typeof options}!`));
     }
-
-    // [ { name: 'asd', templates: [...] } ]    |||    [ ... ]
 
     const checkArraySecondParam = (
         options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGenTemplate[] | any,
