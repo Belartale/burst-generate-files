@@ -9,49 +9,67 @@ import { configGenerateNameForOnceInsert } from '../../constants';
 // Utils
 import { replaceWordCase } from '../replaceWordCase';
 import { addConfigToFile } from './addConfigToFile';
-import { defineMarkerAndAdd } from './defineMarkerAndAdd';
+import { defineMarkerAndAddMarkerTemplate } from './defineMarkerAndAddMarkerTemplate';
 import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 
 // Types
-import * as types from '../../types';
+import * as types from './types';
 
 export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
+    const configGenerateNameForOnceInsertResolvedPath = resolve(PROJECT_ROOT, configGenerateNameForOnceInsert);
+
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
-        && !fs.existsSync(configGenerateNameForOnceInsert))
+        && !fs.existsSync(configGenerateNameForOnceInsertResolvedPath))
         || (markers
         && markers.find((el) => el.onceInsert === true)
-        && fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' }) === '')
+        && fs.readFileSync(configGenerateNameForOnceInsertResolvedPath, { encoding: 'utf-8' }) === '')
     ) {
-        fs.writeFileSync(configGenerateNameForOnceInsert, JSON.stringify([]));
+        fs.writeFileSync(configGenerateNameForOnceInsertResolvedPath, JSON.stringify([]));
     }
 
     markers.forEach((optionsMarker: types.OptionsMarker) => {
-        if (optionsMarker.onceInsert && checkIsOnceInsertMarker({ optionsMarker, configGenerateNameForOnceInsert })) {
+        if (
+            optionsMarker.onceInsert
+            && checkIsOnceInsertMarker(
+                { optionsMarker, configGenerateNameForOnceInsert: configGenerateNameForOnceInsertResolvedPath },
+            )) {
             console.log(chalk.yellow('This marker previously inserted !!!'));
-            console.table(optionsMarker);
+            console.log(optionsMarker);
 
             return;
         }
 
-        const pathFile = resolve(PROJECT_ROOT, optionsMarker.pathToMarker);
+        const mainActionsWithMarkers = (pathFile: string) => {
+            const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
-        const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
+            const dataRedFileAddedMarkers = defineMarkerAndAddMarkerTemplate(
+                { optionsMarker, dataRedFile },
+            );
 
-        const dataRedFileReplaced = defineMarkerAndAdd({ optionsMarker, dataRedFile });
+            const resultData = replaceWordCase({
+                string:            dataRedFileAddedMarkers,
+                stringsForReplace: selectedNames,
+            });
+            fs.writeFileSync(
+                pathFile,
+                resultData,
+            );
+        };
 
-        const resultData = replaceWordCase({
-            string:            dataRedFileReplaced,
-            stringsForReplace: selectedNames,
-        });
-        fs.writeFileSync(
-            pathFile,
-            resultData,
-        );
+        if (Array.isArray(optionsMarker.pathToMarker)) {
+            optionsMarker.pathToMarker.forEach((element) => mainActionsWithMarkers(element));
+        }
+
+        if (typeof optionsMarker.pathToMarker === 'string' && !Array.isArray(optionsMarker.pathToMarker)) {
+            mainActionsWithMarkers(optionsMarker.pathToMarker);
+        }
 
         if (optionsMarker.onceInsert) {
-            addConfigToFile({ optionsMarker, configGenerateNameForOnceInsert });
+            addConfigToFile(
+                { optionsMarker, configGenerateNameForOnceInsert: configGenerateNameForOnceInsertResolvedPath },
+            );
         }
     });
 };

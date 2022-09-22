@@ -1,5 +1,5 @@
 // Types
-import * as types from '../types';
+import * as types from './types';
 
 const cases = ({ stringReplace, result }: types.Cases) => {
     const newString = stringReplace.value.split(' ');
