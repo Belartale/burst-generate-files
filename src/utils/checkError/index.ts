@@ -77,23 +77,31 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
             }
 
             // Setting pathToTemplate
-            if (typeof option.pathToTemplate !== 'string') {
-                errors.push(new Error(`"pathToTemplate" of number ${indexOption} object must be string! But you use ${typeof option.pathToTemplate}!`));
+            if (typeof option.pathToTemplate !== 'string' && !Array.isArray(option.pathToTemplate)) {
+                errors.push(new Error(`"pathToTemplate" of number ${indexOption} object must be string of array! But you use ${typeof option.pathToTemplate}!`));
             }
             if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
-                errors.push(new Error(`"pathToTemplate" of number ${indexOption} object, ${option.pathToTemplate} no such directory! But you use ${option.pathToTemplate}!`));
+                errors.push(new Error(`"pathToTemplate" of number ${indexOption} object, ${option.pathToTemplate} no such directory!`));
             }
             if (Array.isArray(option.pathToTemplate)) {
                 option.pathToTemplate.forEach((element: string, indexPathToTemplate: number) => {
                     if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
-                        errors.push(new Error(`Value of "pathToTemplate" in number ${indexPathToTemplate} object, in number ${indexOption} object, ${element} no such directory! But you use ${element}!`));
+                        errors.push(new Error(`Value of "pathToTemplate" in number ${indexPathToTemplate} object, in number ${indexOption} object, ${element} no such directory!`));
                     }
                 });
             }
 
             // Setting outputPath
-            if (typeof option.outputPath !== 'string') {
-                errors.push(new Error(`"outputPath" of number ${indexOption} object must be string! But you use ${typeof option.outputPath}!`));
+            if (typeof option.outputPath !== 'string' && !Array.isArray(option.outputPath)) {
+                errors.push(new Error(`"outputPath" of number ${indexOption} object must be string or array! But you use ${typeof option.outputPath}!`));
+            }
+
+            if (Array.isArray(option.outputPath)) {
+                option.outputPath.forEach((path: typesCommon.OptionCommonTypes['outputPath'], indexOutputPath: number) => {
+                    if (typeof path !== 'string') {
+                        errors.push(new Error(`Value of "outputPath" in number ${indexOutputPath} object, in number ${indexOption} object, must be string! But you use ${typeof path}!`));
+                    }
+                });
             }
 
             // Setting markers
@@ -109,12 +117,22 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
                     }
 
                     // Setting pathToMarker
-                    if (typeof objectMarker.pathToMarker !== 'string') {
-                        errors.push(new Error(`"pathToMarker" of number ${indexMarker} "markers" in number ${indexOption} object must be string! But you use ${typeof objectMarker.pathToMarker}!`));
+                    if (typeof objectMarker.pathToMarker !== 'string' && !Array.isArray(objectMarker.pathToMarker)) {
+                        errors.push(new Error(`"pathToMarker" of number ${indexMarker} "markers" in number ${indexOption} object must be string or array! But you use ${typeof objectMarker.pathToMarker}!`));
                     }
 
                     if (typeof objectMarker.pathToMarker === 'string' && !fs.existsSync(objectMarker.pathToMarker)) {
-                        errors.push(new Error(`"pathToMarker" of number ${indexOption} "markers" in number ${indexOption}, ${objectMarker.pathToMarker} no such directory! But you use ${objectMarker.pathToMarker}!`));
+                        errors.push(new Error(`"pathToMarker" of number ${indexOption} "markers" in number ${indexOption} object, ${objectMarker.pathToMarker} no such directory!`));
+                    }
+                    if (Array.isArray(objectMarker.pathToMarker)) {
+                        objectMarker.pathToMarker.forEach((path, indexPathToMarker) => {
+                            if (typeof path !== 'string') {
+                                errors.push(new Error(`Value number ${indexPathToMarker} of "pathToMarker" in number ${indexMarker} "markers" of number ${indexOption} object, must be string! But you use ${typeof objectMarker.pathToMarker}!`));
+                            }
+                            if (typeof path === 'string' && !fs.existsSync(path)) {
+                                errors.push(new Error(`Value number ${indexPathToMarker} of "pathToMarker" in number ${indexOption} "markers" in number ${indexOption}, ${objectMarker.pathToMarker} no such directory!`));
+                            }
+                        });
                     }
 
                     // Setting markerTemplate

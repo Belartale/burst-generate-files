@@ -5,7 +5,7 @@ import { getSelectedName } from './utils/getSelectedName';
 import { createFiles } from './utils/createFiles';
 import { markers } from './utils/markers';
 import { onComplete } from './utils/onComplete';
-// import { checkError } from './utils/checkError';
+import { checkError } from './utils/checkError';
 import { catchErrors } from './utils/catchErrors';
 
 // Types
@@ -38,7 +38,7 @@ export const customGen = (
     PROJECT_ROOT: string, options: typesCommon.OptionCustomGen[],
 ) => {
     try {
-        // checkError(PROJECT_ROOT, options, 'customGen');
+        checkError(PROJECT_ROOT, options, 'customGen');
         options.forEach((option) => {
             mainActions(
                 {
@@ -57,7 +57,7 @@ export const CLIGen = async (
     PROJECT_ROOT: string, options: typesCommon.OptionCLIGen[],
 ): Promise<void> => {
     try {
-        // checkError(PROJECT_ROOT, options, 'CLIGen');
+        checkError(PROJECT_ROOT, options, 'CLIGen');
         const selectedConfigItem: typesCommon.OptionCLIGen = await getSelectedItem(options);
 
         selectedConfigItem.templates.forEach(async (option) => {
