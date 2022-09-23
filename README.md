@@ -52,9 +52,13 @@ import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
         name:            "Generate new React component",
-        stringsReplacers: "__exampleComponentName__",
-        pathToTemplate:    "./componentTemplate",
-        outputPath:      "./components/__exampleComponentName__(pascalCase)",
+        templates: [
+            {
+                stringsReplacers: "__exampleComponentName__",
+                pathToTemplate:    "./componentTemplate",
+                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+            },
+        ],
     },
 ]);
 ```
@@ -158,16 +162,24 @@ For extend your config with new template, you need to create new `template` fold
 
 CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
     {
-        name:            "Generate new React component",
-        stringsReplacers: "__exampleComponentName__",
-        pathToTemplate:    "./componentTemplate",
-        outputPath:      "./components/__exampleComponentName__(pascalCase)",
+        name: "Generate new React component",
+        templates: [
+            {
+                stringsReplacers: "__exampleComponentName__",
+                pathToTemplate:    "./componentTemplate",
+                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+            },
+        ],
     },
-    {                                // <= Page generation config
-        name:            "New page",
-        stringsReplacers: "__pageName__",
-        pathToTemplate:    "./pageTemplate",
-        outputPath:      "./page/__pageName__(pascalCase)",
+    {   // <= Page generation config
+        name: "New page",
+        templates: [
+            {
+                stringsReplacers: "__pageName__",
+                pathToTemplate:    "./pageTemplate",
+                outputPath:      "./page/__pageName__(pascalCase)",
+            },
+        ],
     },
 ]);
 ```
@@ -176,9 +188,12 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 
 ## Settings
 ### `name`
-This is the name that will be displayed in the interface.
+This is the name that will be displayed in the interface. For only the function `CLIGen`.
 
 ![Image interface](https://user-images.githubusercontent.com/33392042/189359666-be15cce3-133a-444d-a57d-33fb16033f78.png)
+
+### `templates`
+This is array for options to generate files. For only the function `CLIGen`.
 
 ### `stringsReplacers`
 This is the string which will replace.
@@ -199,30 +214,31 @@ This is the path for output files.
 
 ### `markers` *optional*
 This is the array to create lines into files.
-- #### `pathToMarker`
-This is the path to the file to insert the line.
-
-- #### `marker`
+- #### `pattern`
 This is the marker for insert line.
 
-- #### `regExp` *optional*
-    If you have a complex or specific marker, you can use `new RegExp(value, flags)`.
-    - ##### `value`
-    The value for RegExp.
-    - ##### `flags`
-    The flags for RegExp.
+- #### `pathToMarker`
+This is the path to the file to insert your lines.
+
+- #### `markerTemplate`
+This is string or array with strings to insert in file where is your `pattern`. Those strings can be line to insert or path to the file to be inserted where is the `pattern`.
+
+**Note:** if you want, you can use folder `.genignore`, program ignore that the folder and you can keep your file in the folder then use those files for `markerTemplate`. But you have to create the folder yourself.
 
 - #### `genDirection` *optional*
-This is the option tells the program where to insert the line. Insert line after marker or before marker.
+This is the option tells the program where to insert the line. Insert line after your `pattern` or before.
 
 **Note:** if not exists, then default value `after maker`.
 
-- #### `markerTemplate`
-This is the string which will be inserted into file.
-
-- #### `onceInsert`
+- #### `onceInsert` *optional*
 This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
+
 **Note:** if you want to paste again, you need edit file `config.generate.files.json`
 
 ### `onComplete` *optional*
-this is the function that will be executed after generation
+this is the function that will be executed after generation. If you want you can get the setting that was use. To get the object you need to use a callback.
+```typescript
+onComplete: (obj) => {
+    console.log(obj);
+},
+```
