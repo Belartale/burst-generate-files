@@ -196,7 +196,19 @@ This is the name that will be displayed in the interface. For only the function 
 This is array for options to generate files. For only the function `CLIGen`.
 
 ### `stringsReplacers`
-This is the string which will replace.
+This is the string which will replace. But if you use the function `customGen`, `stringsReplacers` is object or array, example: 
+```typescript
+stringsReplacers: [
+    {
+        replaceVar: "__exampleComponentName__",
+        value: "Wrapper",
+    },
+    {
+        replaceVar: "__exampleComponentName2__",
+        value: "Wrapper2",
+    },
+],
+```
 #### Types of string replacements
 ```sh
 __componentName__(noCase) === lorem Lorem loremam
