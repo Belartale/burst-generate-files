@@ -227,7 +227,7 @@ This is the path or array with your paths for output files.
 ### `markers` *optional*
 This is the array to create lines into files.
 - #### `pattern`
-This is the marker for insert line.
+This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(pattern)$/`.
 
 - #### `pathToMarker`
 This is the path or array with your paths to the file to insert your lines.
