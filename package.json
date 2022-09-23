@@ -1,6 +1,6 @@
 {
     "name": "burst-generate-files",
-    "version": "0.3.10",
+    "version": "0.9.10",
     "description": "package module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
