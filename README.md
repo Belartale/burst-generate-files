@@ -193,10 +193,10 @@ This is the name that will be displayed in the interface. For only the function 
 ![Image interface](https://user-images.githubusercontent.com/33392042/189359666-be15cce3-133a-444d-a57d-33fb16033f78.png)
 
 ### `templates`
-This is array for options to generate files. For only the function `CLIGen`.
+This is array for settings to generate files. For only the function `CLIGen`.
 
 ### `stringsReplacers`
-This is the string which will replace. But if you use the function `customGen`, `stringsReplacers` is object or array, example: 
+This is the string or array with strings which will replace. But if you use the function `customGen`, `stringsReplacers` is object or array, example: 
 ```typescript
 stringsReplacers: [
     {
@@ -219,10 +219,10 @@ __componentName__ === loremLorem
 ```
 
 ### `pathToTemplate`
-This is the path for your template that will create.
+This is the path or array with your paths for your template that will create.
 
 ### `outputPath`
-This is the path for output files.
+This is the path or array with your paths for output files.
 
 ### `markers` *optional*
 This is the array to create lines into files.
@@ -230,7 +230,7 @@ This is the array to create lines into files.
 This is the marker for insert line.
 
 - #### `pathToMarker`
-This is the path to the file to insert your lines.
+This is the path or array with your paths to the file to insert your lines.
 
 - #### `markerTemplate`
 This is string or array with strings to insert in file where is your `pattern`. Those strings can be line to insert or path to the file to be inserted where is the `pattern`.
