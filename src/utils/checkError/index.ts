@@ -25,172 +25,179 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
     }
 
     const checkArraySecondParam = (
-        options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGenTemplate[] | any,
+        {
+            option,
+            beginOfLine,
+        }: {
+            option: typesCommon.OptionCustomGen | typesCommon.OptionCLIGenTemplate | any
+            beginOfLine: string
+        },
     ) => {
         if (Array.isArray(options)) {
             // Setting Objects of Array
-            options.forEach((option, indexOption: number) => {
-                if (typeof option !== 'object') {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]${betweenTwoLines}Type '${typeof option}' is not assignable to type 'object'.${endErrorLine}`));
-                }
+            if (typeof option !== 'object') {
+                errors.push(new Error(`${beginOfLine}${betweenTwoLines}Type '${typeof option}' is not assignable to type 'object'.${endErrorLine}`));
+            }
 
-                // Setting stringsReplacers
-                if (whichFunction === 'customGen') {
-                    if (typeof option.stringsReplacers !== 'object') {
-                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers${betweenTwoLines}Type '${typeof option.stringsReplacers}' is not assignable to type 'object' | 'array'.${endErrorLine}`));
+            // Setting stringsReplacers
+            if (whichFunction === 'customGen') {
+                if (typeof option.stringsReplacers !== 'object') {
+                    errors.push(new Error(`${beginOfLine}/stringsReplacers${betweenTwoLines}Type '${typeof option.stringsReplacers}' is not assignable to type 'object' | 'array'.${endErrorLine}`));
+                }
+                if (typeof option.stringsReplacers === 'object' && !Array.isArray(option.stringsReplacers)) {
+                    if (typeof option.stringsReplacers.replaceVar !== 'string') {
+                        errors.push(new Error(`${beginOfLine}/stringsReplacers/replaceVar${betweenTwoLines}Type '${typeof option.stringsReplacers.replaceVar}' is not assignable to type 'string'.${endErrorLine}`));
                     }
-                    if (typeof option.stringsReplacers === 'object' && !Array.isArray(option.stringsReplacers)) {
-                        if (typeof option.stringsReplacers.replaceVar !== 'string') {
-                            errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers/replaceVar${betweenTwoLines}Type '${typeof option.stringsReplacers.replaceVar}' is not assignable to type 'string'.${endErrorLine}`));
-                        }
-                        if (typeof option.stringsReplacers.value !== 'string') {
-                            errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers/value${betweenTwoLines}Type '${typeof option.stringsReplacers.value}' is not assignable to type 'string'.${endErrorLine}`));
-                        }
-                    }
-                    if (Array.isArray(option.stringsReplacers)) {
-                        option.stringsReplacers.forEach(
-                            (obj: typesCommon.OptionStringsReplacersCustomGen, indexStringsReplacers: number) => {
-                                if (typeof obj !== 'object' || (typeof obj !== 'object' && Array.isArray(obj))) {
-                                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers[${indexStringsReplacers}]${betweenTwoLines}Type '${typeof obj}' is not assignable to type 'object'.${endErrorLine}`));
-                                }
-                                if (typeof obj === 'object' && !Array.isArray(obj)) {
-                                    if (typeof obj.replaceVar !== 'string') {
-                                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers[${indexStringsReplacers}]/replaceVar${betweenTwoLines}Type '${typeof obj.replaceVar}' is not assignable to type 'string'.${endErrorLine}`));
-                                    }
-                                    if (typeof obj.value !== 'string') {
-                                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers[${indexStringsReplacers}]/value${betweenTwoLines}Type '${typeof obj.value}' is not assignable to type 'string'.${endErrorLine}`));
-                                    }
-                                }
-                            },
-                        );
+                    if (typeof option.stringsReplacers.value !== 'string') {
+                        errors.push(new Error(`${beginOfLine}/stringsReplacers/value${betweenTwoLines}Type '${typeof option.stringsReplacers.value}' is not assignable to type 'string'.${endErrorLine}`));
                     }
                 }
-                if (whichFunction === 'CLIGen') {
-                    if (typeof option.stringsReplacers !== 'string' && !Array.isArray(option.stringsReplacers)) {
-                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers${betweenTwoLines}Type '${typeof option.stringsReplacers}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
+                if (Array.isArray(option.stringsReplacers)) {
+                    option.stringsReplacers.forEach(
+                        (obj: typesCommon.OptionStringsReplacersCustomGen, indexStringsReplacers: number) => {
+                            if (typeof obj !== 'object' || (typeof obj !== 'object' && Array.isArray(obj))) {
+                                errors.push(new Error(`${beginOfLine}/stringsReplacers[${indexStringsReplacers}]${betweenTwoLines}Type '${typeof obj}' is not assignable to type 'object'.${endErrorLine}`));
+                            }
+                            if (typeof obj === 'object' && !Array.isArray(obj)) {
+                                if (typeof obj.replaceVar !== 'string') {
+                                    errors.push(new Error(`${beginOfLine}/stringsReplacers[${indexStringsReplacers}]/replaceVar${betweenTwoLines}Type '${typeof obj.replaceVar}' is not assignable to type 'string'.${endErrorLine}`));
+                                }
+                                if (typeof obj.value !== 'string') {
+                                    errors.push(new Error(`${beginOfLine}/stringsReplacers[${indexStringsReplacers}]/value${betweenTwoLines}Type '${typeof obj.value}' is not assignable to type 'string'.${endErrorLine}`));
+                                }
+                            }
+                        },
+                    );
+                }
+            }
+            if (whichFunction === 'CLIGen') {
+                if (typeof option.stringsReplacers !== 'string' && !Array.isArray(option.stringsReplacers)) {
+                    errors.push(new Error(`${beginOfLine}/stringsReplacers${betweenTwoLines}Type '${typeof option.stringsReplacers}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
+                }
+                if (Array.isArray(option.stringsReplacers)) {
+                    option.stringsReplacers.forEach(
+                        (string: string, indexString: number) => {
+                            if (typeof string !== 'string') {
+                                errors.push(new Error(`${beginOfLine}/stringsReplacers[${indexString}]${betweenTwoLines}Type '${typeof string}' is not assignable to type 'string'.${endErrorLine}`));
+                            }
+                        },
+                    );
+                }
+            }
+
+            // Setting pathToTemplate
+            if (typeof option.pathToTemplate !== 'string' && !Array.isArray(option.pathToTemplate)) {
+                errors.push(new Error(`${beginOfLine}/pathToTemplate${betweenTwoLines}Type '${typeof option.pathToTemplate}' is not assignable to type 'string'.${endErrorLine}`));
+            }
+            if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
+                errors.push(new Error(`${beginOfLine}/pathToTemplate${betweenTwoLines}${option.pathToTemplate} no such directory!${endErrorLine}`));
+            }
+            if (Array.isArray(option.pathToTemplate)) {
+                option.pathToTemplate.forEach((path: string, indexPathToTemplate: number) => {
+                    if (typeof path !== 'string') {
+                        errors.push(new Error(`${beginOfLine}/pathToTemplate[${indexPathToTemplate}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
                     }
-                    if (Array.isArray(option.stringsReplacers)) {
-                        option.stringsReplacers.forEach(
-                            (string: string, indexString: number) => {
+                    if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
+                        errors.push(new Error(`${beginOfLine}/pathToTemplate[${indexPathToTemplate}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
+                    }
+                });
+            }
+
+            // Setting outputPath
+            if (typeof option.outputPath !== 'string' && !Array.isArray(option.outputPath)) {
+                errors.push(new Error(`${beginOfLine}/outputPath${betweenTwoLines}Type '${typeof option.outputPath}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
+            }
+
+            if (Array.isArray(option.outputPath)) {
+                option.outputPath.forEach((path: typesCommon.OptionCommonTypes['outputPath'], indexOutputPath: number) => {
+                    if (typeof path !== 'string') {
+                        errors.push(new Error(`${beginOfLine}/outputPath[${indexOutputPath}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+                    }
+                });
+            }
+
+            // Setting markers
+            if (option.markers) {
+                if (!Array.isArray(option.markers)) {
+                    errors.push(new Error(`${beginOfLine}/markers${betweenTwoLines}Type '${typeof option.markers}' is not assignable to type 'array'.${endErrorLine}`));
+                }
+                if (Array.isArray(option.markers)) {
+                    option.markers.forEach((optionMarker: types.OptionsMarker, indexMarker: number) => {
+                        // Setting pattern
+                        if (typeof optionMarker.pattern !== 'string' && optionMarker.pattern !== RegExp(optionMarker.pattern)) {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pattern${betweenTwoLines}Type '${typeof optionMarker.pattern}' is not assignable to type 'string' | 'RegExp'.${endErrorLine}`));
+                        }
+
+                        // Setting pathToMarker
+                        if (typeof optionMarker.pathToMarker !== 'string' && !Array.isArray(optionMarker.pathToMarker)) {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}Type '${typeof optionMarker.pathToMarker}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
+                        }
+
+                        if (typeof optionMarker.pathToMarker === 'string' && !fs.existsSync(optionMarker.pathToMarker)) {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}${optionMarker.pathToMarker} no such directory!${endErrorLine}`));
+                        }
+                        if (Array.isArray(optionMarker.pathToMarker)) {
+                            optionMarker.pathToMarker.forEach((path, indexPathToMarker) => {
+                                if (typeof path !== 'string') {
+                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+                                }
+                                if (typeof path === 'string' && !fs.existsSync(path)) {
+                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
+                                }
+                            });
+                        }
+
+                        // Setting markerTemplate
+                        if (typeof optionMarker.markerTemplate !== 'string' && !Array.isArray(optionMarker.markerTemplate)) {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate${betweenTwoLines}Type '${typeof optionMarker.markerTemplate}' is not assignable to type 'string'.${endErrorLine}`));
+                        }
+                        if (Array.isArray(optionMarker.markerTemplate)) {
+                            optionMarker.markerTemplate.forEach((string, indexMarkerTemplate: number) => {
                                 if (typeof string !== 'string') {
-                                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/stringsReplacers[${indexString}]${betweenTwoLines}Type '${typeof string}' is not assignable to type 'string'.${endErrorLine}`));
+                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate[${indexMarkerTemplate}]${betweenTwoLines}Type '${typeof string}' is not assignable to type 'string'.${endErrorLine}`));
                                 }
-                            },
-                        );
-                    }
-                }
-
-                // Setting pathToTemplate
-                if (typeof option.pathToTemplate !== 'string' && !Array.isArray(option.pathToTemplate)) {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/pathToTemplate${betweenTwoLines}Type '${typeof option.pathToTemplate}' is not assignable to type 'string'.${endErrorLine}`));
-                }
-                if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/pathToTemplate${betweenTwoLines}${option.pathToTemplate} no such directory!${endErrorLine}`));
-                }
-                if (Array.isArray(option.pathToTemplate)) {
-                    option.pathToTemplate.forEach((path: string, indexPathToTemplate: number) => {
-                        if (typeof path !== 'string') {
-                            errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/pathToTemplate[${indexPathToTemplate}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+                            });
                         }
-                        if (typeof option.pathToTemplate === 'string' && !fs.existsSync(option.pathToTemplate)) {
-                            errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/pathToTemplate[${indexPathToTemplate}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
+
+                        // Setting genDirection
+                        if (typeof optionMarker.genDirection !== 'undefined' && optionMarker.genDirection !== 'after' && optionMarker.genDirection !== 'before') {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/genDirection${betweenTwoLines}Type '${typeof optionMarker.genDirection}' is not assignable to type 'after' | 'before' | 'undefined'.${endErrorLine}`));
+                        }
+
+                        // Setting onceInsert
+                        if (optionMarker.onceInsert && typeof optionMarker.onceInsert !== 'boolean') {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/onceInsert${betweenTwoLines}Type '${typeof optionMarker.onceInsert}' is not assignable to type 'boolean'.${endErrorLine}`));
                         }
                     });
                 }
+            }
 
-                // Setting outputPath
-                if (typeof option.outputPath !== 'string' && !Array.isArray(option.outputPath)) {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/outputPath${betweenTwoLines}Type '${typeof option.outputPath}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
-                }
-
-                if (Array.isArray(option.outputPath)) {
-                    option.outputPath.forEach((path: typesCommon.OptionCommonTypes['outputPath'], indexOutputPath: number) => {
-                        if (typeof path !== 'string') {
-                            errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/outputPath[${indexOutputPath}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
-                        }
-                    });
-                }
-
-
-                // Setting markers
-                if (option.markers) {
-                    if (!Array.isArray(option.markers)) {
-                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers${betweenTwoLines}Type '${typeof option.markers}' is not assignable to type 'array'.${endErrorLine}`));
-                    }
-                    if (Array.isArray(option.markers)) {
-                        option.markers.forEach((optionMarker: types.OptionsMarker, indexMarker: number) => {
-                            // Setting pattern
-                            if (typeof optionMarker.pattern !== 'string' && optionMarker.pattern !== RegExp(optionMarker.pattern)) {
-                                errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/pattern${betweenTwoLines}Type '${typeof optionMarker.pattern}' is not assignable to type 'string' | 'RegExp'.${endErrorLine}`));
-                            }
-
-                            // Setting pathToMarker
-                            if (typeof optionMarker.pathToMarker !== 'string' && !Array.isArray(optionMarker.pathToMarker)) {
-                                errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/pathToMarker${betweenTwoLines}Type '${typeof optionMarker.pathToMarker}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
-                            }
-
-                            if (typeof optionMarker.pathToMarker === 'string' && !fs.existsSync(optionMarker.pathToMarker)) {
-                                errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/pathToMarker${betweenTwoLines}${optionMarker.pathToMarker} no such directory!${endErrorLine}`));
-                            }
-                            if (Array.isArray(optionMarker.pathToMarker)) {
-                                optionMarker.pathToMarker.forEach((path, indexPathToMarker) => {
-                                    if (typeof path !== 'string') {
-                                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
-                                    }
-                                    if (typeof path === 'string' && !fs.existsSync(path)) {
-                                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
-                                    }
-                                });
-                            }
-
-                            // Setting markerTemplate
-                            if (typeof optionMarker.markerTemplate !== 'string' && !Array.isArray(optionMarker.markerTemplate)) {
-                                errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/markerTemplate${betweenTwoLines}Type '${typeof optionMarker.markerTemplate}' is not assignable to type 'string'.${endErrorLine}`));
-                            }
-                            if (Array.isArray(optionMarker.markerTemplate)) {
-                                optionMarker.markerTemplate.forEach((string, indexMarkerTemplate: number) => {
-                                    if (typeof string !== 'string') {
-                                        errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/markerTemplate[${indexMarkerTemplate}]${betweenTwoLines}Type '${typeof string}' is not assignable to type 'string'.${endErrorLine}`));
-                                    }
-                                });
-                            }
-
-                            // Setting genDirection
-                            if (typeof optionMarker.genDirection !== 'undefined' && optionMarker.genDirection !== 'after' && optionMarker.genDirection !== 'before') {
-                                errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/genDirection${betweenTwoLines}Type '${typeof optionMarker.genDirection}' is not assignable to type 'after' | 'before' | 'undefined'.${endErrorLine}`));
-                            }
-
-                            // Setting onceInsert
-                            if (optionMarker.onceInsert && typeof optionMarker.onceInsert !== 'boolean') {
-                                errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/markers[${indexMarker}]/onceInsert${betweenTwoLines}Type '${typeof optionMarker.onceInsert}' is not assignable to type 'boolean'.${endErrorLine}`));
-                            }
-                        });
-                    }
-                }
-
-                // Setting onComplete
-                if (option.onComplete && typeof option.onComplete !== 'function') {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexOption}]/onComplete${betweenTwoLines}Type '${typeof option.onComplete}' is not assignable to type 'function'.${endErrorLine}`));
-                }
-            });
+            // Setting onComplete
+            if (option.onComplete && typeof option.onComplete !== 'function') {
+                errors.push(new Error(`${beginOfLine}/onComplete${betweenTwoLines}Type '${typeof option.onComplete}' is not assignable to type 'function'.${endErrorLine}`));
+            }
         }
     };
 
     if (whichFunction === 'customGen' && Array.isArray(options)) {
-        checkArraySecondParam(options);
+        options.forEach((option, indexOption) => {
+            checkArraySecondParam({ option, beginOfLine: `${whichFunction}/Config[${indexOption}]` });
+        });
     }
 
     if (whichFunction === 'CLIGen') {
         if (Array.isArray(options)) {
             options.forEach((optionCLIGen: typesCommon.OptionCLIGen | any, indexCLIGen: number) => {
                 if (typeof optionCLIGen.name !== 'string') {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexCLIGen}]/name${betweenTwoLines}Type '${typeof optionCLIGen.name}' is not assignable to type 'string'.${endErrorLine}`));
+                    errors.push(new Error(`${whichFunction}/ConfigCLIGen[${indexCLIGen}]/name${betweenTwoLines}Type '${typeof optionCLIGen.name}' is not assignable to type 'string'.${endErrorLine}`));
                 }
                 if (!Array.isArray(optionCLIGen.templates)) {
-                    errors.push(new Error(`${whichFunction}/Configs[${indexCLIGen}]/name${betweenTwoLines}Type '${typeof optionCLIGen.templates}' is not assignable to type 'array'.${endErrorLine}`));
+                    errors.push(new Error(`${whichFunction}/ConfigCLIGen[${indexCLIGen}]/templates${betweenTwoLines}Type '${typeof optionCLIGen.templates}' is not assignable to type 'array'.${endErrorLine}`));
                 }
                 if (Array.isArray(optionCLIGen.templates)) {
-                    checkArraySecondParam(optionCLIGen.templates);
+                    optionCLIGen.templates.forEach((option: any, indexOption: number) => {
+                        checkArraySecondParam({ option, beginOfLine: `${whichFunction}/ConfigCLIGen[${indexCLIGen}]/templates[${indexOption}]` });
+                    });
                 }
             });
         }
