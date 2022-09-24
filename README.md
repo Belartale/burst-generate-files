@@ -211,10 +211,15 @@ stringsReplacers: [
 ```
 #### Types of string replacements
 ```sh
-__componentName__(noCase) === lorem Lorem loremam
+__componentName__(noCase) === lorem Lorem lorem
 __componentName__(pascalCase) === LoremLorem
 __componentName__(constantCase) === LOREM_LOREM
 __componentName__(kebabCase) === lorem-lorem
+__componentName__(dotCase) === lorem.lorem
+__componentName__(pathCase) === lorem/lorem
+__componentName__(sentenceCase) === Lorem lorem
+__componentName__(snakeCase) === lorem_lorem
+__componentName__(titleCase) === Lorem Lorem
 __componentName__ === loremLorem
 ```
 
