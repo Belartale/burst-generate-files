@@ -149,12 +149,18 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
 
                         // Setting markerTemplate
                         if (typeof optionMarker.markerTemplate !== 'string' && !Array.isArray(optionMarker.markerTemplate)) {
-                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate${betweenTwoLines}Type '${typeof optionMarker.markerTemplate}' is not assignable to type 'string'.${endErrorLine}`));
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate${betweenTwoLines}Type '${typeof optionMarker.markerTemplate}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
+                        }
+                        if (typeof optionMarker.markerTemplate === 'string' && !fs.existsSync(optionMarker.markerTemplate)) {
+                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate${betweenTwoLines}${optionMarker.markerTemplate} no such directory!${endErrorLine}`));
                         }
                         if (Array.isArray(optionMarker.markerTemplate)) {
                             optionMarker.markerTemplate.forEach((string, indexMarkerTemplate: number) => {
                                 if (typeof string !== 'string') {
                                     errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate[${indexMarkerTemplate}]${betweenTwoLines}Type '${typeof string}' is not assignable to type 'string'.${endErrorLine}`));
+                                }
+                                if (typeof string === 'string' && !fs.existsSync(string)) {
+                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate[${indexMarkerTemplate}]${betweenTwoLines}${string} no such directory!${endErrorLine}`));
                                 }
                             });
                         }

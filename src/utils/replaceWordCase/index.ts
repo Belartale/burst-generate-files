@@ -5,9 +5,25 @@ const cases = ({ stringReplace, result }: types.Cases) => {
     const newString = stringReplace.value.split(' ');
     let newResult = result;
 
-    if (result && result.includes(`${stringReplace.replaceVar}(noCase)`)) { // lorem lorem => loremlorem
+    const defaultCase = (word: string, index: number) => {
+        if (index === 0) {
+            return word.split('').map((letter, indexLetter) => indexLetter === 0 ? letter.toLowerCase() : letter)
+                .join('');
+        }
+
+        return word[ 0 ].toUpperCase() + word.slice(1);
+    };
+
+    if (result && result.includes(`${stringReplace.replaceVar}(noCase)`)) { // lorem lorem => lorem lorem
         const re = new RegExp(`${stringReplace.replaceVar}.noCase.`, 'g');
         const modifiedToPascalCase = newString.join(' ');
+
+        newResult = newResult.replace(re, modifiedToPascalCase);
+    }
+
+    if (result && result.includes(`${stringReplace.replaceVar}(camelCase)`)) { // Lorem lorem => loremLorem
+        const re = new RegExp(`${stringReplace.replaceVar}.camelCase.`, 'g');
+        const modifiedToPascalCase = newString.map((word, index) => defaultCase(word, index)).join('');
 
         newResult = newResult.replace(re, modifiedToPascalCase);
     }
@@ -84,7 +100,7 @@ const cases = ({ stringReplace, result }: types.Cases) => {
 
     if (result && result.includes(stringReplace.replaceVar)) { // lorem lorem => loremLorem
         const re = new RegExp(`${stringReplace.replaceVar}`, 'g');
-        const modifiedToDefault = newString.map((word, index) => index > 0 ? word[ 0 ].toUpperCase() + word.slice(1) : word).join('');
+        const modifiedToDefault = newString.map((word, index) => defaultCase(word, index)).join('');
 
         newResult = newResult.replace(re, modifiedToDefault);
     }

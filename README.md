@@ -238,7 +238,7 @@ This is the marker for insert line. If you want, you can use any regular express
 This is the path or array with your paths to the file to insert your lines.
 
 - #### `markerTemplate`
-This is string or array with strings to insert in file where is your `pattern`. Those strings can be line to insert or path to the file to be inserted where is the `pattern`.
+This is path or paths to data of file to be inserted where is the `pattern`.
 
 **Note:** if you want, you can use folder `.genignore`, program ignore that the folder and you can keep your file in the folder then use those files for `markerTemplate`. But you have to create the folder yourself.
 
