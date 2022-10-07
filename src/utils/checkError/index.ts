@@ -133,18 +133,84 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
                             errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}Type '${typeof optionMarker.pathToMarker}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
                         }
 
-                        if (typeof optionMarker.pathToMarker === 'string' && !fs.existsSync(optionMarker.pathToMarker)) {
-                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}${optionMarker.pathToMarker} no such directory!${endErrorLine}`));
+                        if (whichFunction === 'customGen') {
+                            if (typeof optionMarker.pathToMarker === 'string') {
+                                if (
+                                    (typeof option.stringsReplacers === 'object' && !Array.isArray(option.stringsReplacers) && !optionMarker.pathToMarker.includes(option.stringsReplacers.replaceVar) && !fs.existsSync(optionMarker.pathToMarker))
+                                    || (Array.isArray(option.stringsReplacers)
+                                    && !option.stringsReplacers.some(
+                                        (
+                                            srtRep: typesCommon.OptionStringsReplacersCustomGen,
+                                        ) => optionMarker.pathToMarker.includes(srtRep.replaceVar),
+                                    )
+                                    && !option.stringsReplacers.some(
+                                        (
+                                            strRep: typesCommon.OptionStringsReplacersCustomGen,
+                                        ) => fs.existsSync(strRep.value),
+                                    ))
+                                ) {
+                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}${optionMarker.pathToMarker} no such directory!${endErrorLine}`));
+                                }
+                            }
+                            if (Array.isArray(optionMarker.pathToMarker)) {
+                                optionMarker.pathToMarker.forEach((path, indexPathToMarker) => {
+                                    if (typeof path !== 'string') {
+                                        errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+                                    }
+                                    if (typeof path === 'string') {
+                                        if (
+                                            (typeof option.stringsReplacers === 'string' && !path.includes(option.stringsReplacers) && !fs.existsSync(path))
+                                            || (Array.isArray(option.stringsReplacers)
+                                        && !option.stringsReplacers.some(
+                                            (srtRep: string) => path.includes(srtRep),
+                                        )
+                                            && !option.stringsReplacers.some(
+                                                (strRep: string) => fs.existsSync(strRep),
+                                            ))
+                                        ) {
+                                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
+                                        }
+                                    }
+                                });
+                            }
                         }
-                        if (Array.isArray(optionMarker.pathToMarker)) {
-                            optionMarker.pathToMarker.forEach((path, indexPathToMarker) => {
-                                if (typeof path !== 'string') {
-                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+
+                        if (whichFunction === 'CLIGen') {
+                            if (typeof optionMarker.pathToMarker === 'string') {
+                                if (
+                                    (typeof option.stringsReplacers === 'string' && !optionMarker.pathToMarker.includes(option.stringsReplacers) && !fs.existsSync(optionMarker.pathToMarker))
+                                    || (Array.isArray(option.stringsReplacers)
+                                    && !option.stringsReplacers.some(
+                                        (srtRep: string) => optionMarker.pathToMarker.includes(srtRep),
+                                    )
+                                    && !option.stringsReplacers.some(
+                                        (strRep: string) => fs.existsSync(strRep),
+                                    ))
+                                ) {
+                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}${optionMarker.pathToMarker} no such directory!${endErrorLine}`));
                                 }
-                                if (typeof path === 'string' && !fs.existsSync(path)) {
-                                    errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
-                                }
-                            });
+                            }
+                            if (Array.isArray(optionMarker.pathToMarker)) {
+                                optionMarker.pathToMarker.forEach((path, indexPathToMarker) => {
+                                    if (typeof path !== 'string') {
+                                        errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+                                    }
+                                    if (typeof path === 'string') {
+                                        if (
+                                            (typeof option.stringsReplacers === 'string' && !path.includes(option.stringsReplacers) && !fs.existsSync(path))
+                                            || (Array.isArray(option.stringsReplacers)
+                                        && !option.stringsReplacers.some(
+                                            (srtRep: string) => path.includes(srtRep),
+                                        )
+                                            && !option.stringsReplacers.some(
+                                                (strRep: string) => fs.existsSync(strRep),
+                                            ))
+                                        ) {
+                                            errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}${path} no such directory!${endErrorLine}`));
+                                        }
+                                    }
+                                });
+                            }
                         }
 
                         // Setting markerTemplate
