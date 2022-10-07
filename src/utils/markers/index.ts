@@ -58,12 +58,17 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
             );
         };
 
-        if (Array.isArray(optionsMarker.pathToMarker)) {
-            optionsMarker.pathToMarker.forEach((element) => mainActionsWithMarkers(element));
-        }
-
         if (typeof optionsMarker.pathToMarker === 'string' && !Array.isArray(optionsMarker.pathToMarker)) {
-            mainActionsWithMarkers(optionsMarker.pathToMarker);
+            mainActionsWithMarkers(replaceWordCase({
+                string:            optionsMarker.pathToMarker,
+                stringsForReplace: selectedNames,
+            }));
+        }
+        if (Array.isArray(optionsMarker.pathToMarker)) {
+            optionsMarker.pathToMarker.forEach((path) => mainActionsWithMarkers(replaceWordCase({
+                string:            path,
+                stringsForReplace: selectedNames,
+            })));
         }
 
         if (optionsMarker.onceInsert) {
