@@ -189,21 +189,21 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 ### Markers
 The main feature of this library is `markers` that you can put in existing files and add new lines. For example, a new line can be any entity, for example we use a usual import which should look like this `import Wrapper2 from "./Wrapper2/index.tsx";` after using generate.
 
-First of all we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
+Foremost, we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
 
 ![image](https://user-images.githubusercontent.com/33392042/194887842-cbeea112-4115-4b35-abe6-8c98cb0d4789.png)
 
-Then we write the usual import, but with the `__exampleComponentName__` variable.
+Then we write the usual import, but we will use `__exampleComponentName__` variable.
 
 ```typescript
-import __exampleComponentName__ from "./__exampleComponentName__/index.tsx";
+import __exampleComponentName__(pascalCase) from "./__exampleComponentName__(pascalCase)/index.tsx";
 ```
 
-Next create the file `index.ts` in the folder `components`. Then write the marker `// Imports`. You can write any name for marker.
+Next, create the file `index.ts` in the folder `components`. Then write the marker `// Imports`. You can write any name for marker and use multitude markers for generation.
 
 ![image](https://user-images.githubusercontent.com/33392042/194883602-50b124ba-394c-4dc0-bee7-c17e450f98fb.png)
 
-After creating template for marker, we have to add the new key `markers` for our config generate.
+In `generate.config.ts` we have to add the new key `markers` for our config generate.
 
 ```typescript
 // ./generate.config.ts
@@ -229,6 +229,9 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 ]);
 ```
 
+And funnily, run the command `ts-node "./generate.config.ts"`. After generation, we get new line like import.
+
+![image](https://user-images.githubusercontent.com/33392042/194908018-823c6716-9579-45b0-b9d2-4e070fca705a.png)
 
 ## Settings
 ### `name`
@@ -285,7 +288,9 @@ This is the path or array with your paths to the file to insert your lines.
 - #### `markerTemplate`
 This is path or paths to data of file to be inserted where is the `pattern`.
 
-**Note:** if you want, you can use folder `.genignore`, program ignore that the folder and you can keep your file in the folder then use those files for `markerTemplate`. But you have to create the folder yourself.
+**Note:** for keeping and ignoring markers template, you have to create the folder `.genignore`.
+
+![image](https://user-images.githubusercontent.com/33392042/194910745-00151f31-f52b-43d9-bad3-f354677572aa.png)
 
 - #### `genDirection` *optional*
 This is the option tells the program where to insert the line. Insert line after your `pattern` or before.
