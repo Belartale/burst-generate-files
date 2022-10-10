@@ -8,7 +8,7 @@ This is a library for generating files and folders based on templates that the u
 
 ### Using npm:
 
-```sh
+```bash
 npm i burst-generate-files
 ```
 
@@ -67,7 +67,7 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 To start generating files, you need to run `generate.config.ts`, the best way to do this install [ts-node](https://www.npmjs.com/package/ts-node) package globally.
 
 In terminal, you need just type next command and magic begin... 
-```sh
+```bash
 ts-node "./generate.config.ts"
 ```
 
@@ -81,7 +81,7 @@ ts-node "./generate.config.ts"
 #### If you must use JavaScript
 
 For JavaScript all easier, in your terminal run next command: 
-```sh
+```bash
 node "./generate.config.js"
 ```
 
@@ -185,6 +185,50 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 ```
 
 ![image](https://user-images.githubusercontent.com/33392042/189851222-ed4c7a8b-156e-4a5c-bc79-965b48462a33.png)
+
+### Markers
+The main feature of this library is `markers` that you can put in existing files and add new lines. For example, a new line can be any entity, for example we use a usual import which should look like this `import Wrapper2 from "./Wrapper2/index.tsx";` after using generate.
+
+First of all we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
+
+![image](https://user-images.githubusercontent.com/33392042/194887842-cbeea112-4115-4b35-abe6-8c98cb0d4789.png)
+
+Then we write the usual import, but with the `__exampleComponentName__` variable.
+
+```typescript
+import __exampleComponentName__ from "./__exampleComponentName__/index.tsx";
+```
+
+Next create the file `index.ts` in the folder `components`. Then write the marker `// Imports`. You can write any name for marker.
+
+![image](https://user-images.githubusercontent.com/33392042/194883602-50b124ba-394c-4dc0-bee7-c17e450f98fb.png)
+
+After creating template for marker, we have to add the new key `markers` for our config generate.
+
+```typescript
+// ./generate.config.ts
+
+CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
+    {
+        name: "Generate new React component",
+        templates: [
+            {
+                stringsReplacers: "__exampleComponentName__",
+                pathToTemplate:    "./componentTemplate",
+                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+                markers: [
+                    {
+                        pattern: "// Imports",
+                        pathToMarker: "./components/index.ts",
+                        markerTemplate: "./componentTemplate/.genignore/imports.ts",
+                    },
+                ],
+            },
+        ],
+    },
+]);
+```
+
 
 ## Settings
 ### `name`
