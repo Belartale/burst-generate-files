@@ -12,10 +12,12 @@ export const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert
 
         const newData = parsedData.map((el) => ({ ...el, onceInsert: optionsMarker.onceInsert }));
 
-        if (!parsedData.some((el) => String(el.id.pathToMarker) === String(optionsMarker.pathToMarker)
-        && String(el.id.markerTemplate) === String(optionsMarker.markerTemplate))) {
+        if (!parsedData.some((el) => el.id.pattern.toString() === optionsMarker.pattern.toString()
+        && el.id.pathToMarker.toString() === optionsMarker.pathToMarker.toString()
+        && el.id.markerTemplate.toString() === optionsMarker.markerTemplate.toString())) {
             newData.push({
                 id: {
+                    pattern:        optionsMarker.pattern.toString(),
                     pathToMarker:   optionsMarker.pathToMarker,
                     markerTemplate: optionsMarker.markerTemplate,
                 },
