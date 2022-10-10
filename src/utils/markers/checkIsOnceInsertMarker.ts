@@ -12,8 +12,9 @@ export const checkIsOnceInsertMarker = (
     const parsedData = JSON.parse(dataFile);
 
     const foundElement: types.GenerateFiles = parsedData.find(
-        (el: types.GenerateFiles) => String(el.id.pathToMarker) === String(optionsMarker.pathToMarker)
-        && String(el.id.markerTemplate) === String(optionsMarker.markerTemplate),
+        (el: types.GenerateFiles) => el.id.pattern.toString() === optionsMarker.pattern.toString()
+        && el.id.pathToMarker.toString() === optionsMarker.pathToMarker.toString()
+        && el.id.markerTemplate.toString() === optionsMarker.markerTemplate.toString(),
     );
     if (typeof foundElement === 'object') {
         return foundElement.onceInsert;

@@ -22,6 +22,7 @@ export type CheckIsOnceInsertMarker = {
 }
 export type GenerateFiles = {
     id: {
+        pattern: types.OptionsMarker['pattern']
         pathToMarker: types.OptionsMarker['pathToMarker']
         markerTemplate: types.OptionsMarker['markerTemplate']
     },
