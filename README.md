@@ -8,7 +8,7 @@ This is a library for generating files and folders based on templates that the u
 
 ### Using npm:
 
-```sh
+```bash
 npm i burst-generate-files
 ```
 
@@ -67,7 +67,7 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 To start generating files, you need to run `generate.config.ts`, the best way to do this install [ts-node](https://www.npmjs.com/package/ts-node) package globally.
 
 In terminal, you need just type next command and magic begin... 
-```sh
+```bash
 ts-node "./generate.config.ts"
 ```
 
@@ -81,7 +81,7 @@ ts-node "./generate.config.ts"
 #### If you must use JavaScript
 
 For JavaScript all easier, in your terminal run next command: 
-```sh
+```bash
 node "./generate.config.js"
 ```
 
@@ -186,6 +186,57 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 
 ![image](https://user-images.githubusercontent.com/33392042/189851222-ed4c7a8b-156e-4a5c-bc79-965b48462a33.png)
 
+### Markers
+The main feature of this library is `markers` that you can put in existing files and add new lines. For example, a new line can be any entity, for example we use a usual import which should look like this `import { Wrapper2 } from "./Wrapper2";` after using generate.
+
+Foremost, we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
+
+![image](https://user-images.githubusercontent.com/33392042/194887842-cbeea112-4115-4b35-abe6-8c98cb0d4789.png)
+
+Then we write the usual import, but we will use `__exampleComponentName__` variable.
+
+```typescript
+// ./componentTemplate/.genignore/import.ts
+
+import { __exampleComponentName__(pascalCase) } from "./__exampleComponentName__(pascalCase)";
+```
+
+Next, create the file `index.ts` in the folder `components`. Then write the marker `// Imports`. You can write any name for marker and use multitude markers for generation.
+
+![image](https://user-images.githubusercontent.com/33392042/194883602-50b124ba-394c-4dc0-bee7-c17e450f98fb.png)
+
+In `generate.config.ts` we have to add the new key `markers` for our config generate.
+
+```typescript
+// ./generate.config.ts
+
+CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
+    {
+        name: "Generate new React component",
+        templates: [
+            {
+                stringsReplacers: "__exampleComponentName__",
+                pathToTemplate:    "./componentTemplate",
+                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+                markers: [ // <= New key here
+                    {
+                        pattern: "// Imports",
+                        pathToMarker: "./components/index.ts",
+                        markerTemplate: "./componentTemplate/.genignore/import.ts",
+                    },
+                ],
+            },
+        ],
+    },
+]);
+```
+
+And funnily, run the command `ts-node "./generate.config.ts"`. After generation, we get new line like import.
+
+![image](https://user-images.githubusercontent.com/33392042/195048272-d848b67f-8d17-47e4-a75b-7c940858b6ab.png)
+
+
+
 ## Settings
 ### `name`
 This is the name that will be displayed in the interface. For only the function `CLIGen`.
@@ -196,8 +247,10 @@ This is the name that will be displayed in the interface. For only the function 
 This is array for settings to generate files. For only the function `CLIGen`.
 
 ### `stringsReplacers`
-This is the string or array with strings which will replace. But if you use the function `customGen`, `stringsReplacers` is object or array, example: 
+This is the string or array with strings which will replace. But if you use the function `customGen`, then `stringsReplacers` is object or array, example: 
 ```typescript
+// If you use the customGen
+
 stringsReplacers: [
     {
         replaceVar: "__exampleComponentName__",
@@ -233,7 +286,7 @@ This is the path or array with your paths for output files.
 ### `markers` *optional*
 This is the array to create lines into files.
 - #### `pattern`
-This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(pattern)$/`.
+This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(//.Marker)$/`.
 
 - #### `pathToMarker`
 This is the path or array with your paths to the file to insert your lines.
@@ -241,12 +294,14 @@ This is the path or array with your paths to the file to insert your lines.
 - #### `markerTemplate`
 This is path or paths to data of file to be inserted where is the `pattern`.
 
-**Note:** if you want, you can use folder `.genignore`, program ignore that the folder and you can keep your file in the folder then use those files for `markerTemplate`. But you have to create the folder yourself.
+**Note:** for keeping and ignoring markers template, you have to create the folder `.genignore`.
+
+![image](https://user-images.githubusercontent.com/33392042/194910745-00151f31-f52b-43d9-bad3-f354677572aa.png)
 
 - #### `genDirection` *optional*
-This is the option tells the program where to insert the line. Insert line after your `pattern` or before.
+This is the option tells the program where to insert the line. Insert line `after` or `before` your `pattern`.
 
-**Note:** if not exists, then default value `after maker`.
+**Note:** if not exists, then default value `after`.
 
 - #### `onceInsert` *optional*
 This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
