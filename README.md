@@ -187,7 +187,7 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 ![image](https://user-images.githubusercontent.com/33392042/189851222-ed4c7a8b-156e-4a5c-bc79-965b48462a33.png)
 
 ### Markers
-The main feature of this library is `markers` that you can put in existing files and add new lines. For example, a new line can be any entity, for example we use a usual import which should look like this `import Wrapper2 from "./Wrapper2/index.tsx";` after using generate.
+The main feature of this library is `markers` that you can put in existing files and add new lines. For example, a new line can be any entity, for example we use a usual import which should look like this `import { Wrapper2 } from "./Wrapper2";` after using generate.
 
 Foremost, we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
 
@@ -196,7 +196,9 @@ Foremost, we have to create the template for the marker. In the folder `componen
 Then we write the usual import, but we will use `__exampleComponentName__` variable.
 
 ```typescript
-import __exampleComponentName__(pascalCase) from "./__exampleComponentName__(pascalCase)/index.tsx";
+// ./componentTemplate/.genignore/import.ts
+
+import { __exampleComponentName__(pascalCase) } from "./__exampleComponentName__(pascalCase)";
 ```
 
 Next, create the file `index.ts` in the folder `components`. Then write the marker `// Imports`. You can write any name for marker and use multitude markers for generation.
@@ -216,11 +218,11 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
                 stringsReplacers: "__exampleComponentName__",
                 pathToTemplate:    "./componentTemplate",
                 outputPath:      "./components/__exampleComponentName__(pascalCase)",
-                markers: [
+                markers: [ // <= New key here
                     {
                         pattern: "// Imports",
                         pathToMarker: "./components/index.ts",
-                        markerTemplate: "./componentTemplate/.genignore/imports.ts",
+                        markerTemplate: "./componentTemplate/.genignore/import.ts",
                     },
                 ],
             },
@@ -231,7 +233,9 @@ CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
 
 And funnily, run the command `ts-node "./generate.config.ts"`. After generation, we get new line like import.
 
-![image](https://user-images.githubusercontent.com/33392042/194908018-823c6716-9579-45b0-b9d2-4e070fca705a.png)
+![image](https://user-images.githubusercontent.com/33392042/195048272-d848b67f-8d17-47e4-a75b-7c940858b6ab.png)
+
+
 
 ## Settings
 ### `name`
@@ -243,8 +247,10 @@ This is the name that will be displayed in the interface. For only the function 
 This is array for settings to generate files. For only the function `CLIGen`.
 
 ### `stringsReplacers`
-This is the string or array with strings which will replace. But if you use the function `customGen`, `stringsReplacers` is object or array, example: 
+This is the string or array with strings which will replace. But if you use the function `customGen`, then `stringsReplacers` is object or array, example: 
 ```typescript
+// If you use the customGen
+
 stringsReplacers: [
     {
         replaceVar: "__exampleComponentName__",
@@ -280,7 +286,7 @@ This is the path or array with your paths for output files.
 ### `markers` *optional*
 This is the array to create lines into files.
 - #### `pattern`
-This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(pattern)$/`.
+This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(//.Marker)$/`.
 
 - #### `pathToMarker`
 This is the path or array with your paths to the file to insert your lines.
@@ -293,9 +299,9 @@ This is path or paths to data of file to be inserted where is the `pattern`.
 ![image](https://user-images.githubusercontent.com/33392042/194910745-00151f31-f52b-43d9-bad3-f354677572aa.png)
 
 - #### `genDirection` *optional*
-This is the option tells the program where to insert the line. Insert line after your `pattern` or before.
+This is the option tells the program where to insert the line. Insert line `after` or `before` your `pattern`.
 
-**Note:** if not exists, then default value `after maker`.
+**Note:** if not exists, then default value `after`.
 
 - #### `onceInsert` *optional*
 This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
