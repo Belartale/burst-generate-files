@@ -44,14 +44,14 @@ const cases = ({ stringReplace, result }: types.Cases) => {
 
     if (result && result.includes(`${stringReplace.replaceVar}(kebabCase)`)) { // lorem lorem => lorem-lorem
         const re = new RegExp(`${stringReplace.replaceVar}.kebabCase.`, 'g');
-        const modifiedToKebabCase = newString.map((word) => word).join('-');
+        const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('-');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
     if (result && result.includes(`${stringReplace.replaceVar}(dotCase)`)) { // lorem lorem => lorem.lorem
         const re = new RegExp(`${stringReplace.replaceVar}.dotCase.`, 'g');
-        const modifiedToKebabCase = newString.map((word) => word).join('.');
+        const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('.');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
@@ -65,7 +65,7 @@ const cases = ({ stringReplace, result }: types.Cases) => {
 
     if (result && result.includes(`${stringReplace.replaceVar}(pathCase)`)) { // lorem lorem => lorem/lorem
         const re = new RegExp(`${stringReplace.replaceVar}.pathCase.`, 'g');
-        const modifiedToKebabCase = newString.map((word) => word).join('/');
+        const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('/');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
@@ -86,7 +86,7 @@ const cases = ({ stringReplace, result }: types.Cases) => {
 
     if (result && result.includes(`${stringReplace.replaceVar}(snakeCase)`)) { // lorem lorem => lorem_lorem
         const re = new RegExp(`${stringReplace.replaceVar}.snakeCase.`, 'g');
-        const modifiedToKebabCase = newString.map((word) => word).join('_');
+        const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('_');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
