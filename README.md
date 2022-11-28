@@ -270,6 +270,7 @@ __componentName__(pascalCase) === LoremLorem
 __componentName__(constantCase) === LOREM_LOREM
 __componentName__(kebabCase) === lorem-lorem
 __componentName__(dotCase) === lorem.lorem
+__componentName__(lowerCase) === loremlorem
 __componentName__(pathCase) === lorem/lorem
 __componentName__(sentenceCase) === Lorem lorem
 __componentName__(snakeCase) === lorem_lorem

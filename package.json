@@ -1,6 +1,6 @@
 {
     "name": "burst-generate-files",
-    "version": "0.10.15",
+    "version": "0.10.16",
     "description": "package module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "scripts": {
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
         "link": "npm run build && npm link",
-        "pub": "npm run build && npm publish",
+        "publish": "npm run build && npm publish",
         "clean": "rm -rf node_modules"
     },
     "keywords": [
