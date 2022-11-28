@@ -14,7 +14,8 @@
     },
     "scripts": {
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
-        "build:link": "npm run build && npm link",
+        "link": "npm run build && npm link",
+        "pub": "npm run build && npm publish",
         "clean": "rm -rf node_modules"
     },
     "keywords": [

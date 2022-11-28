@@ -2,16 +2,29 @@
 import * as types from './types';
 
 const cases = ({ stringReplace, result }: types.Cases) => {
-    const newString = stringReplace.value.split(' ');
+    let newString = stringReplace.value.split(' ');
+    if (newString.length <= 1 && /.*[A-Z]/.test(stringReplace.value) && stringReplace.value.toUpperCase() !== stringReplace.value) {
+        const arrCamelCase = stringReplace.value.split('').map((letter, index) => {
+            if (index !== 0 && /[A-Z]/.test(letter)) {
+                return ' ' + letter;
+            }
+
+            return letter;
+        });
+
+        newString = arrCamelCase.join('').split(' ');
+    }
     let newResult = result;
 
-    const defaultCase = (word: string, index: number) => {
-        if (index === 0) {
-            return word.split('').map((letter, indexLetter) => indexLetter === 0 ? letter.toLowerCase() : letter)
+    const camelCase = (word: string, indexWord: number) => {
+        if (indexWord === 0) {
+            return word.split('').map((letter) => letter.toLowerCase())
                 .join('');
         }
 
-        return word[ 0 ].toUpperCase() + word.slice(1);
+        return word[ 0 ].toUpperCase() + word.slice(1).split('')
+            .map((letter) => letter.toLowerCase())
+            .join('');
     };
 
     if (result && result.includes(`${stringReplace.replaceVar}(noCase)`)) { // lorem lorem => lorem lorem
@@ -23,14 +36,16 @@ const cases = ({ stringReplace, result }: types.Cases) => {
 
     if (result && result.includes(`${stringReplace.replaceVar}(camelCase)`)) { // Lorem lorem => loremLorem
         const re = new RegExp(`${stringReplace.replaceVar}.camelCase.`, 'g');
-        const modifiedToPascalCase = newString.map((word, index) => defaultCase(word, index)).join('');
+        const modifiedToPascalCase = newString.map((word, index) => camelCase(word, index)).join('');
 
         newResult = newResult.replace(re, modifiedToPascalCase);
     }
 
     if (result && result.includes(`${stringReplace.replaceVar}(pascalCase)`)) { // lorem lorem => LoremLorem
         const re = new RegExp(`${stringReplace.replaceVar}.pascalCase.`, 'g');
-        const modifiedToPascalCase = newString.map((word) => word[ 0 ].toUpperCase() + word.slice(1)).join('');
+        const modifiedToPascalCase = newString.map((word) => word[ 0 ].toUpperCase() + word.slice(1).split('')
+            .map((latter) => latter.toLowerCase())
+            .join('')).join('');
 
         newResult = newResult.replace(re, modifiedToPascalCase);
     }
@@ -93,14 +108,16 @@ const cases = ({ stringReplace, result }: types.Cases) => {
 
     if (result && result.includes(`${stringReplace.replaceVar}(titleCase)`)) { // lorem lorem => Lorem Lorem
         const re = new RegExp(`${stringReplace.replaceVar}.titleCase.`, 'g');
-        const modifiedToKebabCase = newString.map((word) => word[ 0 ].toUpperCase() + word.slice(1)).join(' ');
+        const modifiedToKebabCase = newString.map((word) => word[ 0 ].toUpperCase() + word.slice(1).split('')
+            .map((letter) => letter.toLowerCase())
+            .join('')).join(' ');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
     if (result && result.includes(stringReplace.replaceVar)) { // lorem lorem => loremLorem
         const re = new RegExp(`${stringReplace.replaceVar}`, 'g');
-        const modifiedToDefault = newString.map((word, index) => defaultCase(word, index)).join('');
+        const modifiedToDefault = newString.map((word, index) => camelCase(word, index)).join('');
 
         newResult = newResult.replace(re, modifiedToDefault);
     }
