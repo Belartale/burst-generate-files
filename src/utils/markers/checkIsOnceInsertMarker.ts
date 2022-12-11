@@ -5,9 +5,9 @@ import fs from 'fs';
 import * as types from './types';
 
 export const checkIsOnceInsertMarker = (
-    { optionsMarker, configGenerateNameForOnceInsert }: types.CheckIsOnceInsertMarker,
+    { optionsMarker, nameConfigGenerateForOnceInsert }: types.CheckIsOnceInsertMarker,
 ) => {
-    const dataFile = fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' });
+    const dataFile = fs.readFileSync(nameConfigGenerateForOnceInsert, { encoding: 'utf-8' });
 
     const parsedData = JSON.parse(dataFile);
 

@@ -4,9 +4,9 @@ import fs from 'fs';
 // Types
 import * as types from './types';
 
-export const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert }: types.AddConfigToFile) => {
+export const addConfigToFile = ({ optionsMarker, nameConfigGenerateForOnceInsert }: types.AddConfigToFile) => {
     if (optionsMarker.onceInsert) {
-        const configGenerateFile = fs.readFileSync(configGenerateNameForOnceInsert, { encoding: 'utf-8' });
+        const configGenerateFile = fs.readFileSync(nameConfigGenerateForOnceInsert, { encoding: 'utf-8' });
 
         const parsedData: types.GenerateFiles[] = JSON.parse(configGenerateFile);
 
@@ -25,6 +25,6 @@ export const addConfigToFile = ({ optionsMarker, configGenerateNameForOnceInsert
             });
         }
 
-        fs.writeFileSync(configGenerateNameForOnceInsert, JSON.stringify(newData));
+        fs.writeFileSync(nameConfigGenerateForOnceInsert, JSON.stringify(newData));
     }
 };
