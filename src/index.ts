@@ -8,6 +8,9 @@ import { onComplete } from './utils/onComplete';
 import { checkError } from './utils/checkError';
 import { catchErrors } from './utils/catchErrors';
 
+// Constants
+import { PROJECT_ROOT } from './constants';
+
 // Types
 import * as typesCommon from './types';
 import * as types from './utils/types';
@@ -35,7 +38,7 @@ const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: typesCommon.Ma
 };
 
 export const customGen = (
-    PROJECT_ROOT: string, options: typesCommon.OptionCustomGen[],
+    options: typesCommon.OptionCustomGen[],
 ) => {
     try {
         checkError(PROJECT_ROOT, options, 'customGen');
@@ -54,7 +57,7 @@ export const customGen = (
 };
 
 export const CLIGen = async (
-    PROJECT_ROOT: string, options: typesCommon.OptionCLIGen[],
+    options: typesCommon.OptionCLIGen[],
 ): Promise<void> => {
     try {
         checkError(PROJECT_ROOT, options, 'CLIGen');

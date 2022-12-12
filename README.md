@@ -39,17 +39,14 @@ Let's create `generate.config.ts` in the root of your project.
 
 First of all you need to add import of `burst-generate-files`, and get `CLIGen` function. 
 
-That function require two parameters, root path of your application and array of settings.
-
-**Note:** for easy way, to get root path of your application, you can use [app-root-path](https://www.npmjs.com/package/app-root-path).
+That function require one parameter, array of settings.
 
 ```typescript
 // ./generate.config.ts
 
 import { CLIGen } from "burst-generate-files";
-import { path as ROOT_PATH_OF_YOUR_APPLICATION } from 'app-root-path';
 
-CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
+CLIGen([
     {
         name:            "Generate new React component",
         templates: [
@@ -160,7 +157,7 @@ For extend your config with new template, you need to create new `template` fold
 ```typescript
 // ./generate.config.ts
 
-CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
+CLIGen([
     {
         name: "Generate new React component",
         templates: [
@@ -210,7 +207,7 @@ In `generate.config.ts` we have to add the new key `markers` for our config gene
 ```typescript
 // ./generate.config.ts
 
-CLIGen(ROOT_PATH_OF_YOUR_APPLICATION, [
+CLIGen([
     {
         name: "Generate new React component",
         templates: [

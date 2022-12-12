@@ -44,7 +44,7 @@
         "@types/webpackbar": "^4.0.3",
         "@typescript-eslint/eslint-plugin": "^5.27.1",
         "@typescript-eslint/parser": "^5.27.1",
-        "app-root-path": "3.0.0",
+        "app-root-path": "^3.1.0",
         "babel-eslint": "^10.1.0",
         "clean-webpack-plugin": "^4.0.0",
         "cross-env": "^7.0.3",

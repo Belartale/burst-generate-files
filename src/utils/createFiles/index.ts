@@ -4,7 +4,7 @@ import fs from 'fs';
 import { Transform } from 'stream';
 
 // Constants
-import { folderNameForMarkers } from '../../constants';
+import { nameFolderForMarkers } from '../../constants';
 
 // Utils
 import { replaceWordCase } from '../replaceWordCase';
@@ -46,7 +46,7 @@ export const createFiles = (
                                     },
                                 }))
                                     .pipe(fs.createWriteStream(curDest));
-                            } else if (stat.isDirectory() && path.basename(curSrc) !== folderNameForMarkers) {
+                            } else if (stat.isDirectory() && path.basename(curSrc) !== nameFolderForMarkers) {
                                 fs.mkdirSync(curDest, { recursive: true });
                                 copy(curSrc, curDest);
                             }

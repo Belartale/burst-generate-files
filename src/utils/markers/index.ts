@@ -4,7 +4,7 @@ import { resolve } from 'path';
 import chalk from 'chalk';
 
 // Constants
-import { configGenerateNameForOnceInsert } from '../../constants';
+import { nameConfigGenerateForOnceInsert } from '../../constants';
 
 // Utils
 import { replaceWordCase } from '../replaceWordCase';
@@ -16,24 +16,24 @@ import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 import * as types from './types';
 
 export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
-    const configGenerateNameForOnceInsertResolvedPath = resolve(PROJECT_ROOT, configGenerateNameForOnceInsert);
+    const nameConfigGenerateForOnceInsertResolvedPath = resolve(PROJECT_ROOT, nameConfigGenerateForOnceInsert);
 
     if (
         (markers
         && markers.find((el) => el.onceInsert === true)
-        && !fs.existsSync(configGenerateNameForOnceInsertResolvedPath))
+        && !fs.existsSync(nameConfigGenerateForOnceInsertResolvedPath))
         || (markers
         && markers.find((el) => el.onceInsert === true)
-        && fs.readFileSync(configGenerateNameForOnceInsertResolvedPath, { encoding: 'utf-8' }) === '')
+        && fs.readFileSync(nameConfigGenerateForOnceInsertResolvedPath, { encoding: 'utf-8' }) === '')
     ) {
-        fs.writeFileSync(configGenerateNameForOnceInsertResolvedPath, JSON.stringify([]));
+        fs.writeFileSync(nameConfigGenerateForOnceInsertResolvedPath, JSON.stringify([]));
     }
 
     markers.forEach((optionsMarker: types.OptionsMarker) => {
         if (
             optionsMarker.onceInsert
             && checkIsOnceInsertMarker(
-                { optionsMarker, configGenerateNameForOnceInsert: configGenerateNameForOnceInsertResolvedPath },
+                { optionsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath },
             )) {
             console.log(chalk.yellow('This marker previously inserted !!!'));
             console.log(optionsMarker);
@@ -73,7 +73,7 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
 
         if (optionsMarker.onceInsert) {
             addConfigToFile(
-                { optionsMarker, configGenerateNameForOnceInsert: configGenerateNameForOnceInsertResolvedPath },
+                { optionsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath },
             );
         }
     });

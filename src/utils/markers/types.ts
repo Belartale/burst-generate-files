@@ -18,7 +18,7 @@ export type OptionsMarker = {
 }
 export type CheckIsOnceInsertMarker = {
     optionsMarker: OptionsMarker
-    configGenerateNameForOnceInsert: string
+    nameConfigGenerateForOnceInsert: string
 }
 export type GenerateFiles = {
     id: {
@@ -38,5 +38,5 @@ export type DefineMarkerAndAddMarkerTemplate = {
 // Function addConfigToFile
 export type AddConfigToFile = {
     optionsMarker: OptionsMarker
-    configGenerateNameForOnceInsert: string
+    nameConfigGenerateForOnceInsert: string
 }
