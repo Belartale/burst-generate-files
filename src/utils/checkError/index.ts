@@ -5,26 +5,18 @@ import fs from 'fs';
 import * as typesCommon from '../../types';
 import * as types from '../types';
 
-export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
+export const checkError = (options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
     let errors = [];
 
     const betweenTwoLines = ':\n  ';
     const endErrorLine = '\n';
 
-    // Setting First param
-    if (!PROJECT_ROOT || typeof PROJECT_ROOT !== 'string') {
-        errors.push(new Error(`${whichFunction} first argument!${betweenTwoLines}Type '${ typeof PROJECT_ROOT }' is not assignable to type 'string'.${endErrorLine}`));
-    }
-    if (typeof PROJECT_ROOT === 'string' && !fs.existsSync(PROJECT_ROOT)) {
-        errors.push(new Error(`${whichFunction} first argument!${betweenTwoLines}Root path of your application is incorrect.${endErrorLine}`));
-    }
-
-    // Setting Second param
+    // Setting param
     if (!options || !Array.isArray(options)) {
-        errors.push(new Error(`${whichFunction} second argument!${betweenTwoLines}Type '${typeof options}' is not assignable to type 'array'.${endErrorLine}`));
+        errors.push(new Error(`${whichFunction} argument!${betweenTwoLines}Type '${typeof options}' is not assignable to type 'array'.${endErrorLine}`));
     }
 
-    const checkArraySecondParam = (
+    const checkArrayParam = (
         {
             option,
             beginOfLine,
@@ -253,7 +245,7 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
 
     if (whichFunction === 'customGen' && Array.isArray(options)) {
         options.forEach((option, indexOption) => {
-            checkArraySecondParam({ option, beginOfLine: `${whichFunction}/Config[${indexOption}]` });
+            checkArrayParam({ option, beginOfLine: `${whichFunction}/ConfigCustomGen[${indexOption}]` });
         });
     }
 
@@ -268,7 +260,7 @@ export const checkError = (PROJECT_ROOT: string, options: typesCommon.OptionCust
                 }
                 if (Array.isArray(optionCLIGen.templates)) {
                     optionCLIGen.templates.forEach((option: any, indexOption: number) => {
-                        checkArraySecondParam({ option, beginOfLine: `${whichFunction}/ConfigCLIGen[${indexCLIGen}]/templates[${indexOption}]` });
+                        checkArrayParam({ option, beginOfLine: `${whichFunction}/ConfigCLIGen[${indexCLIGen}]/templates[${indexOption}]` });
                     });
                 }
             });

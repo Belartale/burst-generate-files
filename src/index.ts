@@ -41,7 +41,7 @@ export const customGen = (
     options: typesCommon.OptionCustomGen[],
 ) => {
     try {
-        checkError(PROJECT_ROOT, options, 'customGen');
+        checkError(options, 'customGen');
         options.forEach((option) => {
             mainActions(
                 {
@@ -60,7 +60,7 @@ export const CLIGen = async (
     options: typesCommon.OptionCLIGen[],
 ): Promise<void> => {
     try {
-        checkError(PROJECT_ROOT, options, 'CLIGen');
+        checkError(options, 'CLIGen');
         const selectedConfigItem: typesCommon.OptionCLIGen = await getSelectedItem(options);
 
         selectedConfigItem.templates.forEach(async (option) => {
