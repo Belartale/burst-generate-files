@@ -1,26 +1,30 @@
 // Core
 import enquirer from 'enquirer';
 
+// Constants
+import { constantForRemovingEntity } from '../../constants';
+
 // Types
 import * as typesCommon from '../../types';
-import * as types from '../types';
 
-export const getSelectedItem = async (options: types.GetSelectedItem): Promise<typesCommon.OptionCLIGen> => {
-    const templateQuestions = {
-        type:    'autocomplete',
-        name:    'optionChoice',
-        message: 'What do you want to generate?',
-        choices: options.map((configItem: typesCommon.OptionCLIGen) => configItem.name),
-        suggest(input: string, choices: string[]) {
-            return choices.filter((choice: any) => {
-                return choice.message.toLowerCase().startsWith(input.toLowerCase());
-            });
-        },
+export const getSelectedItem = async (options: typesCommon.OptionCLIGen[]): Promise<typesCommon.OptionCLIGen> => {
+    const getNamesForShowingInCLI = () => {
+        const result = options.map((option) => option.name);
+
+        return [ ...result, constantForRemovingEntity ];
     };
-    const templateAnswers: { optionChoice: string } = await enquirer.prompt(templateQuestions);
 
-    return options.find(
-        (item: typesCommon.OptionCLIGen) => item.name === templateAnswers.optionChoice,
+    const gotValue: { optionChoice: string } = await enquirer.prompt(
+        {
+            type:    'autocomplete',
+            name:    'optionChoice',
+            message: 'What do you want to generate?',
+            choices: getNamesForShowingInCLI(),
+        },
+    );
+
+    return [ ...options, { name: constantForRemovingEntity }].find(
+        (item: Omit<typesCommon.OptionCLIGen, 'templates'>) => item.name === gotValue.optionChoice,
     ) as typesCommon.OptionCLIGen;
 };
 

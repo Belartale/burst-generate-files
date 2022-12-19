@@ -7,9 +7,10 @@ import { markers } from './utils/markers';
 import { onComplete } from './utils/onComplete';
 import { checkError } from './utils/checkError';
 import { catchErrors } from './utils/catchErrors';
+import { removeEntity } from './utils/removeEntity';
 
 // Constants
-import { PROJECT_ROOT } from './constants';
+import { constantForRemovingEntity, PROJECT_ROOT } from './constants';
 
 // Types
 import * as typesCommon from './types';
@@ -62,12 +63,25 @@ export const CLIGen = async (
     try {
         checkError(options, 'CLIGen');
         const selectedConfigItem: typesCommon.OptionCLIGen = await getSelectedItem(options);
+        console.log('selectedConfigItem', selectedConfigItem);
 
-        selectedConfigItem.templates.forEach(async (option) => {
-            const selectedNames: types.GetSelectedName[] = await getSelectedName(option.stringsReplacers);
+        if (typeof selectedConfigItem !== 'string' && Array.isArray(selectedConfigItem.templates)) {
+            console.log('ARRAY First if');
+            for await (const iteratorOption of selectedConfigItem.templates) {
+                const selectedNames: types.GetSelectedName[] = await getSelectedName(iteratorOption.stringsReplacers);
 
-            mainActions({ configItem: option, selectedNames, PROJECT_ROOT });
-        });
+                mainActions({ configItem: iteratorOption, selectedNames, PROJECT_ROOT });
+            }
+
+            return;
+        }
+
+        if (selectedConfigItem.name === constantForRemovingEntity) {
+            console.log('remove GEN11');
+            removeEntity({ options });
+
+            return;
+        }
     } catch (error: any) {
         catchErrors(error);
     }
