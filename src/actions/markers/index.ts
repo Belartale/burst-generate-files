@@ -7,7 +7,9 @@ import chalk from 'chalk';
 import { nameConfigGenerateForOnceInsert } from '../../constants';
 
 // Utils
-import { replaceWordCase } from '../replaceWordCase';
+import { replaceWordCase } from '../../utils';
+
+// Functions
 import { addConfigToFile } from './addConfigToFile';
 import { defineMarkerAndAddMarkerTemplate } from './defineMarkerAndAddMarkerTemplate';
 import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';

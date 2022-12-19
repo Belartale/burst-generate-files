@@ -2,8 +2,8 @@
 import fs from 'fs';
 
 // Types
+import * as typesActions from '../types';
 import * as typesCommon from '../../types';
-import * as types from '../types';
 
 export const checkError = (options: typesCommon.OptionCustomGen[] | typesCommon.OptionCLIGen[], whichFunction: 'customGen' | 'CLIGen') => {
     let errors = [];
@@ -114,7 +114,7 @@ export const checkError = (options: typesCommon.OptionCustomGen[] | typesCommon.
                     errors.push(new Error(`${beginOfLine}/markers${betweenTwoLines}Type '${typeof option.markers}' is not assignable to type 'array'.${endErrorLine}`));
                 }
                 if (Array.isArray(option.markers)) {
-                    option.markers.forEach((optionMarker: types.OptionsMarker, indexMarker: number) => {
+                    option.markers.forEach((optionMarker: typesActions.OptionsMarker, indexMarker: number) => {
                         // Setting pattern
                         if (typeof optionMarker.pattern !== 'string' && optionMarker.pattern !== RegExp(optionMarker.pattern)) {
                             errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pattern${betweenTwoLines}Type '${typeof optionMarker.pattern}' is not assignable to type 'string' | 'RegExp'.${endErrorLine}`));

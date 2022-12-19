@@ -3,8 +3,9 @@ import fs from 'fs';
 import { resolve } from 'path';
 
 // Types
+import * as types from './types';
 import * as typesCommon from '../../types';
-import * as types from '../types';
+import * as typesActions from '../../actions/types';
 
 const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: string, path: string }) => {
     const absolutePath = resolve(PROJECT_ROOT, path);
@@ -38,7 +39,7 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePat
     // Setting markers
     if (Array.isArray(newOption.markers)) {
         newOption.markers = newOption.markers.map((marker) => {
-            let newMarker: types.OptionsMarker = marker;
+            let newMarker: typesActions.OptionsMarker = marker;
 
             // Setting pathToMarker
             if (Array.isArray(newMarker.pathToMarker)) {

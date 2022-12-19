@@ -1,6 +1,6 @@
 export type GetName = {
-    replaceVar: string
-    result: GetSelectedName[]
+    message: string
+    name: string
 }
 
 export type GetSelectedName = {

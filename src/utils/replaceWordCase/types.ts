@@ -1,12 +1,12 @@
 // Types
-import * as types from '../types';
+import * as typesActions from '../../actions/types';
 
 export type Cases = {
-    stringReplace: types.GetSelectedName
+    stringReplace: typesActions.GetSelectedName
     result: string
 }
 
 export type ReplaceWordCase = {
     string: string
-    stringsForReplace: types.GetSelectedName | types.GetSelectedName[]
+    stringsForReplace: typesActions.GetSelectedName | typesActions.GetSelectedName[]
 }

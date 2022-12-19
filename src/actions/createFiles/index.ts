@@ -7,7 +7,7 @@ import { Transform } from 'stream';
 import { nameFolderForMarkers } from '../../constants';
 
 // Utils
-import { replaceWordCase } from '../replaceWordCase';
+import { replaceWordCase } from '../../utils';
 
 // Types
 import * as types from './types';

@@ -1,4 +1,4 @@
-// utils
+// Functions
 import { collectorTemplates } from './collectorTemplates';
 
 // Types

@@ -1,11 +1,14 @@
 // Types Utils
-import * as types from './utils/types';
+
+// Types
+import { GetSelectedName } from './actions/getSelectedName/types';
+import { OptionsMarker } from './actions/markers/types';
 
 // Common types
 export interface OptionCommonTypes {
     pathToTemplate: string | string[]
     outputPath: string | string[]
-    markers?: types.OptionsMarker[]
+    markers?: OptionsMarker[]
     onComplete?: Function
 }
 export interface Option extends OptionCommonTypes {
@@ -34,6 +37,6 @@ export type OptionCLIGen = {
 // Function mainActions
 export type MainActions = {
     configItem: OptionCustomGen | OptionCLIGenTemplate
-    selectedNames: types.GetSelectedName | types.GetSelectedName[]
+    selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }
