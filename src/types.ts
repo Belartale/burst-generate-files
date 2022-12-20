@@ -1,42 +1,44 @@
-// Types Utils
-
-// Types
+// Types Actions
 import { GetSelectedName } from './actions/getSelectedName/types';
-import { OptionsMarker } from './actions/markers/types';
+import { SettingsMarker } from './actions/markers/types';
 
 // Common types
-export interface OptionCommonTypes {
+export interface SettingCommonTypes {
     pathToTemplate: string | string[]
     outputPath: string | string[]
-    markers?: OptionsMarker[]
+    markers?: SettingsMarker[]
     onComplete?: Function
 }
-export interface Option extends OptionCommonTypes {
+export interface Setting extends SettingCommonTypes {
     name: string
     stringsReplacers: string[]
 }
 
+export type OptionalSettings = {
+    rootPath?: string
+}
+
 // Function customGen
-export type OptionStringsReplacersCustomGen = {
+export type SettingStringsReplacersCustomGen = {
     replaceVar: string
     value: string
 }
-export interface OptionCustomGen extends OptionCommonTypes {
-    stringsReplacers: OptionStringsReplacersCustomGen | OptionStringsReplacersCustomGen[]
+export interface SettingCustomGen extends SettingCommonTypes {
+    stringsReplacers: SettingStringsReplacersCustomGen | SettingStringsReplacersCustomGen[]
 }
 
 // Function CLIGen
-export interface OptionCLIGenTemplate extends OptionCommonTypes {
+export interface SettingCLIGenTemplate extends SettingCommonTypes {
     stringsReplacers: string | string[]
 }
-export type OptionCLIGen = {
+export type SettingCLIGen = {
     name: string
-    templates: OptionCLIGenTemplate[]
+    templates: SettingCLIGenTemplate[]
 }
 
 // Function mainActions
 export type MainActions = {
-    configItem: OptionCustomGen | OptionCLIGenTemplate
+    setting: SettingCustomGen | SettingCLIGenTemplate
     selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }

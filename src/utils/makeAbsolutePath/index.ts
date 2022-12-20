@@ -17,29 +17,29 @@ const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: 
     return path;
 };
 
-export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePath) => {
-    let newOption: typesCommon.OptionCustomGen | typesCommon.OptionCLIGenTemplate = option;
+export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePath) => {
+    let newSetting: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate = setting;
 
     // Setting pathToTemplate
-    if (Array.isArray(newOption.pathToTemplate)) {
-        newOption.pathToTemplate = newOption.pathToTemplate.map((path) => resolve(PROJECT_ROOT, path));
+    if (Array.isArray(newSetting.pathToTemplate)) {
+        newSetting.pathToTemplate = newSetting.pathToTemplate.map((path) => resolve(PROJECT_ROOT, path));
     }
-    if (typeof newOption.pathToTemplate === 'string') {
-        newOption.pathToTemplate = resolve(PROJECT_ROOT, newOption.pathToTemplate);
+    if (typeof newSetting.pathToTemplate === 'string') {
+        newSetting.pathToTemplate = resolve(PROJECT_ROOT, newSetting.pathToTemplate);
     }
 
     // Setting outputPath
-    if (Array.isArray(newOption.outputPath)) {
-        newOption.outputPath = newOption.outputPath.map((path) => resolve(PROJECT_ROOT, path));
+    if (Array.isArray(newSetting.outputPath)) {
+        newSetting.outputPath = newSetting.outputPath.map((path) => resolve(PROJECT_ROOT, path));
     }
-    if (typeof newOption.outputPath === 'string') {
-        newOption.outputPath = resolve(PROJECT_ROOT, newOption.outputPath);
+    if (typeof newSetting.outputPath === 'string') {
+        newSetting.outputPath = resolve(PROJECT_ROOT, newSetting.outputPath);
     }
 
     // Setting markers
-    if (Array.isArray(newOption.markers)) {
-        newOption.markers = newOption.markers.map((marker) => {
-            let newMarker: typesActions.OptionsMarker = marker;
+    if (Array.isArray(newSetting.markers)) {
+        newSetting.markers = newSetting.markers.map((marker) => {
+            let newMarker: typesActions.SettingsMarker = marker;
 
             // Setting pathToMarker
             if (Array.isArray(newMarker.pathToMarker)) {
@@ -69,9 +69,9 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, option }: types.MakeAbsolutePat
             return newMarker;
         });
     }
-    if (!Array.isArray(newOption.markers) && typeof newOption.markers === 'object') {
-        newOption.markers;
+    if (!Array.isArray(newSetting.markers) && typeof newSetting.markers === 'object') {
+        newSetting.markers;
     }
 
-    return newOption;
+    return newSetting;
 };

@@ -5,11 +5,11 @@ export * from './collectorTemplates/types';
 import * as typesActions from '../types';
 
 export type AddMarkerFiles = {
-    markers: OptionsMarker[]
+    markers: SettingsMarker[]
     selectedNames: typesActions.GetSelectedName | typesActions.GetSelectedName[]
     PROJECT_ROOT: string
 }
-export type OptionsMarker = {
+export type SettingsMarker = {
     pattern: string | RegExp
     pathToMarker: string | string[]
     markerTemplate: string | string[]
@@ -17,26 +17,26 @@ export type OptionsMarker = {
     onceInsert?: boolean
 }
 export type CheckIsOnceInsertMarker = {
-    optionsMarker: OptionsMarker
+    settingsMarker: SettingsMarker
     nameConfigGenerateForOnceInsert: string
 }
 export type GenerateFiles = {
     id: {
-        pattern: typesActions.OptionsMarker['pattern']
-        pathToMarker: typesActions.OptionsMarker['pathToMarker']
-        markerTemplate: typesActions.OptionsMarker['markerTemplate']
+        pattern: typesActions.SettingsMarker['pattern']
+        pathToMarker: typesActions.SettingsMarker['pathToMarker']
+        markerTemplate: typesActions.SettingsMarker['markerTemplate']
     },
     onceInsert: boolean
 }
 
 // Function defineMarkerAndAddMarkerTemplate
 export type DefineMarkerAndAddMarkerTemplate = {
-    optionsMarker: OptionsMarker
+    settingsMarker: SettingsMarker
     dataRedFile: string
 }
 
 // Function addConfigToFile
 export type AddConfigToFile = {
-    optionsMarker: OptionsMarker
+    settingsMarker: SettingsMarker
     nameConfigGenerateForOnceInsert: string
 }

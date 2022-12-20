@@ -31,14 +31,14 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
         fs.writeFileSync(nameConfigGenerateForOnceInsertResolvedPath, JSON.stringify([]));
     }
 
-    markers.forEach((optionsMarker: types.OptionsMarker) => {
+    markers.forEach((settingsMarker: types.SettingsMarker) => {
         if (
-            optionsMarker.onceInsert
+            settingsMarker.onceInsert
             && checkIsOnceInsertMarker(
-                { optionsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath },
+                { settingsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath },
             )) {
             console.log(chalk.yellow('This marker previously inserted !!!'));
-            console.log(optionsMarker);
+            console.log(settingsMarker);
 
             return;
         }
@@ -47,7 +47,7 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
             const dataRedFile = fs.readFileSync(pathFile, { encoding: 'utf-8' });
 
             const dataRedFileAddedMarkers = defineMarkerAndAddMarkerTemplate(
-                { optionsMarker, dataRedFile },
+                { settingsMarker, dataRedFile },
             );
 
             const resultData = replaceWordCase({
@@ -60,22 +60,22 @@ export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarke
             );
         };
 
-        if (typeof optionsMarker.pathToMarker === 'string' && !Array.isArray(optionsMarker.pathToMarker)) {
+        if (typeof settingsMarker.pathToMarker === 'string' && !Array.isArray(settingsMarker.pathToMarker)) {
             mainActionsWithMarkers(replaceWordCase({
-                string:            optionsMarker.pathToMarker,
+                string:            settingsMarker.pathToMarker,
                 stringsForReplace: selectedNames,
             }));
         }
-        if (Array.isArray(optionsMarker.pathToMarker)) {
-            optionsMarker.pathToMarker.forEach((path) => mainActionsWithMarkers(replaceWordCase({
+        if (Array.isArray(settingsMarker.pathToMarker)) {
+            settingsMarker.pathToMarker.forEach((path) => mainActionsWithMarkers(replaceWordCase({
                 string:            path,
                 stringsForReplace: selectedNames,
             })));
         }
 
-        if (optionsMarker.onceInsert) {
+        if (settingsMarker.onceInsert) {
             addConfigToFile(
-                { optionsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath },
+                { settingsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath },
             );
         }
     });
