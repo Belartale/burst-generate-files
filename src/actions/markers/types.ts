@@ -2,11 +2,11 @@
 export * from './collectorTemplates/types';
 
 // Types
-import * as types from '../types';
+import * as typesActions from '../types';
 
 export type AddMarkerFiles = {
     markers: OptionsMarker[]
-    selectedNames: types.GetSelectedName | types.GetSelectedName[]
+    selectedNames: typesActions.GetSelectedName | typesActions.GetSelectedName[]
     PROJECT_ROOT: string
 }
 export type OptionsMarker = {
@@ -22,9 +22,9 @@ export type CheckIsOnceInsertMarker = {
 }
 export type GenerateFiles = {
     id: {
-        pattern: types.OptionsMarker['pattern']
-        pathToMarker: types.OptionsMarker['pathToMarker']
-        markerTemplate: types.OptionsMarker['markerTemplate']
+        pattern: typesActions.OptionsMarker['pattern']
+        pathToMarker: typesActions.OptionsMarker['pathToMarker']
+        markerTemplate: typesActions.OptionsMarker['markerTemplate']
     },
     onceInsert: boolean
 }

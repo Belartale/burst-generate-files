@@ -5,11 +5,13 @@ export const catchErrors = (error: any) => {
     if (Array.isArray(error)) {
         for (let i = 0; i < error.length; i++) {
             console.error(chalk.red('Error burst-generate-files ↓'));
-            console.error(error[ i ].message);
+            console.error(error[ i ]); // todo ? error.message ?
         }
 
         return;
     }
-    console.error(chalk.red('Error burst-generate-files ↓'));
-    console.error(error.message);
+    if (error) {
+        console.error(chalk.red('Error burst-generate-files ↓'));
+        console.error(error); // todo ? error.message ?
+    }
 };

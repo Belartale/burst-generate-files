@@ -1,19 +1,25 @@
 //Utils
-import { makeAbsolutePath } from './utils/makeAbsolutePath';
-import { getSelectedItem } from './utils/getSelectedItem';
-import { getSelectedName } from './utils/getSelectedName';
-import { createFiles } from './utils/createFiles';
-import { markers } from './utils/markers';
-import { onComplete } from './utils/onComplete';
-import { checkError } from './utils/checkError';
-import { catchErrors } from './utils/catchErrors';
+import {
+    catchErrors,
+    makeAbsolutePath,
+} from './utils';
+
+// Actions
+import {
+    checkError,
+    createFiles,
+    getSelectedItem,
+    getSelectedName,
+    markers,
+    onComplete,
+} from './actions';
 
 // Constants
 import { PROJECT_ROOT } from './constants';
 
 // Types
 import * as typesCommon from './types';
-import * as types from './utils/types';
+import * as typesActions from './actions/types';
 
 const mainActions = ({ configItem, selectedNames, PROJECT_ROOT }: typesCommon.MainActions) => {
     const configItemWithAbsolutePath = makeAbsolutePath({ PROJECT_ROOT, option: configItem });
@@ -63,11 +69,12 @@ export const CLIGen = async (
         checkError(options, 'CLIGen');
         const selectedConfigItem: typesCommon.OptionCLIGen = await getSelectedItem(options);
 
-        selectedConfigItem.templates.forEach(async (option) => {
-            const selectedNames: types.GetSelectedName[] = await getSelectedName(option.stringsReplacers);
+        for await (const iteratorOption of selectedConfigItem.templates) {
+            const selectedNames: typesActions.GetSelectedName[]
+            = await getSelectedName(iteratorOption.stringsReplacers);
 
-            mainActions({ configItem: option, selectedNames, PROJECT_ROOT });
-        });
+            mainActions({ configItem: iteratorOption, selectedNames, PROJECT_ROOT });
+        }
     } catch (error: any) {
         catchErrors(error);
     }
