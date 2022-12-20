@@ -5,21 +5,21 @@ import { getDataTemplate } from './getDataTemplate';
 import * as types from './types';
 
 export const collectorTemplates = (
-    { optionsMarker, tabs }: types.CollectorTemplates,
+    { settingsMarker, tabs }: types.CollectorTemplates,
 ) => {
     let templates: [] | string[] = [];
 
-    if (typeof optionsMarker.markerTemplate === 'string') {
-        return [ ...templates, getDataTemplate({ template: optionsMarker.markerTemplate, tabs }) ].join('\n');
+    if (typeof settingsMarker.markerTemplate === 'string') {
+        return [ ...templates, getDataTemplate({ template: settingsMarker.markerTemplate, tabs }) ].join('\n');
     }
 
-    if (Array.isArray(optionsMarker.markerTemplate)) {
-        optionsMarker.markerTemplate.forEach((template: string) => {
+    if (Array.isArray(settingsMarker.markerTemplate)) {
+        settingsMarker.markerTemplate.forEach((template: string) => {
             templates = [ ...templates, getDataTemplate({ template, tabs }) ];
         });
 
         return templates.join('\n');
     }
 
-    return tabs + optionsMarker.markerTemplate;
+    return tabs + settingsMarker.markerTemplate;
 };

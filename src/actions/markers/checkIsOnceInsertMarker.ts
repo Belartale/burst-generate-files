@@ -5,16 +5,16 @@ import fs from 'fs';
 import * as types from './types';
 
 export const checkIsOnceInsertMarker = (
-    { optionsMarker, nameConfigGenerateForOnceInsert }: types.CheckIsOnceInsertMarker,
+    { settingsMarker, nameConfigGenerateForOnceInsert }: types.CheckIsOnceInsertMarker,
 ) => {
     const dataFile = fs.readFileSync(nameConfigGenerateForOnceInsert, { encoding: 'utf-8' });
 
     const parsedData = JSON.parse(dataFile);
 
     const foundElement: types.GenerateFiles = parsedData.find(
-        (el: types.GenerateFiles) => el.id.pattern.toString() === optionsMarker.pattern.toString()
-        && el.id.pathToMarker.toString() === optionsMarker.pathToMarker.toString()
-        && el.id.markerTemplate.toString() === optionsMarker.markerTemplate.toString(),
+        (el: types.GenerateFiles) => el.id.pattern.toString() === settingsMarker.pattern.toString()
+        && el.id.pathToMarker.toString() === settingsMarker.pathToMarker.toString()
+        && el.id.markerTemplate.toString() === settingsMarker.markerTemplate.toString(),
     );
     if (typeof foundElement === 'object') {
         return foundElement.onceInsert;
