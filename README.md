@@ -328,7 +328,7 @@ CLIGen(
         // ...
     ], 
     {
-        // <= Here optional settings
+        // <= Optional settings here
     }
 );
 ```
