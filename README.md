@@ -48,12 +48,12 @@ import { CLIGen } from "burst-generate-files";
 
 CLIGen([
     {
-        name:            "Generate new React component",
+        name:      "Generate new React component",
         templates: [
             {
                 stringsReplacers: "__exampleComponentName__",
-                pathToTemplate:    "./componentTemplate",
-                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+                pathToTemplate:   "./componentTemplate",
+                outputPath:       "./components/__exampleComponentName__(pascalCase)",
             },
         ],
     },
@@ -159,22 +159,22 @@ For extend your config with new template, you need to create new `template` fold
 
 CLIGen([
     {
-        name: "Generate new React component",
+        name:      "Generate new React component",
         templates: [
             {
                 stringsReplacers: "__exampleComponentName__",
-                pathToTemplate:    "./componentTemplate",
-                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+                pathToTemplate:   "./componentTemplate",
+                outputPath:       "./components/__exampleComponentName__(pascalCase)",
             },
         ],
     },
     {   // <= Page generation config
-        name: "New page",
+        name:      "New page",
         templates: [
             {
                 stringsReplacers: "__pageName__",
-                pathToTemplate:    "./pageTemplate",
-                outputPath:      "./page/__pageName__(pascalCase)",
+                pathToTemplate:   "./pageTemplate",
+                outputPath:       "./page/__pageName__(pascalCase)",
             },
         ],
     },
@@ -209,16 +209,16 @@ In `generate.config.ts` we have to add the new key `markers` for our config gene
 
 CLIGen([
     {
-        name: "Generate new React component",
+        name:      "Generate new React component",
         templates: [
             {
                 stringsReplacers: "__exampleComponentName__",
-                pathToTemplate:    "./componentTemplate",
-                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+                pathToTemplate:   "./componentTemplate",
+                outputPath:       "./components/__exampleComponentName__(pascalCase)",
                 markers: [ // <= New key here
                     {
-                        pattern: "// Imports",
-                        pathToMarker: "./components/index.ts",
+                        pattern:        "// Imports",
+                        pathToMarker:   "./components/index.ts",
                         markerTemplate: "./componentTemplate/.genignore/import.ts",
                     },
                 ],
@@ -231,8 +231,6 @@ CLIGen([
 And funnily, run the command `ts-node "./generate.config.ts"`. After generation, we get new line like import.
 
 ![image](https://user-images.githubusercontent.com/33392042/195048272-d848b67f-8d17-47e4-a75b-7c940858b6ab.png)
-
-
 
 ## Settings
 ### `name`
@@ -251,11 +249,11 @@ This is the string or array with strings which will replace. But if you use the 
 stringsReplacers: [
     {
         replaceVar: "__exampleComponentName__",
-        value: "Wrapper",
+        value:      "Wrapper",
     },
     {
         replaceVar: "__exampleComponentName2__",
-        value: "Wrapper2",
+        value:      "Wrapper2",
     },
 ],
 ```
@@ -307,9 +305,33 @@ This is the boolean. If it is true, the row will only be inserted once, when you
 **Note:** if you want to paste again, you need edit file `config.generate.files.json`
 
 ### `onComplete` *optional*
-this is the function that will be executed after generation. If you want you can get the setting that was use. To get the object you need to use a callback.
+This is the function that will be executed after generation. If you want you can get the setting that was use. To get the object you need to use a callback.
+
 ```typescript
 onComplete: (obj) => {
     console.log(obj);
 },
 ```
+
+## Optional settings
+
+```typescript
+CLIGen(
+    [
+        // ...
+        {
+            name:      "Generate new React component",
+            templates: [
+                // ...
+            ],
+        },
+        // ...
+    ], 
+    {
+        // <= Here optional settings
+    }
+);
+```
+
+### `rootPath` *optional*
+This is the string for changing root path of your project.
