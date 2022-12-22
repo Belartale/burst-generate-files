@@ -8,6 +8,7 @@ import {
 import {
     checkError,
     createFiles,
+    directorySelection,
     getSelectedItem,
     getSelectedName,
     markers,
@@ -80,6 +81,13 @@ export const CLIGen = async (
         for await (const iteratorSetting of selectedConfigItem.templates) {
             const selectedNames: typesActions.GetSelectedName[]
             = await getSelectedName(iteratorSetting.stringsReplacers);
+
+            directorySelection({
+                template:     iteratorSetting,
+                PROJECT_ROOT: optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT,
+                selectedNames,
+                // PROJECT_ROOT: optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT,
+            });
 
             mainActions({
                 setting:      iteratorSetting,

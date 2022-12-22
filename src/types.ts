@@ -6,6 +6,7 @@ import { SettingsMarker } from './actions/markers/types';
 export interface SettingCommonTypes {
     pathToTemplate: string | string[]
     outputPath: string | string[]
+    directorySelection?: boolean
     markers?: SettingsMarker[]
     onComplete?: Function
 }
