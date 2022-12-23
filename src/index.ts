@@ -24,6 +24,9 @@ import * as typesActions from './actions/types';
 
 const mainActions = ({ setting, selectedNames, PROJECT_ROOT }: typesCommon.MainActions) => {
     const settingWithAbsolutePath = makeAbsolutePath({ PROJECT_ROOT, setting });
+    console.log('====================');
+    console.log('===================', settingWithAbsolutePath.outputPath);
+    console.log('====================');
 
     createFiles({
         pathToTemplate: settingWithAbsolutePath.pathToTemplate,
@@ -49,6 +52,7 @@ export const customGen = (
     optionalSettings: typesCommon.OptionalSettings,
 ) => {
     try {
+        // todo make makeAbsolutePath
         checkError({
             whichFunction: 'customGen',
             settings,
@@ -71,6 +75,7 @@ export const CLIGen = async (
     optionalSettings?: typesCommon.OptionalSettings,
 ): Promise<void> => {
     try {
+        // todo make makeAbsolutePath
         checkError({
             whichFunction: 'CLIGen',
             settings,
@@ -78,21 +83,24 @@ export const CLIGen = async (
         });
         const selectedConfigItem: typesCommon.SettingCLIGen = await getSelectedItem(settings);
 
-        for await (const iteratorSetting of selectedConfigItem.templates) {
+        for await (const iteratorTemplate of selectedConfigItem.templates) {
             const selectedNames: typesActions.GetSelectedName[]
-            = await getSelectedName(iteratorSetting.stringsReplacers);
+            = await getSelectedName(iteratorTemplate.stringsReplacers);
 
-            directorySelection({
-                template:     iteratorSetting,
-                PROJECT_ROOT: optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT,
+            const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
+                ? optionalSettings.rootPath : PROJECT_ROOT;
+
+            await directorySelection({
+                template:     iteratorTemplate,
                 selectedNames,
-                // PROJECT_ROOT: optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT,
+                PROJECT_ROOT: NEW_PROJECT_ROOT,
+                // PROJECT_ROOT: NEW_PROJECT_ROOT,
             });
 
             mainActions({
-                setting:      iteratorSetting,
+                setting:      iteratorTemplate,
                 selectedNames,
-                PROJECT_ROOT: optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT,
+                PROJECT_ROOT: NEW_PROJECT_ROOT,
             });
         }
     } catch (error: any) {

@@ -22,6 +22,8 @@ const getNameFromCLI = async ({ message, name }: types.GetName) => {
 export const getSelectedName = async (strings: string | string[]): Promise<types.GetSelectedName[]> => {
     let result: [] | types.GetSelectedName[] = [];
 
+    console.log('000000000000');
+
     if (Array.isArray(strings)) {
         for await (const string of strings) {
             result = [

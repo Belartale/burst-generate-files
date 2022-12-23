@@ -24,9 +24,11 @@ const getDirectories = ({ source }: {source: string}) => {
     ];
 };
 
-export const directorySelection = ({ template, PROJECT_ROOT, selectedNames }: DirectorySelection) => {
-    console.log('directorySelection_______________________________________');
-
+export const directorySelection = async ({
+    template,
+    PROJECT_ROOT,
+    selectedNames,
+}: DirectorySelection) => {
     if (typeof template.directorySelection === 'boolean' && template.directorySelection) {
         const askPrompt = async (outputPathReplacedWordCase: string): Promise<string> => {
             const values = {
@@ -41,12 +43,13 @@ export const directorySelection = ({ template, PROJECT_ROOT, selectedNames }: Di
                     message: `Choose a directory!\nCurrent directory: ${values.currentDirectory}`,
                     choices: getDirectories({ source: values.currentDirectory }),
                     result:  (result) => {
-                        console.log(`result >>> ${ result }`);
                         if (result === '../') {
                             const valuesCurrentDirectorySplitted = values.currentDirectory.split('\\');
 
 
-                            return valuesCurrentDirectorySplitted.slice(0, valuesCurrentDirectorySplitted.length - 1).join('\\');
+                            const newPath = valuesCurrentDirectorySplitted.slice(0, valuesCurrentDirectorySplitted.length - 1).join('\\');
+
+                            return newPath;
                         }
 
                         if (result === './') {
@@ -63,7 +66,9 @@ export const directorySelection = ({ template, PROJECT_ROOT, selectedNames }: Di
             values.currentDirectory = gotValue.directorySelection;
 
             if (values.isPrompt) {
-                return askPrompt(values.currentDirectory);
+                const result = await askPrompt(values.currentDirectory);
+
+                return result;
             }
 
 
@@ -71,25 +76,65 @@ export const directorySelection = ({ template, PROJECT_ROOT, selectedNames }: Di
         };
 
 
+        // if (typeof template.outputPath === 'string') {
+        //     askPrompt(replaceWordCase({
+        //         string:            template.outputPath,
+        //         stringsForReplace: selectedNames,
+        //     })).then((resultPromise) => {
+        //         template.outputPath = resultPromise;
+        //     });
+        // } else if (Array.isArray(template.outputPath)) {
+        //     template.outputPath = template.outputPath.map((outputPath) => { // todo test if outputPath is ARRAY !!!!!!!!
+        //         let result = { value: outputPath };
+        //         askPrompt(replaceWordCase({
+        //             string:            outputPath,
+        //             stringsForReplace: selectedNames,
+        //         })).then((resultPromise) => {
+        //             result.value = resultPromise;
+        //         });
+
+        //         return result.value;
+        //     });
+        // }
+
+
         if (typeof template.outputPath === 'string') {
-            askPrompt(replaceWordCase({
+            await askPrompt(replaceWordCase({
                 string:            template.outputPath,
                 stringsForReplace: selectedNames,
             })).then((resultPromise) => {
                 template.outputPath = resultPromise;
             });
-        } else if (Array.isArray(template.outputPath)) {
-            template.outputPath = template.outputPath.map((outputPath) => { // todo test if outputPath is ARRAY !!!!!!!!
-                let result = { value: outputPath };
-                askPrompt(replaceWordCase({
-                    string:            outputPath,
+        } else if (Array.isArray(template.outputPath)) { // [ 'outputPath1', 'outputPath2' ]
+            // template.outputPath.map(async (outputPath) => { // todo test if outputPath is ARRAY !!!!!!!!
+            //     let result = { value: outputPath };
+            //     await askPrompt(replaceWordCase({ // питає у користувача в терміналі
+            //         string:            outputPath,
+            //         stringsForReplace: selectedNames,
+            //     })).then((resultPromise) => {
+            //         result.value = resultPromise;
+            //     });
+
+            //     return result.value;
+            // });
+
+            let resultPromises: any = { value: []};
+
+            for await (const iteratorOutputPath of template.outputPath) {
+                iteratorOutputPath;
+
+                await askPrompt(replaceWordCase({ // питає у користувача в терміналі
+                    string:            iteratorOutputPath,
                     stringsForReplace: selectedNames,
                 })).then((resultPromise) => {
-                    result.value = resultPromise;
+                    resultPromises.value = [ ...resultPromises.value, resultPromise ];
                 });
+            }
+            template.outputPath = resultPromises;
 
-                return result.value;
-            });
+            return;
         }
     }
+
+    return template.outputPath;
 };

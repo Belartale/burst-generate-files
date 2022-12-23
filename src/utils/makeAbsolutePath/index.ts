@@ -30,7 +30,11 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePa
 
     // Setting outputPath
     if (Array.isArray(newSetting.outputPath)) {
-        newSetting.outputPath = newSetting.outputPath.map((path) => resolve(PROJECT_ROOT, path));
+        newSetting.outputPath = newSetting.outputPath.map((path) => {
+            console.log(`resolve(PROJECT_ROOT, path) >>> ${ resolve(PROJECT_ROOT, path) }`);
+
+            return resolve(PROJECT_ROOT, path);
+        });
     }
     if (typeof newSetting.outputPath === 'string') {
         newSetting.outputPath = resolve(PROJECT_ROOT, newSetting.outputPath);

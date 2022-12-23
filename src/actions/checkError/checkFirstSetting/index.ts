@@ -1,5 +1,5 @@
 // Core
-import fs from 'fs';
+import fs from 'fs'; // todo PROJECT_ROOT
 
 // Constants
 import { betweenTwoLines, endErrorLine } from '../constants';
