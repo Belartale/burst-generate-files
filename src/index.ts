@@ -7,10 +7,10 @@ import {
 // Actions
 import {
     checkError,
-    createFiles,
-    directorySelection,
     getSelectedItem,
     getSelectedName,
+    selectDirectory,
+    createFiles,
     markers,
     onComplete,
 } from './actions';
@@ -24,9 +24,6 @@ import * as typesActions from './actions/types';
 
 const mainActions = ({ setting, selectedNames, PROJECT_ROOT }: typesCommon.MainActions) => {
     const settingWithAbsolutePath = makeAbsolutePath({ PROJECT_ROOT, setting });
-    console.log('====================');
-    console.log('===================', settingWithAbsolutePath.outputPath);
-    console.log('====================');
 
     createFiles({
         pathToTemplate: settingWithAbsolutePath.pathToTemplate,
@@ -52,17 +49,20 @@ export const customGen = (
     optionalSettings: typesCommon.OptionalSettings,
 ) => {
     try {
-        // todo make makeAbsolutePath
+        const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
+            ? optionalSettings.rootPath : PROJECT_ROOT;
+
         checkError({
             whichFunction: 'customGen',
             settings,
             optionalSettings,
+            PROJECT_ROOT:  NEW_PROJECT_ROOT,
         });
         settings.forEach((setting) => {
             mainActions({
                 setting,
                 selectedNames: setting.stringsReplacers,
-                PROJECT_ROOT:  optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT,
+                PROJECT_ROOT:  NEW_PROJECT_ROOT,
             });
         });
     } catch (error: any) {
@@ -75,11 +75,14 @@ export const CLIGen = async (
     optionalSettings?: typesCommon.OptionalSettings,
 ): Promise<void> => {
     try {
-        // todo make makeAbsolutePath
+        const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
+            ? optionalSettings.rootPath : PROJECT_ROOT;
+
         checkError({
             whichFunction: 'CLIGen',
             settings,
             optionalSettings,
+            PROJECT_ROOT:  NEW_PROJECT_ROOT,
         });
         const selectedConfigItem: typesCommon.SettingCLIGen = await getSelectedItem(settings);
 
@@ -87,14 +90,11 @@ export const CLIGen = async (
             const selectedNames: typesActions.GetSelectedName[]
             = await getSelectedName(iteratorTemplate.stringsReplacers);
 
-            const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
-                ? optionalSettings.rootPath : PROJECT_ROOT;
 
-            await directorySelection({
+            await selectDirectory({
                 template:     iteratorTemplate,
                 selectedNames,
                 PROJECT_ROOT: NEW_PROJECT_ROOT,
-                // PROJECT_ROOT: NEW_PROJECT_ROOT,
             });
 
             mainActions({

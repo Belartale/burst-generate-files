@@ -9,6 +9,7 @@ export const checkError = ({
     whichFunction,
     settings,
     optionalSettings,
+    PROJECT_ROOT,
 }: CheckError) => {
     let errors: CustomErrors = [];
 
@@ -16,6 +17,7 @@ export const checkError = ({
         whichFunction,
         settings,
         errors,
+        PROJECT_ROOT,
     });
     checkSecondSetting({
         whichFunction,

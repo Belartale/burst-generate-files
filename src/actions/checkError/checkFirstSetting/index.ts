@@ -8,12 +8,14 @@ import { betweenTwoLines, endErrorLine } from '../constants';
 import * as types from './types';
 import * as typesActions from '../../types';
 import * as typesCommon from '../../../types';
+import { resolve } from 'path';
 
 export const checkFirstSetting = (
     {
         whichFunction,
         settings,
         errors,
+        PROJECT_ROOT,
     }: types.CheckFirstSettings,
 ) => {
     const checkSettings = ({
@@ -76,7 +78,7 @@ export const checkFirstSetting = (
             if (typeof setting.pathToTemplate !== 'string' && !Array.isArray(setting.pathToTemplate)) {
                 errors.push(new Error(`${beginOfLine}/pathToTemplate${betweenTwoLines}Type '${typeof setting.pathToTemplate}' is not assignable to type 'string'.${endErrorLine}`));
             }
-            if (typeof setting.pathToTemplate === 'string' && !fs.existsSync(setting.pathToTemplate)) {
+            if (typeof setting.pathToTemplate === 'string' && !fs.existsSync(resolve(PROJECT_ROOT, setting.pathToTemplate))) {
                 errors.push(new Error(`${beginOfLine}/pathToTemplate${betweenTwoLines}No such directory, '${setting.pathToTemplate}'.${endErrorLine}`));
             }
             if (Array.isArray(setting.pathToTemplate)) {
@@ -84,7 +86,7 @@ export const checkFirstSetting = (
                     if (typeof path !== 'string') {
                         errors.push(new Error(`${beginOfLine}/pathToTemplate[${indexPathToTemplate}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
                     }
-                    if (typeof setting.pathToTemplate === 'string' && !fs.existsSync(setting.pathToTemplate)) {
+                    if (typeof setting.pathToTemplate === 'string' && !fs.existsSync(resolve(PROJECT_ROOT, setting.pathToTemplate))) {
                         errors.push(new Error(`${beginOfLine}/pathToTemplate[${indexPathToTemplate}]${betweenTwoLines}No such directory, '${path}'.${endErrorLine}`));
                     }
                 });
@@ -123,7 +125,7 @@ export const checkFirstSetting = (
                         if (whichFunction === 'customGen') {
                             if (typeof settingMarker.pathToMarker === 'string') {
                                 if (
-                                    (typeof setting.stringsReplacers === 'object' && !Array.isArray(setting.stringsReplacers) && !settingMarker.pathToMarker.includes(setting.stringsReplacers.replaceVar) && !fs.existsSync(settingMarker.pathToMarker))
+                                    (typeof setting.stringsReplacers === 'object' && !Array.isArray(setting.stringsReplacers) && !settingMarker.pathToMarker.includes(setting.stringsReplacers.replaceVar) && !fs.existsSync(resolve(PROJECT_ROOT, settingMarker.pathToMarker)))
                                     || (Array.isArray(setting.stringsReplacers)
                                     && !setting.stringsReplacers.some(
                                         (
@@ -133,7 +135,7 @@ export const checkFirstSetting = (
                                     && !setting.stringsReplacers.some(
                                         (
                                             strRep: typesCommon.SettingStringsReplacersCustomGen,
-                                        ) => fs.existsSync(strRep.value),
+                                        ) => fs.existsSync(resolve(PROJECT_ROOT, strRep.value)),
                                     ))
                                 ) {
                                     errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}No such directory, '${settingMarker.pathToMarker}'.${endErrorLine}`));
@@ -146,13 +148,13 @@ export const checkFirstSetting = (
                                     }
                                     if (typeof path === 'string') {
                                         if (
-                                            (typeof setting.stringsReplacers === 'string' && !path.includes(setting.stringsReplacers) && !fs.existsSync(path))
+                                            (typeof setting.stringsReplacers === 'string' && !path.includes(setting.stringsReplacers) && !fs.existsSync(resolve(PROJECT_ROOT, path)))
                                             || (Array.isArray(setting.stringsReplacers)
                                         && !setting.stringsReplacers.some(
                                             (srtRep: string) => path.includes(srtRep),
                                         )
                                             && !setting.stringsReplacers.some(
-                                                (strRep: string) => fs.existsSync(strRep),
+                                                (strRep: string) => fs.existsSync(resolve(PROJECT_ROOT, strRep)),
                                             ))
                                         ) {
                                             errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}No such directory, '${path}'.${endErrorLine}`));
@@ -165,13 +167,13 @@ export const checkFirstSetting = (
                         if (whichFunction === 'CLIGen') {
                             if (typeof settingMarker.pathToMarker === 'string') {
                                 if (
-                                    (typeof setting.stringsReplacers === 'string' && !settingMarker.pathToMarker.includes(setting.stringsReplacers) && !fs.existsSync(settingMarker.pathToMarker))
+                                    (typeof setting.stringsReplacers === 'string' && !settingMarker.pathToMarker.includes(setting.stringsReplacers) && !fs.existsSync(resolve(PROJECT_ROOT, settingMarker.pathToMarker)))
                                     || (Array.isArray(setting.stringsReplacers)
                                     && !setting.stringsReplacers.some(
                                         (srtRep: string) => settingMarker.pathToMarker.includes(srtRep),
                                     )
                                     && !setting.stringsReplacers.some(
-                                        (strRep: string) => fs.existsSync(strRep),
+                                        (strRep: string) => fs.existsSync(resolve(PROJECT_ROOT, strRep)),
                                     ))
                                 ) {
                                     errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker${betweenTwoLines}No such directory, '${settingMarker.pathToMarker}'.${endErrorLine}`));
@@ -184,13 +186,13 @@ export const checkFirstSetting = (
                                     }
                                     if (typeof path === 'string') {
                                         if (
-                                            (typeof setting.stringsReplacers === 'string' && !path.includes(setting.stringsReplacers) && !fs.existsSync(path))
+                                            (typeof setting.stringsReplacers === 'string' && !path.includes(setting.stringsReplacers) && !fs.existsSync(resolve(PROJECT_ROOT, path)))
                                             || (Array.isArray(setting.stringsReplacers)
                                         && !setting.stringsReplacers.some(
                                             (srtRep: string) => path.includes(srtRep),
                                         )
                                             && !setting.stringsReplacers.some(
-                                                (strRep: string) => fs.existsSync(strRep),
+                                                (strRep: string) => fs.existsSync(resolve(PROJECT_ROOT, strRep)),
                                             ))
                                         ) {
                                             errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/pathToMarker[${indexPathToMarker}]${betweenTwoLines}No such directory, '${path}'.${endErrorLine}`));
@@ -204,7 +206,7 @@ export const checkFirstSetting = (
                         if (typeof settingMarker.markerTemplate !== 'string' && !Array.isArray(settingMarker.markerTemplate)) {
                             errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate${betweenTwoLines}Type '${typeof settingMarker.markerTemplate}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
                         }
-                        if (typeof settingMarker.markerTemplate === 'string' && !fs.existsSync(settingMarker.markerTemplate)) {
+                        if (typeof settingMarker.markerTemplate === 'string' && !fs.existsSync(resolve(PROJECT_ROOT, settingMarker.markerTemplate))) {
                             errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate${betweenTwoLines}No such directory, '${settingMarker.markerTemplate}'.${endErrorLine}`));
                         }
                         if (Array.isArray(settingMarker.markerTemplate)) {
@@ -212,7 +214,7 @@ export const checkFirstSetting = (
                                 if (typeof string !== 'string') {
                                     errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate[${indexMarkerTemplate}]${betweenTwoLines}Type '${typeof string}' is not assignable to type 'string'.${endErrorLine}`));
                                 }
-                                if (typeof string === 'string' && !fs.existsSync(string)) {
+                                if (typeof string === 'string' && !fs.existsSync(resolve(PROJECT_ROOT, string))) {
                                     errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/markerTemplate[${indexMarkerTemplate}]${betweenTwoLines}No such directory, '${string}'.${endErrorLine}`));
                                 }
                             });

@@ -6,6 +6,7 @@ export type CheckFirstSettings = {
     whichFunction: CheckError['whichFunction']
     settings: typesCommon.SettingCustomGen[] | typesCommon.SettingCLIGen[]
     errors: CustomErrors
+    PROJECT_ROOT: string
 }
 
 export type CheckSettings = {
