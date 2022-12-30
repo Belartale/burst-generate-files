@@ -1,8 +1,8 @@
 // Core
 import chalk from 'chalk';
 
-// Utils
-import { replaceWordCase } from '../../utils';
+// Constants
+import { spaces } from '../../constants';
 
 // Functions
 import { askDirectory } from './askDirectory';
@@ -10,52 +10,17 @@ import { askDirectory } from './askDirectory';
 // Types
 import * as types from './types';
 
-export const selectDirectory = async ({
+const showWarningsAboutCheckMarkers = ({
     template,
-    PROJECT_ROOT,
-    selectedNames,
-}: types.SelectDirectory) => {
-    if (typeof template.selectDirectory === 'boolean' && template.selectDirectory) {
-        if (typeof template.outputPath === 'string') {
-            await askDirectory({
-                outputPathReplacedWordCase: replaceWordCase({
-                    string:            template.outputPath,
-                    stringsForReplace: selectedNames,
-                }),
-                PROJECT_ROOT,
-            }).then((resultPromise) => {
-                template.outputPath = resultPromise;
-            });
-        } else if (Array.isArray(template.outputPath)) {
-            let result: any = { value: []};
+    newOutputPath,
+}: types.ShowWarningsAboutCheckMarkers) => {
+    const messageForChanging = 'You changed outputPath:';
 
-            for await (const iteratorOutputPath of template.outputPath) {
-                await askDirectory({
-                    outputPathReplacedWordCase: replaceWordCase({
-                        string:            iteratorOutputPath,
-                        stringsForReplace: selectedNames,
-                    }),
-                    PROJECT_ROOT,
-                }).then((resultPromise) => {
-                    result.value = [ ...result.value, resultPromise ];
-                });
-            }
-            template.outputPath = result.value;
-        }
+    const log = (text: string) => {
+        console.log(spaces + text);
+    };
 
-        const log = (text: string) => {
-            console.log(`    ${text}`);
-        };
-
-        console.log(chalk.yellow('You changed outputPath:'));
-        if (typeof template.outputPath === 'string') {
-            log(template.outputPath);
-        }
-        if (Array.isArray(template.outputPath)) {
-            template.outputPath.forEach((outputPath) => {
-                log(outputPath);
-            });
-        }
+    const lastPartOfMessage = () => {
         console.log(chalk.yellow('You have to check your markers !!!\nYour markers:'));
         template.markers?.forEach((marker) => {
             if (typeof marker.pathToMarker === 'string') {
@@ -67,5 +32,57 @@ export const selectDirectory = async ({
                 });
             }
         });
+    };
+
+    if (typeof newOutputPath === 'string' && template.outputPath !== newOutputPath) {
+        console.log(chalk.yellow(messageForChanging));
+        log(newOutputPath);
+        lastPartOfMessage();
+    }
+    if (Array.isArray(newOutputPath) && newOutputPath.some((newPath) => !template.outputPath.includes(newPath))) {
+        console.log(chalk.yellow(messageForChanging));
+        newOutputPath.forEach((newPath) => {
+            if (!template.outputPath.includes(newPath)) {
+                log(newPath);
+            }
+        });
+        lastPartOfMessage();
+    }
+};
+
+export const selectDirectory = async ({
+    template,
+    selectedNames,
+}: types.SelectDirectory) => {
+    if (typeof template.selectDirectory === 'boolean' && template.selectDirectory) {
+        if (typeof template.outputPath === 'string') {
+            await askDirectory({
+                outputPath: template.outputPath,
+                selectedNames,
+            }).then((resultPromise) => {
+                showWarningsAboutCheckMarkers({
+                    template,
+                    newOutputPath: resultPromise,
+                });
+                template.outputPath = resultPromise;
+            });
+        }
+        if (Array.isArray(template.outputPath)) {
+            let result: {value: [] | string[]} = { value: []};
+
+            for await (const iteratorOutputPath of template.outputPath) {
+                await askDirectory({
+                    outputPath: iteratorOutputPath,
+                    selectedNames,
+                }).then((resultPromise) => {
+                    result.value = [ ...result.value, resultPromise ];
+                });
+            }
+            showWarningsAboutCheckMarkers({
+                template,
+                newOutputPath: result.value,
+            });
+            template.outputPath = result.value;
+        }
     }
 };

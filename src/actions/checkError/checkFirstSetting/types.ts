@@ -10,6 +10,6 @@ export type CheckFirstSettings = {
 }
 
 export type CheckSettings = {
-    setting: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate | any
+    setting: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate
     beginOfLine: BeginOfLine
 }

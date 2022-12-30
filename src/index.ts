@@ -23,24 +23,22 @@ import * as typesCommon from './types';
 import * as typesActions from './actions/types';
 
 const mainActions = ({ setting, selectedNames, PROJECT_ROOT }: typesCommon.MainActions) => {
-    const settingWithAbsolutePath = makeAbsolutePath({ PROJECT_ROOT, setting });
-
     createFiles({
-        pathToTemplate: settingWithAbsolutePath.pathToTemplate,
-        outputPath:     settingWithAbsolutePath.outputPath,
+        pathToTemplate: setting.pathToTemplate,
+        outputPath:     setting.outputPath,
         selectedNames,
     });
 
-    if (settingWithAbsolutePath.markers) {
+    if (setting.markers) {
         markers({
-            markers: settingWithAbsolutePath.markers,
+            markers: setting.markers,
             selectedNames,
             PROJECT_ROOT,
         });
     }
 
-    if (settingWithAbsolutePath.onComplete) {
-        onComplete({ setting: settingWithAbsolutePath });
+    if (setting.onComplete) {
+        onComplete({ setting: setting });
     }
 };
 
@@ -60,7 +58,7 @@ export const customGen = (
         });
         settings.forEach((setting) => {
             mainActions({
-                setting,
+                setting:       makeAbsolutePath({ PROJECT_ROOT: NEW_PROJECT_ROOT, setting }),
                 selectedNames: setting.stringsReplacers,
                 PROJECT_ROOT:  NEW_PROJECT_ROOT,
             });
@@ -90,15 +88,18 @@ export const CLIGen = async (
             const selectedNames: typesActions.GetSelectedName[]
             = await getSelectedName(iteratorTemplate.stringsReplacers);
 
+            const iteratorTemplateWithAbsolutePaths = makeAbsolutePath({
+                PROJECT_ROOT: NEW_PROJECT_ROOT,
+                setting:      iteratorTemplate,
+            }) as typesCommon.SettingCLIGenTemplate;
 
             await selectDirectory({
-                template:     iteratorTemplate,
+                template: iteratorTemplateWithAbsolutePaths,
                 selectedNames,
-                PROJECT_ROOT: NEW_PROJECT_ROOT,
             });
 
             mainActions({
-                setting:      iteratorTemplate,
+                setting:      iteratorTemplateWithAbsolutePaths,
                 selectedNames,
                 PROJECT_ROOT: NEW_PROJECT_ROOT,
             });

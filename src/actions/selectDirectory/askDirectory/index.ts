@@ -1,55 +1,55 @@
 // Core
 import Enquirer from 'enquirer';
-import path from 'path';
-import fs from 'fs';
+import { resolve } from 'path';
+
+// Constants
+import {
+    slash,
+    controllersDirectories,
+    partOfMessageForCreatingCLI,
+} from './constants';
+
+// Functions
+import { getDirectories } from './getDirectories';
 
 // Types
 import * as types from './types';
 
-const getDirectories = ({ source }: types.GetDirectories) => {
-    return [
-        '../', './',
-        ...fs.readdirSync(source, { withFileTypes: true })
-            .filter((dir) => dir.isDirectory())
-            .map((dir) => '/' + dir.name),
-    ];
-};
-
 const getChangedPath = ({ result, values }: types.GetChangedPath): string => {
-    const action = ({ result, values, symbol }: types.Action): string => {
-        if (result === '../') {
-            const valuesCurrentDirectorySplitted = values.currentDirectory.split(symbol);
+    if (result === controllersDirectories[ 0 ]) {
+        const valuesCurrentDirectorySplitted = values.currentDirectory.split(slash);
 
-            return [ ...valuesCurrentDirectorySplitted, '..' ].join(symbol);
+        if (values.currentDirectory.includes(partOfMessageForCreatingCLI)) {
+            return resolve([ ...values.currentDirectory.replace(partOfMessageForCreatingCLI, '').split(slash), '..' ].join(slash));
         }
 
-        if (result === './') {
-            values.isPrompt = false;
+        return resolve([ ...valuesCurrentDirectorySplitted, '..' ].join(slash));
+    }
 
-            return values.currentDirectory;
+    if (result === controllersDirectories[ 1 ]) {
+        values.isPrompt = false;
+
+        if (values.currentDirectory.includes(partOfMessageForCreatingCLI)) {
+            return resolve(values.currentDirectory.replace(partOfMessageForCreatingCLI, ''));
         }
 
-        return `${values.currentDirectory}${symbol}${result.slice(1, result.length)}`;
-    };
-
-    if (values.currentDirectory.includes('/')) {
-        return action({ result, values, symbol: '/' });
+        return resolve(values.currentDirectory);
     }
 
-    if (values.currentDirectory.includes('\\')) {
-        return action({ result, values, symbol: '\\' });
+    if (result.includes(partOfMessageForCreatingCLI)) {
+        return resolve(`${values.currentDirectory}${slash}${result.slice(1, result.length).replace(partOfMessageForCreatingCLI, '')}`) + partOfMessageForCreatingCLI;
     }
 
-    return result;
+    return resolve(`${values.currentDirectory}${slash}${result.slice(1, result.length)}`);
 };
 
 export const askDirectory = async ({
-    outputPathReplacedWordCase,
-    PROJECT_ROOT,
+    outputPath,
+    selectedNames,
 }: types.AskDirectory): Promise<string> => {
     const values: types.Values = {
         isPrompt:         true,
-        currentDirectory: path.resolve(PROJECT_ROOT, outputPathReplacedWordCase),
+        currentDirectory: outputPath,
     };
 
     do {
@@ -57,10 +57,14 @@ export const askDirectory = async ({
             {
                 type:    'select',
                 name:    'selectDirectory',
-                message: `Choose a directory!\nCurrent directory: ${values.currentDirectory}`,
-                choices: getDirectories({ source: values.currentDirectory }),
-                result:  (result) => {
-                    return path.resolve(getChangedPath({ result, values }));
+                message: `Choose a directory!\n    Current directory: ${values.currentDirectory}`,
+                choices: getDirectories({
+                    currentDirectory:   values.currentDirectory,
+                    outputAbsolutePath: outputPath,
+                    selectedNames,
+                }),
+                result: (result) => {
+                    return getChangedPath({ result, values });
                 },
             },
         );

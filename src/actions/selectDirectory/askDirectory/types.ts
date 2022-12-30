@@ -1,6 +1,8 @@
+import * as typesCommon from '../../types';
+
 export type AskDirectory = {
-    outputPathReplacedWordCase: string
-    PROJECT_ROOT: string
+    outputPath: string
+    selectedNames: typesCommon.GetSelectedName []
 }
 
 export type Values = {
@@ -13,12 +15,8 @@ export type GetChangedPath = {
     values: Values
 }
 
-export type Action = {
-    result: GetChangedPath['result']
-    values: GetChangedPath['values']
-    symbol: string
-}
-
 export type GetDirectories = {
-    source: string
+    currentDirectory: string
+    selectedNames: AskDirectory['selectedNames']
+    outputAbsolutePath: AskDirectory['outputPath']
 }
