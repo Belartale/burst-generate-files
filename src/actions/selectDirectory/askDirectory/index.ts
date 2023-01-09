@@ -57,7 +57,7 @@ export const askDirectory = async ({
             {
                 type:    'select',
                 name:    'selectDirectory',
-                message: `Choose a directory!\n    Current directory: ${values.currentDirectory}`,
+                message: `Choose a directory!\n    Current directory: ${values.currentDirectory.replace(partOfMessageForCreatingCLI, '')}`,
                 choices: getDirectories({
                     currentDirectory:   values.currentDirectory,
                     outputAbsolutePath: outputPath,
