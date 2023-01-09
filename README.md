@@ -162,7 +162,11 @@ CLIGen([
         name:      "Generate new React component",
         templates: [
             {
-                stringsReplacers: "__exampleComponentName__",
+                stringsReplacers: [ 
+                    "__exampleComponentName__",
+                    "__exampleExtension__",
+                    "__exampleStyleExtension__"
+                ], 
                 pathToTemplate:   "./componentTemplate",
                 outputPath:       "./components/__exampleComponentName__(pascalCase)",
             },
@@ -188,7 +192,7 @@ The main feature of this library is `markers` that you can put in existing files
 
 Foremost, we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
 
-![image](https://user-images.githubusercontent.com/33392042/194887842-cbeea112-4115-4b35-abe6-8c98cb0d4789.png)
+![image](https://user-images.githubusercontent.com/33392042/210067479-a325938b-6469-453c-8723-37745d45b2d5.png)
 
 Then we write the usual import, but we will use `__exampleComponentName__` variable.
 
@@ -212,7 +216,11 @@ CLIGen([
         name:      "Generate new React component",
         templates: [
             {
-                stringsReplacers: "__exampleComponentName__",
+                stringsReplacers: [ 
+                    "__exampleComponentName__",
+                    "__exampleExtension__",
+                    "__exampleStyleExtension__"
+                ], 
                 pathToTemplate:   "./componentTemplate",
                 outputPath:       "./components/__exampleComponentName__(pascalCase)",
                 markers: [ // <= New key here
@@ -231,6 +239,9 @@ CLIGen([
 And funnily, run the command `ts-node "./generate.config.ts"`. After generation, we get new line like import.
 
 ![image](https://user-images.githubusercontent.com/33392042/195048272-d848b67f-8d17-47e4-a75b-7c940858b6ab.png)
+
+## Ultra plus use
+If you want to look difficult cases with burst-generate-files. You can install [`Burst`](https://www.npmjs.com/package/cra-template-burst) template. After install, you have to use script `npm run gen` in your terminal. 
 
 ## Settings
 ### `name`
