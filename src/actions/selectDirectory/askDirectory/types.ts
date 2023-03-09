@@ -5,18 +5,14 @@ export type AskDirectory = {
     selectedNames: typesCommon.GetSelectedName []
 }
 
-export type Values = {
-    isPrompt: boolean
-    currentDirectory: string
-}
-
-export type GetChangedPath = {
-    result: string
-    values: Values
-}
-
 export type GetDirectories = {
     currentDirectory: string
     selectedNames: AskDirectory['selectedNames']
     outputAbsolutePath: AskDirectory['outputPath']
+}
+
+export type ObjectTypes = {
+    name: string
+    value: string
+    message: string
 }

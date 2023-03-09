@@ -31,10 +31,13 @@ export const getDirectories = ({
 
     const nextFolder = splittedOutputAbsolutePath[ numberCurrentFolderOfOutputAbsolutePath + 1 ];
 
-    const getFolders = (directory: string) => fs.readdirSync(replaceWordCase({
-        string:            directory,
-        stringsForReplace: selectedNames,
-    }), { withFileTypes: true })
+    const getFolders = (directory: string) => fs.readdirSync(
+        replaceWordCase({
+            string:            directory,
+            stringsForReplace: selectedNames,
+        }),
+        { withFileTypes: true },
+    )
         .filter((dir) => dir.isDirectory())
         .map((dir) => '/' + dir.name);
 
@@ -57,8 +60,14 @@ export const getDirectories = ({
                     return [
                         ...controllersDirectories,
                         `/${lsatFolderOutputPath}${partOfMessageForCreatingCLI}`,
-                        `/${nextFolder}`,
-                        ...getFolders(currentDirectory),
+                        ...[
+                            ...new Set(
+                                [
+                                    `/${nextFolder}`,
+                                    ...getFolders(currentDirectory),
+                                ],
+                            ),
+                        ],
                     ];
                 }
 

@@ -1,12 +1,10 @@
 // Core
-import Enquirer from 'enquirer';
+const { AutoComplete } = require('enquirer');
 import { resolve } from 'path';
 
 // Constants
 import {
-    slash,
-    controllersDirectories,
-    partOfMessageForCreatingCLI,
+    controllersDirectories, partOfMessageForCreatingCLI,
 } from './constants';
 
 // Functions
@@ -15,62 +13,125 @@ import { getDirectories } from './getDirectories';
 // Types
 import * as types from './types';
 
-const getChangedPath = ({ result, values }: types.GetChangedPath): string => {
-    if (result === controllersDirectories[ 0 ]) {
-        const valuesCurrentDirectorySplitted = values.currentDirectory.split(slash);
-
-        if (values.currentDirectory.includes(partOfMessageForCreatingCLI)) {
-            return resolve([ ...values.currentDirectory.replace(partOfMessageForCreatingCLI, '').split(slash), '..' ].join(slash));
-        }
-
-        return resolve([ ...valuesCurrentDirectorySplitted, '..' ].join(slash));
-    }
-
-    if (result === controllersDirectories[ 1 ]) {
-        values.isPrompt = false;
-
-        if (values.currentDirectory.includes(partOfMessageForCreatingCLI)) {
-            return resolve(values.currentDirectory.replace(partOfMessageForCreatingCLI, ''));
-        }
-
-        return resolve(values.currentDirectory);
-    }
-
-    if (result.includes(partOfMessageForCreatingCLI)) {
-        return resolve(`${values.currentDirectory}${slash}${result.slice(1, result.length).replace(partOfMessageForCreatingCLI, '')}`) + partOfMessageForCreatingCLI;
-    }
-
-    return resolve(`${values.currentDirectory}${slash}${result.slice(1, result.length)}`);
-};
-
 export const askDirectory = async ({
     outputPath,
     selectedNames,
 }: types.AskDirectory): Promise<string> => {
-    const values: types.Values = {
-        isPrompt:         true,
-        currentDirectory: outputPath,
-    };
+    const firstPartOfMessage = 'Choose a directory!\n    Current directory: ';
 
-    do {
-        const gotValue: { selectDirectory: string } = await Enquirer.prompt(
-            {
-                type:    'select',
-                name:    'selectDirectory',
-                message: `Choose a directory!\n    Current directory: ${values.currentDirectory.replace(partOfMessageForCreatingCLI, '')}`,
-                choices: getDirectories({
-                    currentDirectory:   values.currentDirectory,
-                    outputAbsolutePath: outputPath,
+    class CustomAutoComplete extends AutoComplete {
+        constructor(options: any) {
+            super(options);
+            this.outputPath = options.outputPath;
+            this.currentDirectory = options.outputPath;
+        }
+
+        focusOnFirstChoice() {
+            this.index = Math.max(0, Math.min(0, this.choices.length));
+            this.enable(this.find(this.index));
+        }
+
+        changeValue(string: string): string {
+            if (string === './') {
+                return this.currentDirectory;
+            }
+
+            return string;
+        }
+
+        changeChoices(newChoices: string[]) {
+            super.choices = newChoices.map((nameNewChoice, index) => {
+                return {
+                    ...super.choices[ 0 ],
+                    index:   index,
+                    name:    nameNewChoice,
+                    message: nameNewChoice,
+                    value:   this.changeValue(nameNewChoice),
+                    path:    nameNewChoice,
+                };
+            });
+        }
+
+        removePartOfMessageForCreatingCLI(string: string): string {
+            return string.replace(partOfMessageForCreatingCLI, '');
+        }
+
+        submit() {
+            if (this.options.multiple) {
+                this.value = this.selected.map((ch: any) => ch.name);
+            }
+
+
+            // todo !!!!!!!!!!!!!! check this.currentDirectory
+
+            if (this.selected.name === controllersDirectories[ 0 ]) { // ../
+                this.currentDirectory = resolve(this.removePartOfMessageForCreatingCLI(this.currentDirectory), '..');
+                this.options.message = firstPartOfMessage + this.currentDirectory;
+
+                const gotDirectories = getDirectories({
+                    currentDirectory:   this.currentDirectory,
+                    outputAbsolutePath: this.outputPath,
                     selectedNames,
-                }),
-                result: (result) => {
-                    return getChangedPath({ result, values });
-                },
-            },
-        );
+                });
 
-        values.currentDirectory = gotValue.selectDirectory;
-    } while (values.isPrompt);
+                this.changeChoices(gotDirectories as string[]);
 
-    return values.currentDirectory;
+                this.render();
+
+                return;
+            }
+
+            if (this.selected.name === controllersDirectories[ 1 ]) { // ./
+                this.currentDirectory = this.removePartOfMessageForCreatingCLI(this.currentDirectory);
+                super.choices = [ ...super.choices ].map((choice) => {
+                    if (choice.name === controllersDirectories[ 1 ]) {
+                        return { ...choice, value: this.currentDirectory };
+                    }
+
+                    return choice;
+                });
+
+                return super.submit();
+            }
+
+            if (this.selected.value.includes(partOfMessageForCreatingCLI)) {
+                this.currentDirectory = resolve(
+                    this.currentDirectory + this.removePartOfMessageForCreatingCLI(this.selected.value),
+                ) + partOfMessageForCreatingCLI;
+            } else {
+                this.currentDirectory = resolve(this.currentDirectory + this.selected.value);
+            }
+
+            // this.currentDirectory = resolve(this.currentDirectory + this.selected.value);
+            this.options.message = firstPartOfMessage + this.currentDirectory;
+
+            const gotDirectories = getDirectories({
+                currentDirectory:   this.currentDirectory,
+                outputAbsolutePath: this.outputPath,
+                selectedNames,
+            });
+
+            this.changeChoices(gotDirectories as string[]);
+
+            this.focusOnFirstChoice();
+            this.render();
+        }
+    }
+
+    const promptCustomAutoComplete = new CustomAutoComplete({
+        name:    'selectDirectory',
+        outputPath,
+        message: firstPartOfMessage + outputPath,
+        choices: getDirectories({
+            currentDirectory:   outputPath,
+            outputAbsolutePath: outputPath,
+            selectedNames,
+        }),
+    });
+
+    const resultPromptC = await promptCustomAutoComplete.run();
+    console.log('resultPromptC >>>');
+    console.log(resultPromptC);
+
+    return resultPromptC;
 };
