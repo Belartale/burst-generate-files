@@ -10,3 +10,9 @@ export const nodeModulePath = (nodeModuleName: string) => resolve(PROJECT_ROOT, 
 
 // App
 export const APP_NAME = process.env.APP_NAME || 'burst-generate-files';
+
+// Modes
+export enum MODE {
+    DEVELOPMENT = 'development',
+    PRODUCTION = 'production',
+}
