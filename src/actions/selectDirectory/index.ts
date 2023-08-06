@@ -14,7 +14,7 @@ const showWarningsAboutCheckMarkers = ({
     template,
     newOutputPath,
 }: types.ShowWarningsAboutCheckMarkers) => {
-    const messageForChanging = 'You changed outputPath:';
+    const messageForChanging = '\nYou changed outputPath:';
 
     const log = (text: string) => {
         console.log(spaces + text);

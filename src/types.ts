@@ -17,6 +17,7 @@ export interface Setting extends SettingCommonTypes {
 
 export type OptionalSettings = {
     rootPath?: string
+    showFullError?: boolean
 }
 
 // Function customGen

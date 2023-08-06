@@ -74,7 +74,7 @@ export const askDirectory = async ({
                     selectedNames,
                 });
 
-                this.changeChoices(gotDirectories as string[]);
+                this.changeChoices(gotDirectories);
 
                 this.render();
 
@@ -111,7 +111,7 @@ export const askDirectory = async ({
                 selectedNames,
             });
 
-            this.changeChoices(gotDirectories as string[]);
+            this.changeChoices(gotDirectories);
 
             this.focusOnFirstChoice();
             this.render();
@@ -130,8 +130,8 @@ export const askDirectory = async ({
     });
 
     const resultPromptC = await promptCustomAutoComplete.run();
-    console.log('resultPromptC >>>');
-    console.log(resultPromptC);
+    // console.log('resultPromptC >>>');
+    // console.log(resultPromptC);
 
     return resultPromptC;
 };

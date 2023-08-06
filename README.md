@@ -13,9 +13,11 @@ npm i burst-generate-files
 ```
 
 ## Fast instructions for use
+
 Below are the steps we will take to build our first generation together.
 
 ### Create your first template
+
 Template is a folder with any structure. In our case, we create a simple example of `React` component.
 
 Create the folder `componentTemplate`, then create file with name `index.tsx`, but also you can use another name `__exampleComponentName__(pascalCase).tsx`, in second variant we have dynamic file name with different replace modes. More information about variables in file names and replace modes you can find deeper in these docs.
@@ -33,11 +35,12 @@ export const __exampleComponentName__(pascalCase) = () => {
      );
 };
 ```
+
 ### Create config file
 
 Let's create `generate.config.ts` in the root of your project.
 
-First of all you need to add import of `burst-generate-files`, and get `CLIGen` function. 
+First of all you need to add import of `burst-generate-files`, and get `CLIGen` function.
 
 That function require one parameter, array of settings.
 
@@ -48,12 +51,12 @@ import { CLIGen } from "burst-generate-files";
 
 CLIGen([
     {
-        name:      "Generate new React component",
+        name: "Generate new React component",
         templates: [
             {
                 stringsReplacers: "__exampleComponentName__",
-                pathToTemplate:   "./componentTemplate",
-                outputPath:       "./components/__exampleComponentName__(pascalCase)",
+                pathToTemplate: "./componentTemplate",
+                outputPath: "./components/__exampleComponentName__(pascalCase)",
             },
         ],
     },
@@ -61,14 +64,17 @@ CLIGen([
 ```
 
 #### If you happy with TypeScript
+
 To start generating files, you need to run `generate.config.ts`, the best way to do this install [ts-node](https://www.npmjs.com/package/ts-node) package globally.
 
-In terminal, you need just type next command and magic begin... 
+In terminal, you need just type next command and magic begin...
+
 ```bash
 ts-node "./generate.config.ts"
 ```
 
-**Note:** also you can add new script in your `package.json`, for example 
+**Note:** also you can add new script in your `package.json`, for example
+
 ```json
 "scripts": {
     "gen": "ts-node ./generate.config.ts"
@@ -77,12 +83,14 @@ ts-node "./generate.config.ts"
 
 #### If you must use JavaScript
 
-For JavaScript all easier, in your terminal run next command: 
+For JavaScript all easier, in your terminal run next command:
+
 ```bash
 node "./generate.config.js"
 ```
 
-### Command Line Interface 
+### Command Line Interface
+
 After running `generate.config.js`, advanced CLI started in your terminal. Next you have to choose that you want to generate, for example it will be `Component`. Press `Enter` to submit your choice, and continue.
 
 ![image](https://user-images.githubusercontent.com/33392042/189500538-5bc4e95e-9b05-4b49-bde2-fde162e3a1e5.png)
@@ -108,8 +116,9 @@ Next, we will get acquainted with the main features of the library.
 The library supports the syntax of variables in the names of files or folders that are contained in templates.
 
 For example, we can rename `index.tsx` file in previous example to `__exampleComponentName__(pascalCase).__exampleExtension__`.
-In that case, name and extension of file will be replaced, by variables what are configured in config file. 
+In that case, name and extension of file will be replaced, by variables what are configured in config file.
 Let's add new variable to `generate.config.ts` file:
+
 ```typescript
     // ./generate.config.ts
     {
@@ -117,7 +126,7 @@ Let's add new variable to `generate.config.ts` file:
         stringsReplacers: [  // <= Open new array
             "__exampleComponentName__",
             "__exampleExtension__", // <= New variable here
-        ], 
+        ],
         // ...
     }
 ```
@@ -132,19 +141,21 @@ In CLI add value `wrapper` to `__exampleComponentName__`, and add value `tsx` to
 ### Extend template
 
 Size of file structure no matter for burst generation. You can create any template, with any files and folder inside.
-For example, let's add new file in `componentTemplate`, and it will be `styles.__exampleStyleExtension__`. 
+For example, let's add new file in `componentTemplate`, and it will be `styles.__exampleStyleExtension__`.
+
 ```typescript
     // ./generate.config.ts
     {
         // ...
-        stringsReplacers: [ 
+        stringsReplacers: [
             "__exampleComponentName__",
             "__exampleExtension__",
             "__exampleStyleExtension__" // <= New variable again here
-        ], 
+        ],
         // ...
     }
 ```
+
 As result, we get new generated file structure based on extended template.
 
 ![image](https://user-images.githubusercontent.com/25966000/189738692-03c3c6f3-3185-4302-b133-25cabd01ba11.png)
@@ -159,26 +170,27 @@ For extend your config with new template, you need to create new `template` fold
 
 CLIGen([
     {
-        name:      "Generate new React component",
+        name: "Generate new React component",
         templates: [
             {
-                stringsReplacers: [ 
+                stringsReplacers: [
                     "__exampleComponentName__",
                     "__exampleExtension__",
-                    "__exampleStyleExtension__"
-                ], 
-                pathToTemplate:   "./componentTemplate",
-                outputPath:       "./components/__exampleComponentName__(pascalCase)",
+                    "__exampleStyleExtension__",
+                ],
+                pathToTemplate: "./componentTemplate",
+                outputPath: "./components/__exampleComponentName__(pascalCase)",
             },
         ],
     },
-    {   // <= Page generation config
-        name:      "New page",
+    {
+        // <= Page generation config
+        name: "New page",
         templates: [
             {
                 stringsReplacers: "__pageName__",
-                pathToTemplate:   "./pageTemplate",
-                outputPath:       "./page/__pageName__(pascalCase)",
+                pathToTemplate: "./pageTemplate",
+                outputPath: "./page/__pageName__(pascalCase)",
             },
         ],
     },
@@ -188,6 +200,7 @@ CLIGen([
 ![image](https://user-images.githubusercontent.com/33392042/189851222-ed4c7a8b-156e-4a5c-bc79-965b48462a33.png)
 
 ### Markers
+
 The main feature of this library is `markers` that you can put in existing files and add new lines. For example, a new line can be any entity, for example we use a usual import which should look like this `import { Wrapper2 } from "./Wrapper2";` after using generate.
 
 Foremost, we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
@@ -213,21 +226,23 @@ In `generate.config.ts` we have to add the new key `markers` for our config gene
 
 CLIGen([
     {
-        name:      "Generate new React component",
+        name: "Generate new React component",
         templates: [
             {
-                stringsReplacers: [ 
+                stringsReplacers: [
                     "__exampleComponentName__",
                     "__exampleExtension__",
-                    "__exampleStyleExtension__"
-                ], 
-                pathToTemplate:   "./componentTemplate",
-                outputPath:       "./components/__exampleComponentName__(pascalCase)",
-                markers: [ // <= New key here
+                    "__exampleStyleExtension__",
+                ],
+                pathToTemplate: "./componentTemplate",
+                outputPath: "./components/__exampleComponentName__(pascalCase)",
+                markers: [
+                    // <= New key here
                     {
-                        pattern:        "// Imports",
-                        pathToMarker:   "./components/index.ts",
-                        markerTemplate: "./componentTemplate/.genignore/import.ts",
+                        pattern: "// Imports",
+                        pathToMarker: "./components/index.ts",
+                        markerTemplate:
+                            "./componentTemplate/.genignore/import.ts",
                     },
                 ],
             },
@@ -241,19 +256,25 @@ And funnily, run the command `ts-node "./generate.config.ts"`. After generation,
 ![image](https://user-images.githubusercontent.com/33392042/195048272-d848b67f-8d17-47e4-a75b-7c940858b6ab.png)
 
 ## Ultra plus use
-If you want to look difficult cases with burst-generate-files. You can install [`Burst`](https://www.npmjs.com/package/cra-template-burst) template. After install, you have to use script `npm run gen` in your terminal. 
+
+If you want to look difficult cases with burst-generate-files. You can install [`Burst`](https://www.npmjs.com/package/cra-template-burst) template. After install, you have to use script `npm run gen` in your terminal.
 
 ## Settings
+
 ### `name`
+
 This is the name that will be displayed in the interface. For only the function `CLIGen`.
 
 ![Image interface](https://user-images.githubusercontent.com/33392042/189359666-be15cce3-133a-444d-a57d-33fb16033f78.png)
 
 ### `templates`
+
 This is array for settings to generate files. For only the function `CLIGen`.
 
 ### `stringsReplacers`
-This is the string or array with strings which will replace. But if you use the function `customGen`, then `stringsReplacers` is object or array, example: 
+
+This is the string or array with strings which will replace. But if you use the function `customGen`, then `stringsReplacers` is object or array, example:
+
 ```typescript
 // If you use the customGen
 
@@ -268,7 +289,9 @@ stringsReplacers: [
     },
 ],
 ```
+
 #### Types of string replacements
+
 ```sh
 __componentName__(noCase) === lorem Lorem lorem
 __componentName__(camelCase) === loremLorem
@@ -285,37 +308,53 @@ __componentName__ === loremLorem
 ```
 
 ### `pathToTemplate`
+
 This is the path or array with your paths for your template that will create.
 
 ### `outputPath`
+
 This is the path or array with your paths for output files.
 
-### `markers` *optional*
+### `selectDirectory` _optional_
+
+This is the boolean. Dynamic change your path.
+
+**Note:** default value `false`.
+
+### `markers` _optional_
+
 This is the array to create lines into files.
-- #### `pattern`
-This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(//.Marker)$/`.
 
-- #### `pathToMarker`
-This is the path or array with your paths to the file to insert your lines.
+-   #### `pattern`
 
-- #### `markerTemplate`
-This is path or paths to data of file to be inserted where is the `pattern`.
+    This is the marker for insert line. If you want, you can use any regular expressions like this `pattern: /^.*(//.Marker)$/`.
+
+-   #### `pathToMarker`
+
+    This is the path or array with your paths to the file to insert your lines.
+
+-   #### `markerTemplate`
+
+    This is path or paths to data of file to be inserted where is the `pattern`.
 
 **Note:** for keeping and ignoring markers template, you have to create the folder `.genignore`.
 
 ![image](https://user-images.githubusercontent.com/33392042/194910745-00151f31-f52b-43d9-bad3-f354677572aa.png)
 
-- #### `genDirection` *optional*
-This is the option tells the program where to insert the line. Insert line `after` or `before` your `pattern`.
+-   #### `genDirection` _optional_
+
+    This is the option tells the program where to insert the line. Insert line `after` or `before` your `pattern`.
 
 **Note:** if not exists, then default value `after`.
 
-- #### `onceInsert` *optional*
-This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
+-   #### `onceInsert` _optional_
+
+    This is the boolean. If it is true, the row will only be inserted once, when you insert again you will catch the warning.
 
 **Note:** if you want to paste again, you need edit file `config.generate.files.json`
 
-### `onComplete` *optional*
+### `onComplete` _optional_
+
 This is the function that will be executed after generation. If you want you can get the setting that was use. To get the object you need to use a callback.
 
 ```typescript
@@ -331,18 +370,23 @@ CLIGen(
     [
         // ...
         {
-            name:      "Generate new React component",
+            name: "Generate new React component",
             templates: [
                 // ...
             ],
         },
         // ...
-    ], 
+    ],
     {
         // <= Optional settings here
     }
 );
 ```
 
-### `rootPath` *optional*
+### `rootPath` _optional_
+
 This is the string for changing root path of your project.
+
+### `showFullError` _optional_
+
+This is the string for showing full message of error.

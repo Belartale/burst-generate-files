@@ -44,7 +44,7 @@ const mainActions = ({ setting, selectedNames, PROJECT_ROOT }: typesCommon.MainA
 
 export const customGen = (
     settings: typesCommon.SettingCustomGen[],
-    optionalSettings: typesCommon.OptionalSettings,
+    optionalSettings?: typesCommon.OptionalSettings,
 ) => {
     try {
         const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
@@ -64,7 +64,7 @@ export const customGen = (
             });
         });
     } catch (error: any) {
-        catchErrors(error);
+        catchErrors({ error, showFullError: optionalSettings?.showFullError });
     }
 };
 
@@ -105,7 +105,7 @@ export const CLIGen = async (
             });
         }
     } catch (error: any) {
-        catchErrors(error);
+        catchErrors({ error, showFullError: optionalSettings?.showFullError });
     }
 };
 

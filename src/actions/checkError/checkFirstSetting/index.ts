@@ -107,8 +107,15 @@ export const checkFirstSetting = (
             });
         }
 
+        // Setting selectDirectory
+        // Optional
+        if (Object.hasOwn(setting, 'selectDirectory') && typeof setting.selectDirectory !== 'boolean') {
+            errors.push(new Error(`${beginOfLine}/selectDirectory${betweenTwoLines}Type '${typeof setting.selectDirectory}' is not assignable to type 'boolean'.${endErrorLine}`));
+        }
+
         // Setting markers
-        if (setting.markers) {
+        // Optional
+        if (Object.hasOwn(setting, 'markers')) {
             if (!Array.isArray(setting.markers)) {
                 errors.push(new Error(`${beginOfLine}/markers${betweenTwoLines}Type '${typeof setting.markers}' is not assignable to type 'array'.${endErrorLine}`));
             }
@@ -214,12 +221,14 @@ export const checkFirstSetting = (
                     }
 
                     // Setting genDirection
+                    // Optional
                     if (typeof settingMarker.genDirection !== 'undefined' && settingMarker.genDirection !== 'after' && settingMarker.genDirection !== 'before') {
                         errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/genDirection${betweenTwoLines}Type '${typeof settingMarker.genDirection}' is not assignable to type 'after' | 'before' | 'undefined'.${endErrorLine}`));
                     }
 
                     // Setting onceInsert
-                    if (settingMarker.onceInsert && typeof settingMarker.onceInsert !== 'boolean') {
+                    // Optional
+                    if (Object.hasOwn(settingMarker, 'onceInsert') && typeof settingMarker.onceInsert !== 'boolean') {
                         errors.push(new Error(`${beginOfLine}/markers[${indexMarker}]/onceInsert${betweenTwoLines}Type '${typeof settingMarker.onceInsert}' is not assignable to type 'boolean'.${endErrorLine}`));
                     }
                 });
@@ -227,7 +236,8 @@ export const checkFirstSetting = (
         }
 
         // Setting onComplete
-        if (setting.onComplete && typeof setting.onComplete !== 'function') {
+        // Optional
+        if (Object.hasOwn(setting, 'onComplete') && typeof setting.onComplete !== 'function') {
             errors.push(new Error(`${beginOfLine}/onComplete${betweenTwoLines}Type '${typeof setting.onComplete}' is not assignable to type 'function'.${endErrorLine}`));
         }
     };
