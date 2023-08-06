@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "CommonJS",
+        "rootDir": "generate",
+        "noImplicitReturns": false,
+        "typeRoots": [
+            "../node_modules/@types"
+        ],
+    },
+    "include": [
+        "generate"
+    ],
+}
