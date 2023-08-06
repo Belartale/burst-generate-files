@@ -9,3 +9,11 @@
 ### Test with production mode
 
 `npm run test:build`
+
+### Test in other project
+
+#### This project (burst-generate-files)
+`npm run link`
+
+#### Then in other project
+`npm run burst-generate-files`

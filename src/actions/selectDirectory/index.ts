@@ -60,10 +60,12 @@ export const selectDirectory = async ({
                 outputPath: template.outputPath,
                 selectedNames,
             }).then((resultPromise) => {
-                showWarningsAboutCheckMarkers({
-                    template,
-                    newOutputPath: resultPromise,
-                });
+                if (template.markers) {
+                    showWarningsAboutCheckMarkers({
+                        template,
+                        newOutputPath: resultPromise,
+                    });
+                }
                 template.outputPath = resultPromise;
             });
         }
@@ -78,10 +80,12 @@ export const selectDirectory = async ({
                     result.value = [ ...result.value, resultPromise ];
                 });
             }
-            showWarningsAboutCheckMarkers({
-                template,
-                newOutputPath: result.value,
-            });
+            if (template.markers) {
+                showWarningsAboutCheckMarkers({
+                    template,
+                    newOutputPath: result.value,
+                });
+            }
             template.outputPath = result.value;
         }
     }

@@ -39,6 +39,18 @@ PACKAGE.then(({ CLIGen }) => {
                     pathToTemplate:   `${pathToTemplate}/component`,
                     outputPath:       `./${folderForTesting}/src/components/__componentName__(pascalCase)`,
                     selectDirectory:  true,
+                    markers:          [
+                        {
+                            pattern:        '// MarkerGen re-export',
+                            markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
+                            pathToMarker:   `./${folderForTesting}/src/components/index.ts`,
+                        },
+                        {
+                            pattern:        '// MarkerGen re-export',
+                            markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
+                            pathToMarker:   `./${folderForTesting}/src/components/index.ts`,
+                        },
+                    ],
                 },
             ],
         },
