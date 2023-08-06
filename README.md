@@ -51,12 +51,12 @@ import { CLIGen } from "burst-generate-files";
 
 CLIGen([
     {
-        name: "Generate new React component",
+        name:      "Generate new React component",
         templates: [
             {
                 stringsReplacers: "__exampleComponentName__",
-                pathToTemplate: "./componentTemplate",
-                outputPath: "./components/__exampleComponentName__(pascalCase)",
+                pathToTemplate:   "./componentTemplate",
+                outputPath:       "./components/__exampleComponentName__(pascalCase)",
             },
         ],
     },
@@ -170,7 +170,7 @@ For extend your config with new template, you need to create new `template` fold
 
 CLIGen([
     {
-        name: "Generate new React component",
+        name:      "Generate new React component",
         templates: [
             {
                 stringsReplacers: [
@@ -178,19 +178,19 @@ CLIGen([
                     "__exampleExtension__",
                     "__exampleStyleExtension__",
                 ],
-                pathToTemplate: "./componentTemplate",
-                outputPath: "./components/__exampleComponentName__(pascalCase)",
+                pathToTemplate:   "./componentTemplate",
+                outputPath:       "./components/__exampleComponentName__(pascalCase)",
             },
         ],
     },
     {
         // <= Page generation config
-        name: "New page",
+        name:      "New page",
         templates: [
             {
                 stringsReplacers: "__pageName__",
-                pathToTemplate: "./pageTemplate",
-                outputPath: "./page/__pageName__(pascalCase)",
+                pathToTemplate:   "./pageTemplate",
+                outputPath:       "./page/__pageName__(pascalCase)",
             },
         ],
     },
@@ -226,7 +226,7 @@ In `generate.config.ts` we have to add the new key `markers` for our config gene
 
 CLIGen([
     {
-        name: "Generate new React component",
+        name:      "Generate new React component",
         templates: [
             {
                 stringsReplacers: [
@@ -235,14 +235,13 @@ CLIGen([
                     "__exampleStyleExtension__",
                 ],
                 pathToTemplate: "./componentTemplate",
-                outputPath: "./components/__exampleComponentName__(pascalCase)",
+                outputPath:     "./components/__exampleComponentName__(pascalCase)",
                 markers: [
                     // <= New key here
                     {
-                        pattern: "// Imports",
-                        pathToMarker: "./components/index.ts",
-                        markerTemplate:
-                            "./componentTemplate/.genignore/import.ts",
+                        pattern:        "// Imports",
+                        pathToMarker:   "./components/index.ts",
+                        markerTemplate: "./componentTemplate/.genignore/import.ts",
                     },
                 ],
             },
@@ -370,7 +369,7 @@ CLIGen(
     [
         // ...
         {
-            name: "Generate new React component",
+            name:      "Generate new React component",
             templates: [
                 // ...
             ],

@@ -61,9 +61,6 @@ export const askDirectory = async ({
                 this.value = this.selected.map((ch: any) => ch.name);
             }
 
-
-            // todo !!!!!!!!!!!!!! check this.currentDirectory
-
             if (this.selected.name === controllersDirectories[ 0 ]) { // ../
                 this.currentDirectory = resolve(this.removePartOfMessageForCreatingCLI(this.currentDirectory), '..');
                 this.options.message = firstPartOfMessage + this.currentDirectory;
@@ -102,7 +99,6 @@ export const askDirectory = async ({
                 this.currentDirectory = resolve(this.currentDirectory + this.selected.value);
             }
 
-            // this.currentDirectory = resolve(this.currentDirectory + this.selected.value);
             this.options.message = firstPartOfMessage + this.currentDirectory;
 
             const gotDirectories = getDirectories({
@@ -129,9 +125,7 @@ export const askDirectory = async ({
         }),
     });
 
-    const resultPromptC = await promptCustomAutoComplete.run();
-    // console.log('resultPromptC >>>');
-    // console.log(resultPromptC);
+    const resultPrompt = await promptCustomAutoComplete.run();
 
-    return resultPromptC;
+    return resultPrompt;
 };
