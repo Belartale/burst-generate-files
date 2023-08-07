@@ -16,4 +16,4 @@
 `npm run link`
 
 #### Then in other project
-`npm run burst-generate-files`
+`npm link burst-generate-files`
