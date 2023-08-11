@@ -54,39 +54,37 @@ export const selectDirectory = async ({
     template,
     selectedNames,
 }: types.SelectDirectory) => {
-    if (typeof template.selectDirectory === 'boolean' && template.selectDirectory) {
-        if (typeof template.outputPath === 'string') {
-            await askDirectory({
-                outputPath: template.outputPath,
-                selectedNames,
-            }).then((resultPromise) => {
-                if (template.markers) {
-                    showWarningsAboutCheckMarkers({
-                        template,
-                        newOutputPath: resultPromise,
-                    });
-                }
-                template.outputPath = resultPromise;
-            });
-        }
-        if (Array.isArray(template.outputPath)) {
-            let result: {value: [] | string[]} = { value: []};
-
-            for await (const iteratorOutputPath of template.outputPath) {
-                await askDirectory({
-                    outputPath: iteratorOutputPath,
-                    selectedNames,
-                }).then((resultPromise) => {
-                    result.value = [ ...result.value, resultPromise ];
-                });
-            }
+    if (typeof template.outputPath === 'string') {
+        await askDirectory({
+            outputPath: template.outputPath,
+            selectedNames,
+        }).then((resultPromise) => {
             if (template.markers) {
                 showWarningsAboutCheckMarkers({
                     template,
-                    newOutputPath: result.value,
+                    newOutputPath: resultPromise,
                 });
             }
-            template.outputPath = result.value;
+            template.outputPath = resultPromise;
+        });
+    }
+    if (Array.isArray(template.outputPath)) {
+        let result: {value: [] | string[]} = { value: []};
+
+        for await (const iteratorOutputPath of template.outputPath) {
+            await askDirectory({
+                outputPath: iteratorOutputPath,
+                selectedNames,
+            }).then((resultPromise) => {
+                result.value = [ ...result.value, resultPromise ];
+            });
         }
+        if (template.markers) {
+            showWarningsAboutCheckMarkers({
+                template,
+                newOutputPath: result.value,
+            });
+        }
+        template.outputPath = result.value;
     }
 };

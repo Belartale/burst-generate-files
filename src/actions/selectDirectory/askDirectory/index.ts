@@ -4,7 +4,11 @@ import { resolve } from 'path';
 
 // Constants
 import {
-    controllersDirectories, partOfMessageForCreatingCLI,
+    CONTROLLERS,
+    CONTROLLERS_CREATE_NEW_FOLDER,
+    CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS,
+    controllersDirectories,
+    getSelectionsOfCreateFolder,
 } from './constants';
 
 // Functions
@@ -52,17 +56,14 @@ export const askDirectory = async ({
             });
         }
 
-        removePartOfMessageForCreatingCLI(string: string): string {
-            return string.replace(partOfMessageForCreatingCLI, '');
-        }
-
         submit() {
             if (this.options.multiple) {
                 this.value = this.selected.map((ch: any) => ch.name);
             }
 
+
             if (this.selected.name === controllersDirectories[ 0 ]) { // ../
-                this.currentDirectory = resolve(this.removePartOfMessageForCreatingCLI(this.currentDirectory), '..');
+                this.currentDirectory = resolve(this.currentDirectory, '..');
                 this.options.message = firstPartOfMessage + this.currentDirectory;
 
                 const gotDirectories = getDirectories({
@@ -79,7 +80,6 @@ export const askDirectory = async ({
             }
 
             if (this.selected.name === controllersDirectories[ 1 ]) { // ./
-                this.currentDirectory = this.removePartOfMessageForCreatingCLI(this.currentDirectory);
                 super.choices = [ ...super.choices ].map((choice) => {
                     if (choice.name === controllersDirectories[ 1 ]) {
                         return { ...choice, value: this.currentDirectory };
@@ -91,13 +91,32 @@ export const askDirectory = async ({
                 return super.submit();
             }
 
-            if (this.selected.value.includes(partOfMessageForCreatingCLI)) {
-                this.currentDirectory = resolve(
-                    this.currentDirectory + this.removePartOfMessageForCreatingCLI(this.selected.value),
-                ) + partOfMessageForCreatingCLI;
-            } else {
-                this.currentDirectory = resolve(this.currentDirectory + this.selected.value);
+            if (this.selected.name === CONTROLLERS.CREATE_NEW_FOLDER
+                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.OPTION_CANCEL) {
+                // console.log(this.options);
+                this.changeChoices(getSelectionsOfCreateFolder(selectedNames.map((name) => '/' + name.replaceVar)));
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
+            } else if (this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.OPTION_CANCEL) {
+                const gotDirectories = getDirectories({
+                    currentDirectory:   this.currentDirectory,
+                    outputAbsolutePath: this.outputPath,
+                    selectedNames,
+                });
+
+                this.changeChoices(gotDirectories);
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
             }
+
+
+            this.currentDirectory = resolve(this.currentDirectory, this.selected.value.replace('/', ''));
 
             this.options.message = firstPartOfMessage + this.currentDirectory;
 
@@ -105,6 +124,7 @@ export const askDirectory = async ({
                 currentDirectory:   this.currentDirectory,
                 outputAbsolutePath: this.outputPath,
                 selectedNames,
+                debug:              true,
             });
 
             this.changeChoices(gotDirectories);

@@ -58,7 +58,10 @@ export const customGen = (
         });
         settings.forEach((setting) => {
             mainActions({
-                setting:       makeAbsolutePath({ PROJECT_ROOT: NEW_PROJECT_ROOT, setting }),
+                setting: makeAbsolutePath({
+                    PROJECT_ROOT: NEW_PROJECT_ROOT,
+                    setting,
+                }) as typesCommon.SettingCustomGen,
                 selectedNames: setting.stringsReplacers,
                 PROJECT_ROOT:  NEW_PROJECT_ROOT,
             });
@@ -93,13 +96,30 @@ export const CLIGen = async (
                 setting:      iteratorTemplate,
             }) as typesCommon.SettingCLIGenTemplate;
 
-            await selectDirectory({
-                template: iteratorTemplateWithAbsolutePaths,
-                selectedNames,
-            });
+            if (!iteratorTemplate.outputPath || iteratorTemplate.selectDirectory === true) { // toto add error to checkError, if outputPath === undefined and selectDirectory === false >>> error
+                const iteratorTemplateWithAbsolutePathsAndRequiredOutputPath:
+                typesCommon.SettingCLIGenTemplateRequiredOutputPath = {
+                    ...iteratorTemplateWithAbsolutePaths,
+                    outputPath: iteratorTemplateWithAbsolutePaths.outputPath || NEW_PROJECT_ROOT,
+                };
+
+                await selectDirectory({
+                    template: iteratorTemplateWithAbsolutePathsAndRequiredOutputPath,
+                    selectedNames,
+                });
+
+                mainActions({
+                    setting:      iteratorTemplateWithAbsolutePathsAndRequiredOutputPath,
+                    selectedNames,
+                    PROJECT_ROOT: NEW_PROJECT_ROOT,
+                });
+
+                return;
+            }
 
             mainActions({
-                setting:      iteratorTemplateWithAbsolutePaths,
+                setting:
+                        iteratorTemplateWithAbsolutePaths as typesCommon.SettingCLIGenTemplateRequiredOutputPath,
                 selectedNames,
                 PROJECT_ROOT: NEW_PROJECT_ROOT,
             });

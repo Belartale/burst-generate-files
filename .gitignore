@@ -1,3 +1,7 @@
+/test/src/
+/test/src/**/*
+/test/src/*.*
+
 # == Core ==
 
 # Directories at root of a first
@@ -5,7 +9,6 @@
 /coverage/
 /flow-coverage/
 /dist/
-/test/src/
 
 # Files
 *.log

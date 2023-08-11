@@ -5,15 +5,20 @@ import { SettingsMarker } from './actions/markers/types';
 // Common types
 export interface SettingCommonTypes {
     pathToTemplate: string | string[]
-    outputPath: string | string[]
     selectDirectory?: boolean
     markers?: SettingsMarker[]
     onComplete?: Function
 }
-export interface Setting extends SettingCommonTypes {
-    name: string
-    stringsReplacers: string[]
+
+export type OutputPath = string | string[]
+export interface InterfaceOutputPath {
+    outputPath: OutputPath
 }
+
+// export interface Setting extends SettingCommonTypes {
+//     name: string
+//     stringsReplacers: string[]
+// }
 
 export type OptionalSettings = {
     rootPath?: string
@@ -25,12 +30,12 @@ export type SettingStringsReplacersCustomGen = {
     replaceVar: string
     value: string
 }
-export interface SettingCustomGen extends SettingCommonTypes {
+export interface SettingCustomGen extends SettingCommonTypes, InterfaceOutputPath {
     stringsReplacers: SettingStringsReplacersCustomGen | SettingStringsReplacersCustomGen[]
 }
 
 // Function CLIGen
-export interface SettingCLIGenTemplate extends SettingCommonTypes {
+export interface SettingCLIGenTemplate extends SettingCommonTypes, Partial<InterfaceOutputPath> {
     stringsReplacers: string | string[]
 }
 export type SettingCLIGen = {
@@ -38,9 +43,18 @@ export type SettingCLIGen = {
     templates: SettingCLIGenTemplate[]
 }
 
+// Required OutputPath
+export interface SettingCLIGenTemplateRequiredOutputPath extends SettingCommonTypes, InterfaceOutputPath {
+    stringsReplacers: string | string[]
+}
+export type SettingCLIGenRequiredOutputPath = {
+    name: string
+    templates: SettingCLIGenTemplateRequiredOutputPath[]
+}
+
 // Function mainActions
 export type MainActions = {
-    setting: SettingCustomGen | SettingCLIGenTemplate
+    setting: SettingCustomGen | SettingCLIGenTemplateRequiredOutputPath
     selectedNames: GetSelectedName | GetSelectedName[]
     PROJECT_ROOT: string
 }
