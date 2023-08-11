@@ -18,7 +18,6 @@ export const getDirectories = ({
     currentDirectory,
     outputAbsolutePath,
     selectedNames,
-    debug,
 }: types.GetDirectories) => {
     const splittedOutputAbsolutePath = outputAbsolutePath.split(slash);
     const lsatFolderOutputPath = splittedOutputAbsolutePath.at(-1) as string;
@@ -48,11 +47,6 @@ export const getDirectories = ({
     }));
 
     if (selectedNames.some((selectedName) => outputAbsolutePath.includes(selectedName.replaceVar))) {
-        if (debug) {
-            // console.log(chalk.red('splittedOutputAbsolutePath >>> ', JSON.stringify(splittedOutputAbsolutePath)));
-            // console.log(chalk.red('nextFolder >>> ', nextFolder));
-        }
-
         if (currentDirectory !== outputAbsolutePath) {
             if (isExistsDirectory(currentDirectory)) {
                 if (nextFolder && outputAbsolutePath.includes(resolve(currentDirectory, nextFolder))) {
@@ -95,7 +89,6 @@ export const getDirectories = ({
         return [
             ...controllersDirectories,
             ...getFolders(currentDirectory),
-            '/ssss',
         ];
     }
 

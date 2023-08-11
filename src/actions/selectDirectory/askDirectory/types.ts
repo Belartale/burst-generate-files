@@ -9,7 +9,6 @@ export type GetDirectories = {
     currentDirectory: string
     selectedNames: AskDirectory['selectedNames']
     outputAbsolutePath: AskDirectory['outputPath']
-    debug?: boolean // todo remove
 }
 
 export type ObjectTypes = {

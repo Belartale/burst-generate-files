@@ -1,28 +1,30 @@
 export const slash = '\\';
-// export const partOfMessageForCreatingCLI = ' // <= Create last folder by outputPath';
+export const firstPartOfMessage = 'Choose a directory!\n    Current directory: ';
+export const firstPartOfMessageForChoosingWordCase = 'Choose a word case!\n    Current directory: ';
 
 export enum CONTROLLERS {
     BACK = '../',
     HERE = './',
-    CREATE_NEW_FOLDER = '# Create new folder',
+    OPTION_CANCEL = '# Back to select directory',
 }
 
 export enum CONTROLLERS_CREATE_NEW_FOLDER {
-    OPTION_CANCEL = '# Back to select directory',
-    CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS = '# Create new folder by stringsReplacers',
+    MAIN = '# Create new folder',
+    OPTION_CANCEL = '# Back to option "Crete new folder"',
 }
 
 export enum CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS {
-    OPTION_CANCEL = '# Back to option crete new folder',
+    MAIN = '# Create new folder by stringsReplacers',
+    OPTION_CANCEL = '# Back to option "Create new folder by stringsReplacers"',
 }
 
 export const controllersDirectories = [
     CONTROLLERS.BACK,
     CONTROLLERS.HERE,
-    CONTROLLERS.CREATE_NEW_FOLDER,
+    CONTROLLERS_CREATE_NEW_FOLDER.MAIN,
 ];
 
-export const getSelectionsOfCreateFolder
+export const getOptionsOfCreateNewFolder
 = (stringsReplacers: string[]) => [
     CONTROLLERS_CREATE_NEW_FOLDER.OPTION_CANCEL,
     ...stringsReplacers,
