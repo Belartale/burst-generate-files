@@ -32,6 +32,28 @@ PACKAGE.then(({ CLIGen }) => {
                 },
             ],
         },
+        {
+            name:      'Generate new React component',
+            templates: [
+                {
+                    stringsReplacers: [
+                        '__exampleComponentName__',
+                        '__exampleExtension__',
+                        '__exampleStyleExtension__',
+                    ],
+                    pathToTemplate: `${pathToTemplate}/componentTemplate`,
+                    // outputPath: "./components/__exampleComponentName__(pascalCase)",
+                    markers:        [
+                        // <= New key here
+                        {
+                            pattern:        '// MarkerGen re-export',
+                            pathToMarker:   `./${folderForTesting}/src/components/index.ts`,
+                            markerTemplate: `${pathToTemplate}/componentTemplate/.genignore/import.ts`,
+                        },
+                    ],
+                },
+            ],
+        },
     ], {
         // rootPath:      `${path}/test`,
         showFullError: true,

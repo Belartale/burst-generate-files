@@ -14,10 +14,10 @@
     },
     "scripts": {
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
-        "test:dev": "cross-env-shell TEST_MODE=development npm run test:gen",
-        "pretest:build": "npm run build",
-        "test:build": "cross-env-shell TEST_MODE=production npm run test:gen",
-        "test:gen": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
+        "start": "cross-env-shell TEST_MODE=development npm run start:gen",
+        "prestart:build": "npm run build",
+        "start:build": "cross-env-shell TEST_MODE=production npm run start:gen",
+        "start:gen": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
         "link": "npm run build && npm link",
         "publish": "npm run build && npm publish",
         "clean": "rm -rf node_modules"

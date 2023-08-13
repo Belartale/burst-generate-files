@@ -1,0 +1,1 @@
+import { __exampleComponentName__(pascalCase) } from "./__exampleComponentName__(pascalCase)";

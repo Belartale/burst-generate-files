@@ -18,9 +18,8 @@ export const getDirectories = ({
     currentDirectory,
     outputAbsolutePath,
     selectedNames,
-}: types.GetDirectories) => {
+}: types.GetDirectories): string[] => {
     const splittedOutputAbsolutePath = outputAbsolutePath.split(slash);
-    const lsatFolderOutputPath = splittedOutputAbsolutePath.at(-1) as string;
 
     const splittedCurrentDirectory = currentDirectory.split('\\');
     const lastFolderCurrentDirectory = splittedCurrentDirectory.at(-1);
@@ -63,16 +62,14 @@ export const getDirectories = ({
                 ];
             }
 
-            if (!isExistsDirectory(currentDirectory)) {
-                if (nextFolder) {
-                    return [
-                        ...controllersDirectories,
-                        `/${nextFolder}`,
-                    ];
-                }
-
-                return [ ...controllersDirectories ];
+            if (nextFolder) {
+                return [
+                    ...controllersDirectories,
+                    `/${nextFolder}`,
+                ];
             }
+
+            return [ ...controllersDirectories ];
         }
         if (currentDirectory === outputAbsolutePath) {
             if (isExistsDirectory(currentDirectory)) {
@@ -81,19 +78,17 @@ export const getDirectories = ({
                     ...getFolders(currentDirectory),
                 ];
             }
-            if (!isExistsDirectory(currentDirectory)) {
-                return [ ...controllersDirectories ];
-            }
-        }
 
+            return [ ...controllersDirectories ];
+        }
+    }
+
+    if (isExistsDirectory(currentDirectory)) {
         return [
             ...controllersDirectories,
             ...getFolders(currentDirectory),
         ];
     }
 
-    return [
-        ...controllersDirectories,
-        ...getFolders(currentDirectory),
-    ];
+    return [ ...controllersDirectories ];
 };

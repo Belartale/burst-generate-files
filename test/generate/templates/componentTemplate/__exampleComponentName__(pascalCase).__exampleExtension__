@@ -1,0 +1,11 @@
+// ./componentTemplate/index.tsx
+
+import React from "react";
+
+export const __exampleComponentName__(pascalCase) = () => {
+    return (
+        <div>
+            This is component: __exampleComponentName__
+        </div>
+    );
+};

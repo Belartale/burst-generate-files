@@ -1,6 +1,6 @@
 export const slash = '\\';
-export const firstPartOfMessage = 'Choose a directory!\n    Current directory: ';
-export const firstPartOfMessageForChoosingWordCase = 'Choose a word case!\n    Current directory: ';
+export const firstPartOfMessage = 'Select a directory!\n    Current directory: ';
+export const firstPartOfMessageForSelectingWordCase = 'Select a word case!\n    Current directory: ';
 
 export enum CONTROLLERS {
     BACK = '../',

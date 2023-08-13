@@ -10,7 +10,7 @@ import {
     CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS,
     controllersDirectories,
     firstPartOfMessage,
-    firstPartOfMessageForChoosingWordCase,
+    firstPartOfMessageForSelectingWordCase,
     getOptionsOfCreateNewFolder,
 } from './constants';
 
@@ -25,10 +25,13 @@ export const askDirectory = async ({
     selectedNames,
 }: types.AskDirectory): Promise<string> => {
     class CustomAutoComplete extends AutoComplete {
+        mode: null | CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN;
+
         constructor(options: any) {
             super(options);
             this.outputPath = options.outputPath;
             this.currentDirectory = options.outputPath;
+            this.mode = null;
         }
 
         focusOnFirstChoice() {
@@ -58,9 +61,12 @@ export const askDirectory = async ({
         }
 
         submit() {
+            // Core start
             if (this.options.multiple) {
                 this.value = this.selected.map((ch: any) => ch.name);
             }
+            // Core end
+
 
             if (this.selected.name === controllersDirectories[ 0 ]) { // ../
                 this.currentDirectory = resolve(this.currentDirectory, '..');
@@ -91,8 +97,10 @@ export const askDirectory = async ({
                 return super.submit();
             }
 
-            if (this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.MAIN
-                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.OPTION_CANCEL) {
+            if (
+                this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.MAIN
+                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.OPTION_CANCEL
+            ) { // create new folder (system settings)
                 this.changeChoices([
                     CONTROLLERS.OPTION_CANCEL,
                     CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN,
@@ -102,7 +110,7 @@ export const askDirectory = async ({
                 this.render();
 
                 return;
-            } else if (this.selected.name === CONTROLLERS.OPTION_CANCEL) {
+            } else if (this.selected.name === CONTROLLERS.OPTION_CANCEL) { // leave create new folder (system settings)
                 const gotDirectories = getDirectories({
                     currentDirectory:   this.currentDirectory,
                     outputAbsolutePath: this.outputPath,
@@ -115,18 +123,25 @@ export const askDirectory = async ({
                 this.render();
 
                 return;
-            } else if (this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN
-                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.OPTION_CANCEL) {
+            } else if (
+                this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN
+                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.OPTION_CANCEL
+            ) { // go to Create new folder by stringsReplacers (list stringsReplacers)
+                this.mode = CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN;
+
                 this.changeChoices(getOptionsOfCreateNewFolder(selectedNames.map((name) => '/' + name.replaceVar)));
 
                 this.focusOnFirstChoice();
                 this.render();
 
                 return;
-            } else if (selectedNames.some((selectedName) => selectedName.replaceVar === this.selected.name.replace('/', ''))) {
+            } else if (
+                this.mode === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN
+                && selectedNames.some((selectedName) => selectedName.replaceVar === this.selected.name.replace('/', ''))
+            ) { // select word case
                 this.currentDirectory = resolve(this.currentDirectory, this.selected.name.replace('/', ''));
 
-                this.options.message = firstPartOfMessageForChoosingWordCase + this.currentDirectory;
+                this.options.message = firstPartOfMessageForSelectingWordCase + this.currentDirectory;
 
                 this.changeChoices([
                     CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.OPTION_CANCEL,
@@ -138,6 +153,8 @@ export const askDirectory = async ({
 
                 return;
             } else if (DEFAULT_WORDS_CASES_ARRAY.some((wordCase) => wordCase === this.selected.name)) {
+                this.mode = null;
+
                 this.currentDirectory += `(${this.selected.name})`;
 
                 this.options.message = firstPartOfMessage + this.currentDirectory;
