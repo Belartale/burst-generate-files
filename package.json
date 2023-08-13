@@ -1,6 +1,6 @@
 {
     "name": "burst-generate-files",
-    "version": "0.12.18-beta.1",
+    "version": "0.12.18-beta.3",
     "description": "package module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -18,8 +18,12 @@
         "prestart:build": "npm run build",
         "start:build": "cross-env-shell TEST_MODE=production npm run start:gen",
         "start:gen": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
-        "link": "npm run build && npm link",
-        "publish": "npm run build && npm publish",
+        "prelink": "npm run build",
+        "link": "npm link",
+        "prepublish": "npm run build",
+        "publish": "npm publish",
+        "prepublish:beta": "npm run build",
+        "publish:beta": "npm publish --tag beta",
         "clean": "rm -rf node_modules"
     },
     "keywords": [
