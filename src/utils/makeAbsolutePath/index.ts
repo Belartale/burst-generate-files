@@ -4,7 +4,6 @@ import { resolve } from 'path';
 
 // Types
 import * as types from './types';
-import * as typesCommon from '../../types';
 import * as typesActions from '../../actions/types';
 
 const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: string, path: string }) => {
@@ -18,7 +17,7 @@ const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: 
 };
 
 export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePath) => {
-    let newSetting: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate = setting;
+    let newSetting: types.MakeAbsolutePath['setting'] = setting;
 
     // Setting pathToTemplate
     if (Array.isArray(newSetting.pathToTemplate)) {

@@ -6,11 +6,10 @@ import { resolve } from 'path';
 import {
     slash,
     controllersDirectories,
-    partOfMessageForCreatingCLI,
 } from './constants';
 
 // Utils
-import { replaceWordCase } from '../../../utils';
+import { removeDuplicateArray, replaceWordCase } from '../../../utils';
 
 // Types
 import * as types from './types';
@@ -19,9 +18,8 @@ export const getDirectories = ({
     currentDirectory,
     outputAbsolutePath,
     selectedNames,
-}: types.GetDirectories) => {
+}: types.GetDirectories): string[] => {
     const splittedOutputAbsolutePath = outputAbsolutePath.split(slash);
-    const lsatFolderOutputPath = splittedOutputAbsolutePath.at(-1) as string;
 
     const splittedCurrentDirectory = currentDirectory.split('\\');
     const lastFolderCurrentDirectory = splittedCurrentDirectory.at(-1);
@@ -29,7 +27,8 @@ export const getDirectories = ({
     const numberCurrentFolderOfOutputAbsolutePath
                     = splittedOutputAbsolutePath.indexOf(lastFolderCurrentDirectory as string);
 
-    const nextFolder = splittedOutputAbsolutePath[ numberCurrentFolderOfOutputAbsolutePath + 1 ];
+    const nextFolder = numberCurrentFolderOfOutputAbsolutePath >= 0
+        ? splittedOutputAbsolutePath[ numberCurrentFolderOfOutputAbsolutePath + 1 ] : null;
 
     const getFolders = (directory: string) => fs.readdirSync(
         replaceWordCase({
@@ -47,66 +46,14 @@ export const getDirectories = ({
     }));
 
     if (selectedNames.some((selectedName) => outputAbsolutePath.includes(selectedName.replaceVar))) {
-        if (currentDirectory.includes(partOfMessageForCreatingCLI)) {
-            return [ ...controllersDirectories ];
-        }
-        if (
-            selectedNames.some(
-                (selectedName) => lsatFolderOutputPath.includes(selectedName.replaceVar),
-            ) && currentDirectory !== outputAbsolutePath
-        ) {
-            if (isExistsDirectory(currentDirectory)) {
-                if (outputAbsolutePath.includes(resolve(currentDirectory, nextFolder))) {
-                    return [
-                        ...controllersDirectories,
-                        `/${lsatFolderOutputPath}${partOfMessageForCreatingCLI}`,
-                        ...[
-                            ...new Set(
-                                [
-                                    `/${nextFolder}`,
-                                    ...getFolders(currentDirectory),
-                                ],
-                            ),
-                        ],
-                    ];
-                }
-
-                return [
-                    ...controllersDirectories,
-                    `/${lsatFolderOutputPath}${partOfMessageForCreatingCLI}`,
-                    ...getFolders(currentDirectory),
-                ];
-            }
-            if (!isExistsDirectory(currentDirectory)) {
-                if (currentDirectory.includes(partOfMessageForCreatingCLI)) {
-                    return [ ...controllersDirectories ];
-                }
-                if (
-                    lsatFolderOutputPath
-                         === nextFolder
-                ) {
-                    return [
-                        ...controllersDirectories,
-                        `/${nextFolder}`,
-                    ];
-                }
-
-                return [
-                    ...controllersDirectories,
-                    `/${lsatFolderOutputPath}${partOfMessageForCreatingCLI}`,
-                    `/${nextFolder}`,
-                ];
-            }
-        }
-
         if (currentDirectory !== outputAbsolutePath) {
             if (isExistsDirectory(currentDirectory)) {
-                if (outputAbsolutePath.includes(resolve(currentDirectory, nextFolder))) {
-                    return [
+                if (nextFolder && outputAbsolutePath.includes(resolve(currentDirectory, nextFolder))) {
+                    return removeDuplicateArray<string>([
                         ...controllersDirectories,
                         `/${nextFolder}`,
                         ...getFolders(currentDirectory),
-                    ];
+                    ]);
                 }
 
                 return [
@@ -114,12 +61,15 @@ export const getDirectories = ({
                     ...getFolders(currentDirectory),
                 ];
             }
-            if (!isExistsDirectory(currentDirectory)) {
+
+            if (nextFolder) {
                 return [
                     ...controllersDirectories,
                     `/${nextFolder}`,
                 ];
             }
+
+            return [ ...controllersDirectories ];
         }
         if (currentDirectory === outputAbsolutePath) {
             if (isExistsDirectory(currentDirectory)) {
@@ -128,20 +78,17 @@ export const getDirectories = ({
                     ...getFolders(currentDirectory),
                 ];
             }
-            if (!isExistsDirectory(currentDirectory)) {
-                return [ ...controllersDirectories ];
-            }
+
+            return [ ...controllersDirectories ];
         }
+    }
 
-
+    if (isExistsDirectory(currentDirectory)) {
         return [
             ...controllersDirectories,
             ...getFolders(currentDirectory),
         ];
     }
 
-    return [
-        ...controllersDirectories,
-        ...getFolders(currentDirectory),
-    ];
+    return [ ...controllersDirectories ];
 };

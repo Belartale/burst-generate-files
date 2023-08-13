@@ -3,8 +3,15 @@ const { AutoComplete } = require('enquirer');
 import { resolve } from 'path';
 
 // Constants
+import { DEFAULT_WORDS_CASES_ARRAY } from '../../../constants';
 import {
-    controllersDirectories, partOfMessageForCreatingCLI,
+    CONTROLLERS,
+    CONTROLLERS_CREATE_NEW_FOLDER,
+    CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS,
+    controllersDirectories,
+    firstPartOfMessage,
+    firstPartOfMessageForSelectingWordCase,
+    getOptionsOfCreateNewFolder,
 } from './constants';
 
 // Functions
@@ -17,13 +24,14 @@ export const askDirectory = async ({
     outputPath,
     selectedNames,
 }: types.AskDirectory): Promise<string> => {
-    const firstPartOfMessage = 'Choose a directory!\n    Current directory: ';
-
     class CustomAutoComplete extends AutoComplete {
+        mode: null | CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN;
+
         constructor(options: any) {
             super(options);
             this.outputPath = options.outputPath;
             this.currentDirectory = options.outputPath;
+            this.mode = null;
         }
 
         focusOnFirstChoice() {
@@ -52,17 +60,16 @@ export const askDirectory = async ({
             });
         }
 
-        removePartOfMessageForCreatingCLI(string: string): string {
-            return string.replace(partOfMessageForCreatingCLI, '');
-        }
-
         submit() {
+            // Core start
             if (this.options.multiple) {
                 this.value = this.selected.map((ch: any) => ch.name);
             }
+            // Core end
+
 
             if (this.selected.name === controllersDirectories[ 0 ]) { // ../
-                this.currentDirectory = resolve(this.removePartOfMessageForCreatingCLI(this.currentDirectory), '..');
+                this.currentDirectory = resolve(this.currentDirectory, '..');
                 this.options.message = firstPartOfMessage + this.currentDirectory;
 
                 const gotDirectories = getDirectories({
@@ -79,7 +86,6 @@ export const askDirectory = async ({
             }
 
             if (this.selected.name === controllersDirectories[ 1 ]) { // ./
-                this.currentDirectory = this.removePartOfMessageForCreatingCLI(this.currentDirectory);
                 super.choices = [ ...super.choices ].map((choice) => {
                     if (choice.name === controllersDirectories[ 1 ]) {
                         return { ...choice, value: this.currentDirectory };
@@ -91,13 +97,84 @@ export const askDirectory = async ({
                 return super.submit();
             }
 
-            if (this.selected.value.includes(partOfMessageForCreatingCLI)) {
-                this.currentDirectory = resolve(
-                    this.currentDirectory + this.removePartOfMessageForCreatingCLI(this.selected.value),
-                ) + partOfMessageForCreatingCLI;
-            } else {
-                this.currentDirectory = resolve(this.currentDirectory + this.selected.value);
+            if (
+                this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.MAIN
+                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER.OPTION_CANCEL
+            ) { // create new folder (system settings)
+                this.changeChoices([
+                    CONTROLLERS.OPTION_CANCEL,
+                    CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN,
+                ]);
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
+            } else if (this.selected.name === CONTROLLERS.OPTION_CANCEL) { // leave create new folder (system settings)
+                const gotDirectories = getDirectories({
+                    currentDirectory:   this.currentDirectory,
+                    outputAbsolutePath: this.outputPath,
+                    selectedNames,
+                });
+
+                this.changeChoices(gotDirectories);
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
+            } else if (
+                this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN
+                || this.selected.name === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.OPTION_CANCEL
+            ) { // go to Create new folder by stringsReplacers (list stringsReplacers)
+                this.mode = CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN;
+
+                this.changeChoices(getOptionsOfCreateNewFolder(selectedNames.map((name) => '/' + name.replaceVar)));
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
+            } else if (
+                this.mode === CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.MAIN
+                && selectedNames.some((selectedName) => selectedName.replaceVar === this.selected.name.replace('/', ''))
+            ) { // select word case
+                this.currentDirectory = resolve(this.currentDirectory, this.selected.name.replace('/', ''));
+
+                this.options.message = firstPartOfMessageForSelectingWordCase + this.currentDirectory;
+
+                this.changeChoices([
+                    CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS.OPTION_CANCEL,
+                    ...DEFAULT_WORDS_CASES_ARRAY,
+                ]);
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
+            } else if (DEFAULT_WORDS_CASES_ARRAY.some((wordCase) => wordCase === this.selected.name)) {
+                this.mode = null;
+
+                this.currentDirectory += `(${this.selected.name})`;
+
+                this.options.message = firstPartOfMessage + this.currentDirectory;
+
+                const gotDirectories = getDirectories({
+                    currentDirectory:   this.currentDirectory,
+                    outputAbsolutePath: this.outputPath,
+                    selectedNames,
+                });
+
+                this.changeChoices(gotDirectories);
+
+                this.focusOnFirstChoice();
+                this.render();
+
+                return;
             }
+
+
+            this.currentDirectory = resolve(this.currentDirectory, this.selected.value.replace('/', ''));
 
             this.options.message = firstPartOfMessage + this.currentDirectory;
 
