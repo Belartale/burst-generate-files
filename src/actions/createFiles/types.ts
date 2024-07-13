@@ -4,6 +4,6 @@ import * as typesActions from '../types';
 
 export type CreateFiles = {
     pathToTemplate: typesCommon.SettingCommonTypes['pathToTemplate']
-    outputPath: typesCommon.SettingCommonTypes['outputPath']
+    outputPath: typesCommon.OutputPath
     selectedNames: typesActions.GetSelectedName | typesActions.GetSelectedName[]
 }

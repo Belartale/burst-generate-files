@@ -18,9 +18,10 @@ PACKAGE.then(({ CLIGen }) => {
             name:      'Component: ./src/view/components/__componentName__',
             templates: [
                 {
-                    stringsReplacers: '__componentName__',
+                    stringsReplacers: [ '__componentName__', '__componentName2__' ],
                     pathToTemplate:   `${pathToTemplate}/component`,
-                    outputPath:       `./${folderForTesting}/src/components/__componentName__(pascalCase)`,
+                    outputPath:       `./${folderForTesting}/src/components/__componentName__/folder1/__componentName__(pascalCase)`,
+                    selectDirectory:  true,
                     markers:          [
                         {
                             pattern:        '// MarkerGen re-export',
@@ -32,29 +33,29 @@ PACKAGE.then(({ CLIGen }) => {
             ],
         },
         {
-            name:      'selectDirectory Component: ./src/view/components/__componentName__',
+            name:      'Generate new React component',
             templates: [
                 {
-                    stringsReplacers: '__componentName__',
-                    pathToTemplate:   `${pathToTemplate}/component`,
-                    outputPath:       `./${folderForTesting}/src/components/__componentName__(pascalCase)`,
-                    selectDirectory:  true,
-                    markers:          [
+                    stringsReplacers: [
+                        '__exampleComponentName__',
+                        '__exampleExtension__',
+                        '__exampleStyleExtension__',
+                    ],
+                    pathToTemplate: `${pathToTemplate}/componentTemplate`,
+                    // outputPath: "./components/__exampleComponentName__(pascalCase)",
+                    markers:        [
+                        // <= New key here
                         {
                             pattern:        '// MarkerGen re-export',
-                            markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
                             pathToMarker:   `./${folderForTesting}/src/components/index.ts`,
-                        },
-                        {
-                            pattern:        '// MarkerGen re-export',
-                            markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
-                            pathToMarker:   `./${folderForTesting}/src/components/index.ts`,
+                            markerTemplate: `${pathToTemplate}/componentTemplate/.genignore/import.ts`,
                         },
                     ],
                 },
             ],
         },
     ], {
+        // rootPath:      `${path}/test`,
         showFullError: true,
     });
 });

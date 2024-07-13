@@ -205,7 +205,7 @@ The main feature of this library is `markers` that you can put in existing files
 
 Foremost, we have to create the template for the marker. In the folder `componentTemplate` we have to create the folder `.genignore`, this folder is ignored during generation, we can store our marker in it. Let's name this file `imports.ts`.
 
-![image](https://user-images.githubusercontent.com/33392042/210067479-a325938b-6469-453c-8723-37745d45b2d5.png)
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/e89f50e7-43b5-4bb8-bba4-6611929b78b1)
 
 Then we write the usual import, but we will use `__exampleComponentName__` variable.
 
@@ -253,6 +253,80 @@ CLIGen([
 And funnily, run the command `ts-node "./generate.config.ts"`. After generation, we get new line like import.
 
 ![image](https://user-images.githubusercontent.com/33392042/195048272-d848b67f-8d17-47e4-a75b-7c940858b6ab.png)
+
+### Select a directory for generation
+
+Also we can select a directory where we want to generate files. To activate this feature we have to remove `outputPath`. Then we have to run generate and fill inputs. After we can select a directory.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/0f1c6449-4c19-439f-83b9-11fdcb902d03)
+
+**Note:** if `outputPath` is removed, the current directory starts from the root project.
+
+First the `../` option to climb to the top directory. Second the `./` option to generate files in current directory. Third the `# Create new folder` option to create new folder. And other options are folders in current directory.
+
+For example, we can select the option `/components`. After, we entered the `components` folder.
+
+Then, we can generate files in the `components` folder, but we have to create new folder, we have to select the `# Create new folder` option.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/9875d2d1-41c3-46f3-8d1c-89f359221f96)
+
+Then, we have to select the `# Create new folder by stringsReplacers` option. We can create new folder by `stringsReplacers`.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/93903e6f-f53a-48f6-b766-be9632e655b2)
+
+We have to select the `/__exampleComponentName__` option.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/2ff24c20-23c4-4d45-8508-ff923eac0c0f)
+
+Then, we can select type of string replacements. We have to select the `pascalCase` option.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/f610aa3a-016e-4a47-9379-160aaf92ea8b)
+
+Then we have to select the `./` option to generate the files. But we can continue to select a directory.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/41560fb4-f96a-483c-a409-c04be8e8afe6)
+
+Finally, we generated the files.
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/10432152-8617-4d19-99e9-46a1f0004205)
+
+### Select a directory with the `outputPath` for generation
+
+We can use the `selectDirectory` with the `outputPath`. For example, we can write:
+
+```typescript
+// ./generate.config.ts
+
+CLIGen([
+    {
+        name:      "Generate new React component",
+        templates: [
+            {
+                stringsReplacers: [
+                    "__exampleComponentName__",
+                    "__exampleExtension__",
+                    "__exampleStyleExtension__",
+                ],
+                pathToTemplate:  "./componentTemplate",
+                outputPath:      "./components/__exampleComponentName__(pascalCase)",
+                selectDirectory: true, // <= New key here
+                markers: [
+                    {
+                        pattern:        "// Imports",
+                        pathToMarker:   "./components/index.ts",
+                        markerTemplate: "./componentTemplate/.genignore/import.ts",
+                    },
+                ],
+            },
+        ],
+    },
+]);
+```
+
+After ran generation, the path starts by the `outputPath`
+
+![image](https://github.com/Belartale/burst-generate-files/assets/33392042/b8966a14-521d-4b2f-b09a-2a07f4b455a5)
+
 
 ## Ultra plus use
 
@@ -310,7 +384,7 @@ __componentName__ === loremLorem
 
 This is the path or array with your paths for your template that will create.
 
-### `outputPath`
+### `outputPath` _optional_
 
 This is the path or array with your paths for output files.
 
@@ -389,3 +463,6 @@ This is the string for changing root path of your project.
 ### `showFullError` _optional_
 
 This is the string for showing full message of error.
+
+## License
+[Apache 2.0 License](https://github.com/Belartale/burst-generate-files/blob/main/LICENSE)

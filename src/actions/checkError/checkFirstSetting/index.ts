@@ -95,16 +95,18 @@ export const checkFirstSetting = (
         }
 
         // Setting outputPath
-        if (typeof setting.outputPath !== 'string' && !Array.isArray(setting.outputPath)) {
-            errors.push(new Error(`${beginOfLine}/outputPath${betweenTwoLines}Type '${typeof setting.outputPath}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
-        }
+        if (Object.hasOwn(setting, 'outputPath')) {
+            if (typeof setting.outputPath !== 'string' && !Array.isArray(setting.outputPath)) {
+                errors.push(new Error(`${beginOfLine}/outputPath${betweenTwoLines}Type '${typeof setting.outputPath}' is not assignable to type 'string' | 'array'.${endErrorLine}`));
+            }
 
-        if (Array.isArray(setting.outputPath)) {
-            setting.outputPath.forEach((path, indexOutputPath) => {
-                if (typeof path !== 'string') {
-                    errors.push(new Error(`${beginOfLine}/outputPath[${indexOutputPath}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
-                }
-            });
+            if (Array.isArray(setting.outputPath)) {
+                setting.outputPath.forEach((path, indexOutputPath) => {
+                    if (typeof path !== 'string') {
+                        errors.push(new Error(`${beginOfLine}/outputPath[${indexOutputPath}]${betweenTwoLines}Type '${typeof path}' is not assignable to type 'string'.${endErrorLine}`));
+                    }
+                });
+            }
         }
 
         // Setting selectDirectory
