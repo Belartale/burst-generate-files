@@ -463,3 +463,6 @@ This is the string for changing root path of your project.
 ### `showFullError` _optional_
 
 This is the string for showing full message of error.
+
+## License
+[Apache 2.0 License](https://github.com/Belartale/burst-generate-files/blob/main/LICENSE)
