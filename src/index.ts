@@ -46,29 +46,25 @@ export const customGen = (
     settings: typesCommon.SettingCustomGen[],
     optionalSettings?: typesCommon.OptionalSettings,
 ) => {
-    try {
-        const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
-            ? optionalSettings.rootPath : PROJECT_ROOT;
+    const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
+        ? optionalSettings.rootPath : PROJECT_ROOT;
 
-        checkError({
-            whichFunction: 'customGen',
-            settings,
-            optionalSettings,
+    checkError({
+        whichFunction: 'customGen',
+        settings,
+        optionalSettings,
+        PROJECT_ROOT:  NEW_PROJECT_ROOT,
+    });
+    settings.forEach((setting) => {
+        mainActions({
+            setting: makeAbsolutePath({
+                PROJECT_ROOT: NEW_PROJECT_ROOT,
+                setting,
+            }) as typesCommon.SettingCustomGen,
+            selectedNames: setting.stringsReplacers,
             PROJECT_ROOT:  NEW_PROJECT_ROOT,
         });
-        settings.forEach((setting) => {
-            mainActions({
-                setting: makeAbsolutePath({
-                    PROJECT_ROOT: NEW_PROJECT_ROOT,
-                    setting,
-                }) as typesCommon.SettingCustomGen,
-                selectedNames: setting.stringsReplacers,
-                PROJECT_ROOT:  NEW_PROJECT_ROOT,
-            });
-        });
-    } catch (error: any) {
-        catchErrors({ error, showFullError: optionalSettings?.showFullError });
-    }
+    });
 };
 
 export const CLIGen = async (
