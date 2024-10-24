@@ -1,7 +1,6 @@
 // Core
 import path from 'path';
 import fs from 'fs';
-import { Transform } from 'stream';
 
 // Constants
 import { nameFolderForMarkers } from '../../constants';
@@ -14,88 +13,75 @@ import * as types from './types';
 
 export const createFiles = (
     { pathToTemplate, outputPath, selectedNames }: types.CreateFiles,
-) => {
-    const copyDir = (copyDirSrc: string, copyDirDest: string | string[], copyDirCallback: Function) => {
+): void => {
+    const copyDir = (copyDirSrc: string, copyDirDest: string | string[]) => {
         const copy = (copySrc: string, copyDest: string) => {
-            fs.readdir(copySrc, (error, list) => {
-                if (error) {
-                    copyDirCallback(error);
+            const list = fs.readdirSync(copySrc);
 
-                    return;
-                }
-                list.forEach((item) => {
-                    const ss = path.resolve(copySrc, item);
-                    fs.stat(ss, (error, stat) => {
-                        if (error) {
-                            copyDirCallback(error);
-                        } else {
-                            const curSrc = path.resolve(copySrc, item);
-                            const curDest = replaceWordCase({
-                                string:            path.resolve(copyDest, item),
-                                stringsForReplace: selectedNames,
-                            });
+            list.forEach((item) => {
+                const ss = path.resolve(copySrc, item);
+                const stat = fs.statSync(ss);
 
-                            if (stat.isFile()) {
-                                fs.createReadStream(curSrc).pipe(new Transform({
-                                    transform(chunk, encoding, callback) {
-                                        this.push(replaceWordCase({
-                                            string:            chunk.toString(),
-                                            stringsForReplace: selectedNames,
-                                        }));
-                                        callback();
-                                    },
-                                }))
-                                    .pipe(fs.createWriteStream(curDest));
-                            } else if (stat.isDirectory() && path.basename(curSrc) !== nameFolderForMarkers) {
-                                fs.mkdirSync(curDest, { recursive: true });
-                                copy(curSrc, curDest);
-                            }
-                        }
-                    });
+                const curSrc = path.resolve(copySrc, item);
+                const curDest = replaceWordCase({
+                    string:            path.resolve(copyDest, item),
+                    stringsForReplace: selectedNames,
                 });
+
+                if (stat.isFile()) {
+                    const content = fs.readFileSync(curSrc, 'utf-8');
+
+                    const modifiedContent = replaceWordCase({
+                        string:            content,
+                        stringsForReplace: selectedNames,
+                    });
+
+                    fs.writeFileSync(curDest, modifiedContent);
+                } else if (stat.isDirectory() && path.basename(curSrc) !== nameFolderForMarkers) {
+                    fs.mkdirSync(curDest, { recursive: true });
+                    copy(curSrc, curDest);
+                }
             });
         };
 
-
         if (Array.isArray(copyDirDest)) {
-            copyDirDest.map((string) => replaceWordCase({
-                string,
-                stringsForReplace: selectedNames,
-            })).forEach((dest) => {
-                fs.access(dest, (error) => {
-                    if (error) {
+            copyDirDest
+                .map((string) => replaceWordCase({
+                    string,
+                    stringsForReplace: selectedNames,
+                }))
+                .forEach((dest) => {
+                    try {
+                        fs.accessSync(dest);
+                    } catch {
                         fs.mkdirSync(dest, { recursive: true });
                     }
                     copy(copyDirSrc, dest);
                 });
-            });
         }
+
         if (typeof copyDirDest === 'string') {
             const rightDest = replaceWordCase({
                 string:            copyDirDest,
                 stringsForReplace: selectedNames,
             });
-            fs.access(rightDest, (error) => {
-                if (error) {
-                    fs.mkdirSync(rightDest, { recursive: true });
-                }
-                copy(copyDirSrc, rightDest);
-            });
+
+            try {
+                fs.accessSync(rightDest);
+            } catch {
+                fs.mkdirSync(rightDest, { recursive: true });
+            }
+            copy(copyDirSrc, rightDest);
         }
     };
 
-
     if (Array.isArray(pathToTemplate)) {
-        pathToTemplate.forEach((path) => {
-            copyDir(path, outputPath, (error: any) => {
-                throw error;
-            });
+        pathToTemplate.forEach((templatePath) => {
+            copyDir(templatePath, outputPath);
         });
 
         return;
     }
 
-    copyDir(pathToTemplate, outputPath, (error: any) => {
-        throw error;
-    });
+    copyDir(pathToTemplate, outputPath);
 };

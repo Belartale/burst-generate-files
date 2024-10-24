@@ -37,6 +37,7 @@ const mainActions = ({ setting, selectedNames, PROJECT_ROOT }: typesCommon.MainA
         });
     }
 
+
     if (setting.onComplete) {
         onComplete({ setting: setting });
     }
