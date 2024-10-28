@@ -1,6 +1,6 @@
 {
     "name": "burst-generate-files",
-    "version": "0.12.18",
+    "version": "0.12.19",
     "description": "package module for generate files",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     "author": "Artur Bielan (belartale@gmail.com), Oleksandr Konik (arziburst@gmail.com)",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Belartale/burst-generate-files"
+        "url": "git+https://github.com/Belartale/burst-generate-files.git"
     },
     "scripts": {
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
