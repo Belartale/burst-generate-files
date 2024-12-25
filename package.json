@@ -15,10 +15,7 @@
     },
     "scripts": {
         "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
-        "start": "cross-env-shell TEST_MODE=development npm run start:gen",
-        "prestart:build": "npm run build",
-        "start:build": "cross-env-shell TEST_MODE=production npm run start:gen",
-        "start:gen": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
+        "start": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
         "prelink": "npm run build",
         "link": "npm link",
         "prepublish": "npm run build",
@@ -71,7 +68,8 @@
     },
     "dependencies": {
         "chalk": "^2.4.2",
-        "enquirer": "^2.3.6"
+        "enquirer": "^2.3.6",
+        "zod": "^3.24.1"
     },
     "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

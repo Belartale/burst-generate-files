@@ -10,8 +10,6 @@ import { CLIGen } from '../../src';
 const folderForTesting = 'test'; // if folder changed, change it in package.json too (npm scripts) and in tsconfig.generate.json
 const pathToTemplate = `./${folderForTesting}/generate/templates`;
 
-console.log(chalk.yellow(`Test started with mode: ${process.env.TEST_MODE || MODE.DEVELOPMENT}\n`));
-
 CLIGen(
 	[
 		{
@@ -19,7 +17,7 @@ CLIGen(
 			templates: [
 				{
 					stringsReplacers: ['__componentName__', '__componentName2__'],
-					pathToTemplate: `${pathToTemplate}/component`,
+					pathToTemplate: [`${pathToTemplate}/component`, `${pathToTemplate}/component`],
 					outputPath: `./${folderForTesting}/src/components/__componentName__/folder1/__componentName__(pascalCase)`,
 					selectDirectory: true,
 					markers: [
@@ -51,8 +49,8 @@ CLIGen(
 			],
 		},
 	],
-	{
-		// rootPath:      `${path}/test`,
-		showFullError: true,
-	},
+	// {
+	// 	rootPath:      `./`,
+	// 	showFullError: true,
+	// },
 );

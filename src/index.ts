@@ -1,5 +1,5 @@
 //Utils
-import { catchErrors, makeAbsolutePath, CLIGenSettingsTypeChecker } from './utils';
+import { catchErrors, makeAbsolutePath } from './utils';
 
 // Actions
 import { checkError, getSelectedItem, getSelectedName, selectDirectory, createFiles, markers, onComplete } from './actions';
@@ -36,7 +36,6 @@ export const customGen = (settings: typesCommon.SettingCustomGen[], optionalSett
 		const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT;
 
 		checkError({
-			whichFunction: 'customGen',
 			settings,
 			optionalSettings,
 			PROJECT_ROOT: NEW_PROJECT_ROOT,
@@ -57,19 +56,10 @@ export const customGen = (settings: typesCommon.SettingCustomGen[], optionalSett
 };
 
 export const CLIGen = async (settings: typesCommon.SettingCLIGen[], optionalSettings?: typesCommon.OptionalSettings): Promise<void> => {
-	const errors = CLIGenSettingsTypeChecker(settings);
-
-	if (errors.length) {
-		console.error(`Ouch! Chief, ${errors.length < 2 ? 'There is 1 Error' : `There are ${errors.length} Errors`}`);
-		console.table(errors);
-		return;
-	}
-
 	try {
 		const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath ? optionalSettings.rootPath : PROJECT_ROOT;
 
 		checkError({
-			whichFunction: 'CLIGen',
 			settings,
 			optionalSettings,
 			PROJECT_ROOT: NEW_PROJECT_ROOT,
