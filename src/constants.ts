@@ -6,6 +6,7 @@ export const nameConfigGenerateForOnceInsert = 'config.generate.files.json';
 export const PROJECT_ROOT = path.resolve();
 
 export const spaces = '    ';
+export const CUSTOM_ERROR = 'customError';
 
 enum PREFIXES {
     CASE = 'Case',
