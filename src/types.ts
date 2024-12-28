@@ -5,7 +5,7 @@ import { SettingsMarker } from './actions/markers/types';
 // Common types
 export interface SettingCommonTypes {
     pathToTemplate: string | string[]
-    selectDirectory?: boolean
+    selectDirectory?: boolean //todo remove for customGen
     markers?: SettingsMarker[]
     onComplete?: Function
 }
