@@ -5,38 +5,38 @@ export * from './collectorTemplates/types';
 import * as typesActions from '../types';
 
 export type AddMarkerFiles = {
-    markers: SettingsMarker[]
-    selectedNames: typesActions.GetSelectedName | typesActions.GetSelectedName[]
-    PROJECT_ROOT: string
-}
+    markers: SettingsMarker[];
+    selectedNames: typesActions.GetSelectedName | typesActions.GetSelectedName[];
+    PROJECT_ROOT: string;
+};
 export type SettingsMarker = {
-    pattern: string | RegExp
-    pathToMarker: string | string[]
-    markerTemplate: string | string[]
-    genDirection?: 'after' | 'before'
-    onceInsert?: boolean
-}
+    pattern: string | RegExp;
+    pathToMarker: string | string[];
+    markerTemplate: string | string[];
+    genDirection?: 'after' | 'before';
+    onceInsert?: boolean;
+};
 export type CheckIsOnceInsertMarker = {
-    settingsMarker: SettingsMarker
-    nameConfigGenerateForOnceInsert: string
-}
+    settingsMarker: SettingsMarker;
+    nameConfigGenerateForOnceInsert: string;
+};
 export type GenerateFiles = {
     id: {
-        pattern: typesActions.SettingsMarker['pattern']
-        pathToMarker: typesActions.SettingsMarker['pathToMarker']
-        markerTemplate: typesActions.SettingsMarker['markerTemplate']
-    },
-    onceInsert: boolean
-}
+        pattern: typesActions.SettingsMarker['pattern'];
+        pathToMarker: typesActions.SettingsMarker['pathToMarker'];
+        markerTemplate: typesActions.SettingsMarker['markerTemplate'];
+    };
+    onceInsert: boolean;
+};
 
 // Function defineMarkerAndAddMarkerTemplate
 export type DefineMarkerAndAddMarkerTemplate = {
-    settingsMarker: SettingsMarker
-    dataRedFile: string
-}
+    settingsMarker: SettingsMarker;
+    dataRedFile: string;
+};
 
 // Function addConfigToFile
 export type AddConfigToFile = {
-    settingsMarker: SettingsMarker
-    nameConfigGenerateForOnceInsert: string
-}
+    settingsMarker: SettingsMarker;
+    nameConfigGenerateForOnceInsert: string;
+};

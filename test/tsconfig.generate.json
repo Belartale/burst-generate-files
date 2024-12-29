@@ -5,11 +5,7 @@
         "module": "CommonJS",
         "rootDir": "generate",
         "noImplicitReturns": false,
-        "typeRoots": [
-            "../node_modules/@types"
-        ],
+        "typeRoots": ["../node_modules/@types"]
     },
-    "include": [
-        "generate"
-    ],
+    "include": ["generate"]
 }

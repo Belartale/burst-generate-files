@@ -11,9 +11,7 @@ import { replaceWordCase } from '../../utils';
 // Types
 import * as types from './types';
 
-export const createFiles = (
-    { pathToTemplate, outputPath, selectedNames }: types.CreateFiles,
-): void => {
+export const createFiles = ({ pathToTemplate, outputPath, selectedNames }: types.CreateFiles): void => {
     const copyDir = (copyDirSrc: string, copyDirDest: string | string[]) => {
         const copy = (copySrc: string, copyDest: string) => {
             const list = fs.readdirSync(copySrc);
@@ -24,7 +22,7 @@ export const createFiles = (
 
                 const curSrc = path.resolve(copySrc, item);
                 const curDest = replaceWordCase({
-                    string:            path.resolve(copyDest, item),
+                    string: path.resolve(copyDest, item),
                     stringsForReplace: selectedNames,
                 });
 
@@ -32,7 +30,7 @@ export const createFiles = (
                     const content = fs.readFileSync(curSrc, 'utf-8');
 
                     const modifiedContent = replaceWordCase({
-                        string:            content,
+                        string: content,
                         stringsForReplace: selectedNames,
                     });
 
@@ -46,10 +44,12 @@ export const createFiles = (
 
         if (Array.isArray(copyDirDest)) {
             copyDirDest
-                .map((string) => replaceWordCase({
-                    string,
-                    stringsForReplace: selectedNames,
-                }))
+                .map((string) =>
+                    replaceWordCase({
+                        string,
+                        stringsForReplace: selectedNames,
+                    }),
+                )
                 .forEach((dest) => {
                     try {
                         fs.accessSync(dest);
@@ -62,7 +62,7 @@ export const createFiles = (
 
         if (typeof copyDirDest === 'string') {
             const rightDest = replaceWordCase({
-                string:            copyDirDest,
+                string: copyDirDest,
                 stringsForReplace: selectedNames,
             });
 

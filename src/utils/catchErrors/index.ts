@@ -13,21 +13,21 @@ export const catchErrors = ({ error, showFullError }: types.CatchErrorsTypes) =>
     if (Array.isArray(error)) {
         console.error(chalk.red(headerError));
         for (let i = 0; i < error.length; i++) {
-            if (!showFullError && error[ i ].name === CUSTOM_ERROR) {
+            if (!showFullError && error[i].name === CUSTOM_ERROR) {
                 console.error(``);
-                console.error(error[ i ].message);
+                console.error(error[i].message);
             } else {
                 console.error(``);
-                console.error(error[ i ]);
+                console.error(error[i]);
             }
         }
 
         return;
     }
-    if (error) {
+    if (error && typeof error === 'object') {
         console.error(chalk.red(headerError));
 
-        if (!showFullError && error.name === CUSTOM_ERROR) {
+        if (!showFullError && 'name' in error && error.name === CUSTOM_ERROR && 'message' in error && error.message === CUSTOM_ERROR) {
             console.error(``);
             console.error(error.message);
         } else {

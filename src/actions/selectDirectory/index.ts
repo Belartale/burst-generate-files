@@ -10,10 +10,7 @@ import { askDirectory } from './askDirectory';
 // Types
 import * as types from './types';
 
-const showWarningsAboutCheckMarkers = ({
-    template,
-    newOutputPath,
-}: types.ShowWarningsAboutCheckMarkers) => {
+const showWarningsAboutCheckMarkers = ({ template, newOutputPath }: types.ShowWarningsAboutCheckMarkers) => {
     const messageForChanging = '\nYou changed outputPath:';
 
     const log = (text: string) => {
@@ -50,10 +47,7 @@ const showWarningsAboutCheckMarkers = ({
     }
 };
 
-export const selectDirectory = async ({
-    template,
-    selectedNames,
-}: types.SelectDirectory) => {
+export const selectDirectory = async ({ template, selectedNames }: types.SelectDirectory) => {
     if (typeof template.outputPath === 'string') {
         await askDirectory({
             outputPath: template.outputPath,
@@ -69,14 +63,14 @@ export const selectDirectory = async ({
         });
     }
     if (Array.isArray(template.outputPath)) {
-        let result: {value: [] | string[]} = { value: []};
+        const result: { value: [] | string[] } = { value: [] };
 
         for await (const iteratorOutputPath of template.outputPath) {
             await askDirectory({
                 outputPath: iteratorOutputPath,
                 selectedNames,
             }).then((resultPromise) => {
-                result.value = [ ...result.value, resultPromise ];
+                result.value = [...result.value, resultPromise];
             });
         }
         if (template.markers) {

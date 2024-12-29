@@ -5,14 +5,13 @@ export const loadTypeScript = (): Configuration => ({
     module: {
         rules: [
             {
-                test:    /\.ts(x?)$/,
+                test: /\.ts(x?)$/,
                 include: /src/,
                 exclude: /node_modules/,
-                use:     {
+                use: {
                     loader: 'ts-loader',
                 },
             },
         ],
     },
 });
-

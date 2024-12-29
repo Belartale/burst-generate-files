@@ -1,70 +1,80 @@
 {
-	"name": "burst-generate-files",
-	"version": "0.12.19",
-	"description": "package module for generate files",
-	"main": "./build/index.js",
-	"types": "./build/index.d.ts",
-	"files": [
-		"build"
-	],
-	"license": "Apache-2.0",
-	"author": "Artur Bielan (belartale@gmail.com), Oleksandr Konik (arziburst@gmail.com)",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Belartale/burst-generate-files.git"
-	},
-	"scripts": {
-		"build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
-		"start": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
-		"prelink": "npm run build",
-		"link": "npm link",
-		"prepublish": "npm run build",
-		"publish": "npm publish",
-		"prepublish:beta": "npm run build",
-		"publish:beta": "npm publish --tag beta",
-		"clean": "rm -rf node_modules && rm -rf build"
-	},
-	"keywords": [
-		"generate",
-		"generation",
-		"typescript",
-		"node",
-		"generate-files",
-		"generation-files",
-		"custom-files",
-		"generate-code",
-		"generation-code",
-		"template",
-		"generate-template",
-		"generation-template",
-		"generator",
-		"generator-files"
-	],
-	"devDependencies": {
-		"@types/app-root-path": "^1.2.8",
-		"@types/node": "^22.10.2",
-		"@types/terser-webpack-plugin": "^5.2.0",
-		"@types/webpack-merge": "^5.0.0",
-		"@types/webpack-node-externals": "^3.0.4",
-		"@types/webpackbar": "^4.0.6",
-		"@typescript-eslint/eslint-plugin": "^8.18.2",
-		"@typescript-eslint/parser": "^8.18.2",
-		"app-root-path": "^3.1.0",
-		"clean-webpack-plugin": "^4.0.0",
-		"cross-env": "^7.0.3",
-		"dotenv": "^16.4.7",
-		"eslint": "^9.17.0",
-		"ts-loader": "^9.5.1",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.7.2",
-		"webpack": "^5.97.1",
-		"webpack-merge": "^6.0.1",
-		"webpack-node-externals": "^3.0.0",
-		"webpackbar": "^7.0.0"
-	},
-	"dependencies": {
-		"chalk": "^2.4.2",
-		"enquirer": "^2.4.1",
-		"zod": "^3.24.1"
-	}
+    "name": "burst-generate-files",
+    "version": "0.12.19",
+    "description": "package module for generate files",
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "files": [
+        "build"
+    ],
+    "license": "Apache-2.0",
+    "author": "Artur Bielan (belartale@gmail.com), Oleksandr Konik (arziburst@gmail.com)",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Belartale/burst-generate-files.git"
+    },
+    "scripts": {
+        "eslint": "npx eslint",
+        "prettier:check": "npx prettier . --check",
+        "prettier:write": "npx prettier . --write",
+        "prettier:watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
+        "prebuild": "npm run eslint && npm run prettier:write",
+        "build": "cross-env-shell NODE_ENV=production ts-node -P \"./tsconfig.webpack.json\" \"./scripts/webpack/build\"",
+        "start": "cross-env-shell ts-node -P \"./test/tsconfig.generate.json\" \"./test/generate\"",
+        "prelink": "npm run build",
+        "link": "npm link",
+        "prepublish": "npm run build",
+        "publish": "npm publish",
+        "prepublish-beta": "npm run build",
+        "publish-beta": "npm publish --tag beta",
+        "clean": "rm -rf node_modules && rm -rf build"
+    },
+    "keywords": [
+        "generate",
+        "generation",
+        "typescript",
+        "node",
+        "generate-files",
+        "generation-files",
+        "custom-files",
+        "generate-code",
+        "generation-code",
+        "template",
+        "generate-template",
+        "generation-template",
+        "generator",
+        "generator-files"
+    ],
+    "devDependencies": {
+        "@eslint/js": "^9.17.0",
+        "@types/app-root-path": "^1.2.8",
+        "@types/node": "^22.10.2",
+        "@types/terser-webpack-plugin": "^5.2.0",
+        "@types/webpack-merge": "^5.0.0",
+        "@types/webpack-node-externals": "^3.0.4",
+        "@types/webpackbar": "^4.0.6",
+        "@typescript-eslint/eslint-plugin": "^8.18.2",
+        "@typescript-eslint/parser": "^8.18.2",
+        "app-root-path": "^3.1.0",
+        "clean-webpack-plugin": "^4.0.0",
+        "cross-env": "^7.0.3",
+        "dotenv": "^16.4.7",
+        "eslint": "^9.17.0",
+        "eslint-config-prettier": "^9.1.0",
+        "globals": "^15.14.0",
+        "prettier": "3.4.2",
+        "ts-loader": "^9.5.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.2",
+        "typescript-eslint": "^8.18.2",
+        "webpack": "^5.97.1",
+        "webpack-merge": "^6.0.1",
+        "webpack-node-externals": "^3.0.0",
+        "webpackbar": "^7.0.0"
+    },
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "enquirer": "^2.4.1",
+        "zod": "^3.24.1"
+    }
 }

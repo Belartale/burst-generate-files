@@ -1,4 +1,4 @@
 export type GetDataTemplate = {
-    template: string
-    tabs: string
-}
+    template: string;
+    tabs: string;
+};

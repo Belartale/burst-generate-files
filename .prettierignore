@@ -1,0 +1,7 @@
+# Ignore artifacts:
+build
+coverage
+LICENSE
+*.md
+
+test/generate/templates
