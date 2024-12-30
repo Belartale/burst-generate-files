@@ -1,31 +1,38 @@
 // Core
 import chalk from 'chalk';
 
+// Constants
+import { CUSTOM_ERROR } from '../../constants';
+
 // Types
 import * as types from './types';
 
 export const catchErrors = ({ error, showFullError }: types.CatchErrorsTypes) => {
-    const headerError = 'burst-generate-files ↓';
+    const headerError = '\nErrors burst-generate-files:';
 
     if (Array.isArray(error)) {
-        console.error(chalk.red(`Errors ${headerError}`));
+        console.error(chalk.red(headerError));
         for (let i = 0; i < error.length; i++) {
-            if (showFullError) {
-                console.error(error[ i ]);
+            if (!showFullError && error[i].name === CUSTOM_ERROR) {
+                console.error(``);
+                console.error(error[i].message);
             } else {
-                console.error(error[ i ].message);
+                console.error(``);
+                console.error(error[i]);
             }
         }
 
         return;
     }
-    if (error) {
-        console.error(chalk.red(`Error ${headerError}`));
+    if (error && typeof error === 'object') {
+        console.error(chalk.red(headerError));
 
-        if (showFullError) {
-            console.error(error);
-        } else {
+        if (!showFullError && 'name' in error && error.name === CUSTOM_ERROR && 'message' in error && error.message === CUSTOM_ERROR) {
+            console.error(``);
             console.error(error.message);
+        } else {
+            console.error(``);
+            console.error(error);
         }
     }
 };

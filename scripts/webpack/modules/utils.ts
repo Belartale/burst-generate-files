@@ -1,14 +1,11 @@
 // Core
-import {
-    Configuration,
-    DefinePlugin,
-} from 'webpack';
+import { Configuration, DefinePlugin } from 'webpack';
 import WebpackBar from 'webpackbar';
 import NodeExternals from 'webpack-node-externals';
 import dotenv from 'dotenv';
 
 export const connectBuildProgressIndicator = (): Configuration => ({
-    plugins: [ new WebpackBar({ basic: true }) ],
+    plugins: [new WebpackBar({ basic: true })],
 });
 
 export const defineEnvVariables = (): Configuration => {
@@ -18,9 +15,12 @@ export const defineEnvVariables = (): Configuration => {
 
     const environmentHandler = () => {
         switch (process?.env?.NODE_ENV) {
-            case 'development': return envFileFinder('.env.development');
-            case 'production': return envFileFinder('.env.production');
-            default: return envFileFinder('.env.example');
+            case 'development':
+                return envFileFinder('.env.development');
+            case 'production':
+                return envFileFinder('.env.production');
+            default:
+                return envFileFinder('.env.example');
         }
     };
 
@@ -35,5 +35,5 @@ export const defineEnvVariables = (): Configuration => {
 
 export const nodeExternals = (): Configuration => ({
     externalsPresets: { node: true },
-    externals:        [ NodeExternals() ],
+    externals: [NodeExternals()],
 });

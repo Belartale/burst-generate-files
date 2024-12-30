@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "ES2015",
         "module": "ESNext",
-        "lib": [ "dom", "esnext" ],
+        "lib": ["dom", "esnext"],
         "declaration": true,
         "sourceMap": true,
         "allowJs": true,
@@ -19,11 +19,10 @@
         "noUnusedParameters": false,
         "noImplicitReturns": true,
         "noEmit": false,
-        "outDir": "dist",
+        "outDir": "build",
         "rootDir": "src",
-        "typeRoots": [ "node_modules/@types", "src/@types" ],
+        "typeRoots": ["node_modules/@types", "src/@types"]
     },
-    "include": [ "src/**/*" ],
-    "exclude": [ "dist" ]
+    "include": ["src/**/*"],
+    "exclude": ["build"]
 }
-  

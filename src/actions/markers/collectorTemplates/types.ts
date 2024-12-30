@@ -5,6 +5,6 @@ export * from './getDataTemplate/types';
 import * as types from '../types';
 
 export type CollectorTemplates = {
-    settingsMarker: types.SettingsMarker
-    tabs: string
-}
+    settingsMarker: types.SettingsMarker;
+    tabs: string;
+};

@@ -8,7 +8,9 @@ export const getDataTemplate = ({ template, tabs }: types.GetDataTemplate) => {
     if (fs.existsSync(template)) {
         const redFileMarker = fs.readFileSync(template, { encoding: 'utf-8' });
 
-        const newString = redFileMarker.split(/\r?\n/).map((line) => tabs + line)
+        const newString = redFileMarker
+            .split(/\r?\n/)
+            .map((line) => tabs + line)
             .join('\n')
             .trim();
 

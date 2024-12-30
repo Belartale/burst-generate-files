@@ -11,17 +11,14 @@ export const getSelectedItem = async (settings: typesCommon.SettingCLIGen[]): Pr
         return result;
     };
 
-    const gotValue: { settingChoice: string } = await enquirer.prompt(
-        {
-            type:    'autocomplete',
-            name:    'settingChoice',
-            message: 'What do you want to generate?',
-            choices: getNamesForShowingInCLI(),
-        },
-    );
+    const gotValue: { settingChoice: string } = await enquirer.prompt({
+        type: 'autocomplete',
+        name: 'settingChoice',
+        message: 'What do you want to generate?',
+        choices: getNamesForShowingInCLI(),
+    });
 
     return settings.find(
         (item: Omit<typesCommon.SettingCLIGen, 'templates'>) => item.name === gotValue.settingChoice,
     ) as typesCommon.SettingCLIGen;
 };
-

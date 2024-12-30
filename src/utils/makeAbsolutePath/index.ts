@@ -6,7 +6,7 @@ import { resolve } from 'path';
 import * as types from './types';
 import * as typesActions from '../../actions/types';
 
-const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: string, path: string }) => {
+const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: string; path: string }) => {
     const absolutePath = resolve(PROJECT_ROOT, path);
 
     if (fs.existsSync(absolutePath)) {
@@ -17,7 +17,7 @@ const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: 
 };
 
 export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePath) => {
-    let newSetting: types.MakeAbsolutePath['setting'] = setting;
+    const newSetting: types.MakeAbsolutePath['setting'] = setting;
 
     // Setting pathToTemplate
     if (Array.isArray(newSetting.pathToTemplate)) {
@@ -38,7 +38,7 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePa
     // Setting markers
     if (Array.isArray(newSetting.markers)) {
         newSetting.markers = newSetting.markers.map((marker) => {
-            let newMarker: typesActions.SettingsMarker = marker;
+            const newMarker: typesActions.SettingsMarker = marker;
 
             // Setting pathToMarker
             if (Array.isArray(newMarker.pathToMarker)) {
@@ -67,9 +67,6 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePa
 
             return newMarker;
         });
-    }
-    if (!Array.isArray(newSetting.markers) && typeof newSetting.markers === 'object') {
-        newSetting.markers;
     }
 
     return newSetting;
