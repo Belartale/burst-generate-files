@@ -37,27 +37,28 @@ const cases = ({ stringReplace, result }: types.Cases) => {
         );
     };
 
-    // todo replace .includes to regex >>> ) and (
-
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.NO})`)) {
+    const regexpNo = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.NO}.`;
+    if (result && new RegExp(regexpNo).test(result)) {
         // lorem lorem => lorem lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.NO}.`, 'g');
+        const re = new RegExp(regexpNo, 'g');
         const modifiedToPascalCase = newString.join(' ');
 
         newResult = newResult.replace(re, modifiedToPascalCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.CAMEL})`)) {
+    const regexpCamel = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.CAMEL}.`;
+    if (result && new RegExp(regexpCamel).test(result)) {
         // Lorem lorem => loremLorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.CAMEL}.`, 'g');
+        const re = new RegExp(regexpCamel, 'g');
         const modifiedToPascalCase = newString.map((word, index) => camelCase(word, index)).join('');
 
         newResult = newResult.replace(re, modifiedToPascalCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.PASCAL})`)) {
+    const regexpPascal = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.PASCAL}.`;
+    if (result && new RegExp(regexpPascal).test(result)) {
         // lorem lorem => LoremLorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.PASCAL}.`, 'g');
+        const re = new RegExp(regexpPascal, 'g');
         const modifiedToPascalCase = newString
             .map(
                 (word) =>
@@ -73,49 +74,55 @@ const cases = ({ stringReplace, result }: types.Cases) => {
         newResult = newResult.replace(re, modifiedToPascalCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.CONSTANT})`)) {
+    const regexpConstant = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.CONSTANT}.`;
+    if (result && new RegExp(regexpConstant).test(result)) {
         // lorem lorem => LOREM_LOREM
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.CONSTANT}.`, 'g');
+        const re = new RegExp(regexpConstant, 'g');
         const modifiedToConstantCase = newString.map((word) => word.toUpperCase()).join('_');
 
         newResult = newResult.replace(re, modifiedToConstantCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.KEBAB})`)) {
+    const regexpKebab = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.KEBAB}.`;
+    if (result && new RegExp(regexpKebab).test(result)) {
         // lorem lorem => lorem-lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.KEBAB}.`, 'g');
+        const re = new RegExp(regexpKebab, 'g');
         const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('-');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.DOT})`)) {
+    const regexpDot = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.DOT}.`;
+    if (result && new RegExp(regexpDot).test(result)) {
         // lorem lorem => lorem.lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.DOT}.`, 'g');
+        const re = new RegExp(regexpDot, 'g');
         const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('.');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.LOWER})`)) {
+    const regexpLower = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.LOWER}.`;
+    if (result && new RegExp(regexpLower).test(result)) {
         // LOREM LoRem => loremlorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.LOWER}.`, 'g');
+        const re = new RegExp(regexpLower, 'g');
         const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.PATH})`)) {
+    const regexpPath = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.PATH}.`;
+    if (result && new RegExp(regexpPath).test(result)) {
         // lorem lorem => lorem/lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.PATH}.`, 'g');
+        const re = new RegExp(regexpPath, 'g');
         const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('/');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.SENTENCE})`)) {
+    const regexpSentence = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.SENTENCE}.`;
+    if (result && new RegExp(regexpSentence).test(result)) {
         // lorem lorem => Lorem lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.SENTENCE}.`, 'g');
+        const re = new RegExp(regexpSentence, 'g');
         const modifiedToKebabCase = newString
             .map((word, index) => {
                 if (index === 0) {
@@ -132,17 +139,19 @@ const cases = ({ stringReplace, result }: types.Cases) => {
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.SNAKE})`)) {
+    const regexpSnake = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.SNAKE}.`;
+    if (result && new RegExp(regexpSnake).test(result)) {
         // lorem lorem => lorem_lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.SNAKE}.`, 'g');
+        const re = new RegExp(regexpSnake, 'g');
         const modifiedToKebabCase = newString.map((word) => word.toLowerCase()).join('_');
 
         newResult = newResult.replace(re, modifiedToKebabCase);
     }
 
-    if (result && result.includes(`${stringReplace.replaceVar}(${DEFAULT_WORDS_CASES.TITLE})`)) {
+    const regexpTitle = `${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.TITLE}.`;
+    if (result && new RegExp(regexpTitle).test(result)) {
         // lorem lorem => Lorem Lorem
-        const re = new RegExp(`${stringReplace.replaceVar}.${DEFAULT_WORDS_CASES.TITLE}.`, 'g');
+        const re = new RegExp(regexpTitle, 'g');
         const modifiedToKebabCase = newString
             .map(
                 (word) =>
@@ -159,9 +168,10 @@ const cases = ({ stringReplace, result }: types.Cases) => {
     }
 
     // DEFAULT_WORDS_CASES.CAMEL
-    if (result && result.includes(stringReplace.replaceVar)) {
+    const defaultCamel = stringReplace.replaceVar;
+    if (result && new RegExp(defaultCamel).test(result)) {
         // lorem lorem => loremLorem
-        const re = new RegExp(`${stringReplace.replaceVar}`, 'g');
+        const re = new RegExp(defaultCamel, 'g');
         const modifiedToDefault = newString.map((word, index) => camelCase(word, index)).join('');
 
         newResult = newResult.replace(re, modifiedToDefault);
