@@ -1,5 +1,5 @@
 // Core
-import { CLIGen } from '../../src';
+import { CLIGen, markersGen } from '../../src';
 
 const folderForTesting = 'test'; // if folder changed, change it in package.json too (npm scripts) and in tsconfig.generate.json
 const pathToTemplate = `./${folderForTesting}/generate/templates`;
@@ -10,16 +10,13 @@ CLIGen(
             name: 'Component: ./src/view/components/__componentName__',
             templates: [
                 {
-                    stringsReplacers: ['__componentName__', '__componentName2__'],
-                    pathToTemplate: [`${pathToTemplate}/component`, `${pathToTemplate}/component`],
-                    outputPath: [
-                        `./${folderForTesting}/src/components/__componentName__/folder1/__componentName__(pascalCase)`,
-                        `./${folderForTesting}/src/components/__componentName2__/folder2/__componentName2__(pascalCase)`,
-                    ],
-                    selectDirectory: true,
+                    stringsReplacers: '__componentName__',
+                    pathToTemplate: `${pathToTemplate}/component`,
+                    outputPath: `./${folderForTesting}/src/components/__componentName__(pascalCase)`,
+                    selectDirectory: true, //! todo
                     markers: [
                         {
-                            pattern: '// MarkerGen re-export',
+                            pattern: '// MarkerGen re-export1', //! todo
                             markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
                             pathToMarker: `./${folderForTesting}/src/components/index.ts`,
                         },
@@ -33,9 +30,9 @@ CLIGen(
                 {
                     stringsReplacers: ['__exampleComponentName__', '__exampleExtension__', '__exampleStyleExtension__'],
                     pathToTemplate: `${pathToTemplate}/componentTemplate`,
-                    // outputPath: "./components/__exampleComponentName__(pascalCase)",
+                    outputPath: `./${folderForTesting}/src/components/__exampleComponentName__(pascalCase)`,
+                    selectDirectory: true,
                     markers: [
-                        // <= New key here
                         {
                             pattern: '// MarkerGen re-export',
                             pathToMarker: `./${folderForTesting}/src/components/index.ts`,
@@ -46,8 +43,27 @@ CLIGen(
             ],
         },
     ],
-    // {
-    // 	rootPath:      `./`,
-    // 	showFullError: true,
-    // },
+    {
+        rootPath: './',
+        showFullError: true,
+    },
 );
+
+// markersGen(
+//     {
+//         selectedNames: {
+//             replaceVar: '__componentName__',
+//             value: 'lorem1 lorem2 lorem3',
+//         },
+//         markers: [
+//             {
+//                 pattern: '// MarkerGen re-export',
+//                 markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
+//                 pathToMarker: `./${folderForTesting}/src/components/index.ts`,
+//             },
+//         ],
+//     },
+//     {
+//         rootPath: 1,
+//     },
+// );

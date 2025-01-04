@@ -1,1 +1,1 @@
-export * from './__componentName__(pascalCase)';
+export * from './__componentName__(dotCase)';

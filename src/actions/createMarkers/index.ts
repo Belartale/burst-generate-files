@@ -17,8 +17,8 @@ import { checkIsOnceInsertMarker } from './checkIsOnceInsertMarker';
 // Types
 import * as types from './types';
 
-export const markers = ({ markers, selectedNames, PROJECT_ROOT }: types.AddMarkerFiles) => {
-    const nameConfigGenerateForOnceInsertResolvedPath = resolve(PROJECT_ROOT, nameConfigGenerateForOnceInsert);
+export const createMarkers = ({ markers, selectedNames, rootPath }: types.CreateMarkers) => {
+    const nameConfigGenerateForOnceInsertResolvedPath = resolve(rootPath, nameConfigGenerateForOnceInsert);
 
     if (
         (markers && markers.find((el) => el.onceInsert === true) && !fs.existsSync(nameConfigGenerateForOnceInsertResolvedPath)) ||

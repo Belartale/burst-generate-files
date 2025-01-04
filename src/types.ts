@@ -1,6 +1,6 @@
 // Types Actions
 import { GetSelectedName } from './actions/getSelectedName/types';
-import { SettingsMarker } from './actions/markers/types';
+import { CreateMarkers, SettingsMarker } from './actions/createMarkers/types';
 
 // Common types
 export interface SettingCommonTypes {
@@ -52,9 +52,13 @@ export type SettingCLIGenRequiredOutputPath = {
     templates: SettingCLIGenTemplateRequiredOutputPath[];
 };
 
+// Function markersGen
+export type SettingMarkersGen = Omit<CreateMarkers, 'rootPath'>;
+export type OptionalSettingsMarkersGen = Pick<CreateMarkers, 'rootPath'>;
+
 // Function mainActions
 export type MainActions = {
     setting: SettingCustomGen | SettingCLIGenTemplateRequiredOutputPath;
     selectedNames: GetSelectedName | GetSelectedName[];
-    PROJECT_ROOT: string;
+    rootPath: string;
 };

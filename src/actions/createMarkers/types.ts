@@ -4,10 +4,10 @@ export * from './collectorTemplates/types';
 // Types
 import * as typesActions from '../types';
 
-export type AddMarkerFiles = {
+export type CreateMarkers = {
     markers: SettingsMarker[];
     selectedNames: typesActions.GetSelectedName | typesActions.GetSelectedName[];
-    PROJECT_ROOT: string;
+    rootPath: string;
 };
 export type SettingsMarker = {
     pattern: string | RegExp;

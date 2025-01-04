@@ -2,6 +2,6 @@
 import * as typesCommon from '../../types';
 
 export type MakeAbsolutePath = {
-    PROJECT_ROOT: string;
+    rootPath: string;
     setting: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate;
 };

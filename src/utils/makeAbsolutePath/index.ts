@@ -6,8 +6,8 @@ import { resolve } from 'path';
 import * as types from './types';
 import * as typesActions from '../../actions/types';
 
-const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: string; path: string }) => {
-    const absolutePath = resolve(PROJECT_ROOT, path);
+const ifExistsFileReturnAbsolutePath = ({ rootPath, path }: { rootPath: string; path: string }) => {
+    const absolutePath = resolve(rootPath, path);
 
     if (fs.existsSync(absolutePath)) {
         return absolutePath;
@@ -16,23 +16,23 @@ const ifExistsFileReturnAbsolutePath = ({ PROJECT_ROOT, path }: { PROJECT_ROOT: 
     return path;
 };
 
-export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePath) => {
+export const makeAbsolutePath = ({ rootPath, setting }: types.MakeAbsolutePath) => {
     const newSetting: types.MakeAbsolutePath['setting'] = setting;
 
     // Setting pathToTemplate
     if (Array.isArray(newSetting.pathToTemplate)) {
-        newSetting.pathToTemplate = newSetting.pathToTemplate.map((path) => resolve(PROJECT_ROOT, path));
+        newSetting.pathToTemplate = newSetting.pathToTemplate.map((path) => resolve(rootPath, path));
     }
     if (typeof newSetting.pathToTemplate === 'string') {
-        newSetting.pathToTemplate = resolve(PROJECT_ROOT, newSetting.pathToTemplate);
+        newSetting.pathToTemplate = resolve(rootPath, newSetting.pathToTemplate);
     }
 
     // Setting outputPath
     if (Array.isArray(newSetting.outputPath)) {
-        newSetting.outputPath = newSetting.outputPath.map((path) => resolve(PROJECT_ROOT, path));
+        newSetting.outputPath = newSetting.outputPath.map((path) => resolve(rootPath, path));
     }
     if (typeof newSetting.outputPath === 'string') {
-        newSetting.outputPath = resolve(PROJECT_ROOT, newSetting.outputPath);
+        newSetting.outputPath = resolve(rootPath, newSetting.outputPath);
     }
 
     // Setting markers
@@ -43,22 +43,22 @@ export const makeAbsolutePath = ({ PROJECT_ROOT, setting }: types.MakeAbsolutePa
             // Setting pathToMarker
             if (Array.isArray(newMarker.pathToMarker)) {
                 newMarker.pathToMarker = newMarker.pathToMarker.map((path) => {
-                    return ifExistsFileReturnAbsolutePath({ PROJECT_ROOT, path });
+                    return ifExistsFileReturnAbsolutePath({ rootPath, path });
                 });
             }
 
             if (typeof newMarker.pathToMarker === 'string') {
-                newMarker.pathToMarker = resolve(PROJECT_ROOT, newMarker.pathToMarker);
+                newMarker.pathToMarker = resolve(rootPath, newMarker.pathToMarker);
             }
 
             // Setting markerTemplate
             if (Array.isArray(newMarker.markerTemplate)) {
                 newMarker.markerTemplate = newMarker.markerTemplate.map((string) => {
-                    return ifExistsFileReturnAbsolutePath({ PROJECT_ROOT, path: string });
+                    return ifExistsFileReturnAbsolutePath({ rootPath, path: string });
                 });
             }
             if (typeof newMarker.pathToMarker === 'string') {
-                const absolutePath = resolve(PROJECT_ROOT, newMarker.pathToMarker);
+                const absolutePath = resolve(rootPath, newMarker.pathToMarker);
 
                 if (fs.existsSync(absolutePath)) {
                     newMarker.pathToMarker = absolutePath;
