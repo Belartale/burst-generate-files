@@ -1,12 +1,15 @@
+import { z as zod } from 'zod';
 import * as typesCommon from '../../types';
 
 export type CheckError = {
-    whichFunction: 'customGen' | 'CLIGen'
-    settings: typesCommon.SettingCustomGen[] | typesCommon.SettingCLIGen[]
-    optionalSettings?: typesCommon.OptionalSettings
-    PROJECT_ROOT: string
-}
+    settings: typesCommon.SettingCustomGen[] | typesCommon.SettingCLIGen[];
+    optionalOfSettings?: typesCommon.OptionalSettings;
+    rootPath: string;
+};
 
-export type BeginOfLine = string
+export type BeginOfLine = string;
 
-export type CustomErrors = Error[]
+export type GetRefineParams = (
+    rootPath: CheckError['rootPath'],
+    params?: zod.CustomErrorParams,
+) => (path: string | string[]) => { message: string } & zod.CustomErrorParams;

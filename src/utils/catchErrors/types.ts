@@ -1,6 +1,6 @@
 import * as typesCommon from '../../types';
 
 export type CatchErrorsTypes = {
-    error: any
-    showFullError: typesCommon.OptionalSettings['showFullError']
+    error: unknown | Error | Error[];
+    showFullError: typesCommon.OptionalSettings['showFullError'];
 };

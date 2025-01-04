@@ -4,8 +4,7 @@
         "module": "CommonJS",
         "rootDir": "scripts",
         "noImplicitReturns": false,
-        "typeRoots": [ "node_modules/@types" ],
+        "typeRoots": ["node_modules/@types"]
     },
-    "include": [ "scripts/webpack" ],
+    "include": ["scripts/webpack"]
 }
-  

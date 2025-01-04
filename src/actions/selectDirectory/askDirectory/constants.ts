@@ -18,14 +18,9 @@ export enum CONTROLLERS_CREATE_NEW_FOLDER_BY_STRINGS_REPLACERS {
     OPTION_CANCEL = '# Back to option "Create new folder by stringsReplacers"',
 }
 
-export const controllersDirectories = [
-    CONTROLLERS.BACK,
-    CONTROLLERS.HERE,
-    CONTROLLERS_CREATE_NEW_FOLDER.MAIN,
-];
+export const controllersDirectories = [CONTROLLERS.BACK, CONTROLLERS.HERE, CONTROLLERS_CREATE_NEW_FOLDER.MAIN];
 
-export const getOptionsOfCreateNewFolder
-= (stringsReplacers: string[]) => [
+export const getOptionsOfCreateNewFolder = (stringsReplacers: string[]) => [
     CONTROLLERS_CREATE_NEW_FOLDER.OPTION_CANCEL,
     ...stringsReplacers,
 ];

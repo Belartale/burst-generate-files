@@ -9,6 +9,7 @@
 /coverage/
 /flow-coverage/
 /dist/
+/build/
 
 # Files
 *.log
@@ -95,3 +96,5 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+.codegpt

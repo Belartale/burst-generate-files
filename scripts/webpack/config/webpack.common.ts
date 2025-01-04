@@ -10,16 +10,16 @@ import * as modules from '../modules';
 export const getCommonConfig = () => {
     return merge(
         {
-            mode:    'production',
+            mode: 'production',
             devtool: false,
-            entry:   [ SOURCE_DIRECTORY ],
-            output:  {
+            entry: [SOURCE_DIRECTORY],
+            output: {
                 filename: 'index.js',
-                path:     BUILD_DIRECTORY,
-                library:  'burstGenerateFiles',
+                path: BUILD_DIRECTORY,
+                library: 'burstGenerateFiles',
             },
             resolve: {
-                extensions: [ '.ts', '.js' ],
+                extensions: ['.ts', '.js'],
             },
         },
         modules.cleanDirectories(),

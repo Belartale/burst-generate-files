@@ -4,11 +4,16 @@ import enquirer from 'enquirer';
 // Types
 import * as types from './types';
 
+type EnquirerPrompt = {
+    // todo - add native type, if possible
+    selectedName: string;
+};
+
 const getNameFromCLI = async ({ message, name }: types.GetName) => {
-    const gotValue: any = await enquirer.prompt({
-        type:     'input',
-        name:     name,
-        message:  message,
+    const gotValue: EnquirerPrompt = await enquirer.prompt({
+        type: 'input',
+        name: name,
+        message: message,
         validate: (value: string) => {
             const isValid: boolean = Boolean(value.trim());
 
@@ -16,7 +21,7 @@ const getNameFromCLI = async ({ message, name }: types.GetName) => {
         },
     });
 
-    return gotValue[ `${name}` ].trim();
+    return gotValue.selectedName.trim();
 };
 
 export const getSelectedName = async (strings: string | string[]): Promise<types.GetSelectedName[]> => {
@@ -25,18 +30,20 @@ export const getSelectedName = async (strings: string | string[]): Promise<types
     if (Array.isArray(strings)) {
         for await (const string of strings) {
             result = [
-                ...result, {
+                ...result,
+                {
                     replaceVar: string,
-                    value:      await getNameFromCLI({ message: `Replace ${string} on`, name: 'selectedName' }),
+                    value: await getNameFromCLI({ message: `Replace ${string} on`, name: 'selectedName' }),
                 },
             ];
         }
     }
     if (!Array.isArray(strings)) {
         result = [
-            ...result, {
+            ...result,
+            {
                 replaceVar: strings,
-                value:      await getNameFromCLI({ message: `Replace ${strings} on`, name: 'selectedName' }),
+                value: await getNameFromCLI({ message: `Replace ${strings} on`, name: 'selectedName' }),
             },
         ];
     }

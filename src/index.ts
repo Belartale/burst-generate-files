@@ -1,103 +1,97 @@
+// Core
+import { z as zod } from 'zod';
+
 //Utils
-import {
-    catchErrors,
-    makeAbsolutePath,
-} from './utils';
+import { catchErrors, createErrorsZod, makeAbsolutePath } from './utils';
 
 // Actions
-import {
-    checkError,
-    getSelectedItem,
-    getSelectedName,
-    selectDirectory,
-    createFiles,
-    markers,
-    onComplete,
-} from './actions';
+import { checkError, getSelectedItem, getSelectedName, selectDirectory, createFiles, createMarkers, onComplete } from './actions';
 
 // Constants
 import { PROJECT_ROOT } from './constants';
 
+// Schemas
+import { getSchemaMarkers } from './actions/checkError/schemas';
+
 // Types
 import * as typesCommon from './types';
 import * as typesActions from './actions/types';
+import { CreateErrorsZod } from './utils/types';
 
-const mainActions = ({ setting, selectedNames, PROJECT_ROOT }: typesCommon.MainActions) => {
+const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActions) => {
     createFiles({
         pathToTemplate: setting.pathToTemplate,
-        outputPath:     setting.outputPath,
+        outputPath: setting.outputPath,
         selectedNames,
     });
 
     if (setting.markers) {
-        markers({
+        createMarkers({
             markers: setting.markers,
             selectedNames,
-            PROJECT_ROOT,
+            rootPath: rootPath,
         });
     }
-
 
     if (setting.onComplete) {
         onComplete({ setting: setting });
     }
 };
 
-export const customGen = (
-    settings: typesCommon.SettingCustomGen[],
-    optionalSettings?: typesCommon.OptionalSettings,
-) => {
-    const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
-        ? optionalSettings.rootPath : PROJECT_ROOT;
-
-    checkError({
-        whichFunction: 'customGen',
-        settings,
-        optionalSettings,
-        PROJECT_ROOT:  NEW_PROJECT_ROOT,
-    });
-    settings.forEach((setting) => {
-        mainActions({
-            setting: makeAbsolutePath({
-                PROJECT_ROOT: NEW_PROJECT_ROOT,
-                setting,
-            }) as typesCommon.SettingCustomGen,
-            selectedNames: setting.stringsReplacers,
-            PROJECT_ROOT:  NEW_PROJECT_ROOT,
-        });
-    });
-};
-
-export const CLIGen = async (
-    settings: typesCommon.SettingCLIGen[],
-    optionalSettings?: typesCommon.OptionalSettings,
-): Promise<void> => {
+export const customGen = (settings: typesCommon.SettingCustomGen[], optionalSettings?: typesCommon.OptionalSettings) => {
     try {
-        const NEW_PROJECT_ROOT = optionalSettings && optionalSettings.rootPath
-            ? optionalSettings.rootPath : PROJECT_ROOT;
+        const newRootPath =
+            optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
+                ? optionalSettings.rootPath
+                : PROJECT_ROOT;
 
         checkError({
-            whichFunction: 'CLIGen',
             settings,
-            optionalSettings,
-            PROJECT_ROOT:  NEW_PROJECT_ROOT,
+            optionalOfSettings: optionalSettings,
+            rootPath: newRootPath,
         });
+        settings.forEach((setting) => {
+            mainActions({
+                setting: makeAbsolutePath({
+                    rootPath: newRootPath,
+                    setting,
+                }) as typesCommon.SettingCustomGen,
+                selectedNames: setting.stringsReplacers,
+                rootPath: newRootPath,
+            });
+        });
+    } catch (error) {
+        catchErrors({ error, showFullError: optionalSettings?.showFullError });
+    }
+};
+
+export const CLIGen = async (settings: typesCommon.SettingCLIGen[], optionalSettings?: typesCommon.OptionalSettings): Promise<void> => {
+    try {
+        const newRootPath =
+            optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
+                ? optionalSettings.rootPath
+                : PROJECT_ROOT;
+
+        checkError({
+            settings,
+            optionalOfSettings: optionalSettings,
+            rootPath: newRootPath,
+        });
+
         const selectedConfigItem: typesCommon.SettingCLIGen = await getSelectedItem(settings);
 
         for await (const iteratorTemplate of selectedConfigItem.templates) {
-            const selectedNames: typesActions.GetSelectedName[]
-            = await getSelectedName(iteratorTemplate.stringsReplacers);
+            const selectedNames: typesActions.GetSelectedName[] = await getSelectedName(iteratorTemplate.stringsReplacers);
 
             const iteratorTemplateWithAbsolutePaths = makeAbsolutePath({
-                PROJECT_ROOT: NEW_PROJECT_ROOT,
-                setting:      iteratorTemplate,
+                rootPath: newRootPath,
+                setting: iteratorTemplate,
             }) as typesCommon.SettingCLIGenTemplate;
 
-            if (!iteratorTemplate.outputPath || iteratorTemplate.selectDirectory === true) { // toto add error to checkError, if outputPath === undefined and selectDirectory === false >>> error
-                const iteratorTemplateWithAbsolutePathsAndRequiredOutputPath:
-                typesCommon.SettingCLIGenTemplateRequiredOutputPath = {
+            if (!iteratorTemplate.outputPath || iteratorTemplate.selectDirectory === true) {
+                const iteratorTemplateWithAbsolutePathsAndRequiredOutputPath: typesCommon.SettingCLIGenTemplateRequiredOutputPath = {
                     ...iteratorTemplateWithAbsolutePaths,
-                    outputPath: iteratorTemplateWithAbsolutePaths.outputPath || NEW_PROJECT_ROOT,
+                    outputPath: iteratorTemplateWithAbsolutePaths.outputPath || newRootPath,
                 };
 
                 await selectDirectory({
@@ -106,25 +100,70 @@ export const CLIGen = async (
                 });
 
                 mainActions({
-                    setting:      iteratorTemplateWithAbsolutePathsAndRequiredOutputPath,
+                    setting: iteratorTemplateWithAbsolutePathsAndRequiredOutputPath,
                     selectedNames,
-                    PROJECT_ROOT: NEW_PROJECT_ROOT,
+                    rootPath: newRootPath,
                 });
 
                 return;
             }
 
             mainActions({
-                setting:
-                        iteratorTemplateWithAbsolutePaths as typesCommon.SettingCLIGenTemplateRequiredOutputPath,
+                setting: iteratorTemplateWithAbsolutePaths as typesCommon.SettingCLIGenTemplateRequiredOutputPath,
                 selectedNames,
-                PROJECT_ROOT: NEW_PROJECT_ROOT,
+                rootPath: newRootPath,
             });
         }
-    } catch (error: any) {
+    } catch (error) {
         catchErrors({ error, showFullError: optionalSettings?.showFullError });
     }
 };
 
+export const markersGen = (settings: typesCommon.SettingMarkersGen, optionalSettings: typesCommon.OptionalSettingsMarkersGen) => {
+    const errors: CreateErrorsZod['errors'] = [];
+
+    const newRootPath =
+        optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
+            ? optionalSettings.rootPath
+            : PROJECT_ROOT;
+
+    const selectedNamesSchema = zod.object({
+        replaceVar: zod.string(),
+        value: zod.string(),
+    });
+    const schemaSettings = zod.object({
+        selectedNames: selectedNamesSchema.or(zod.array(selectedNamesSchema)),
+        markers: getSchemaMarkers(newRootPath),
+    });
+
+    const schemaOptionalSettings = zod.object({
+        rootPath: zod.string(),
+    });
+
+    const validationResultSettingsMarker = schemaSettings.safeParse(settings);
+    const validationResultOptionalSettingsMarker = schemaOptionalSettings.safeParse(optionalSettings);
+
+    errors.push(
+        ...createErrorsZod({
+            validationResult: validationResultSettingsMarker,
+            whichParameter: 'first',
+            errors,
+        }),
+        ...createErrorsZod({
+            validationResult: validationResultOptionalSettingsMarker,
+            whichParameter: 'second',
+            errors,
+        }),
+    );
+
+    // Errors
+    if (errors.length > 0) {
+        throw errors;
+    }
+
+    createMarkers({ ...settings, rootPath: newRootPath });
+};
+
 exports.customGen = customGen;
 exports.CLIGen = CLIGen;
+exports.markersGen = markersGen;
