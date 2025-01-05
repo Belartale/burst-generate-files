@@ -3,7 +3,7 @@ import * as typesCommon from '../../types';
 
 export type CheckError = {
     settings: typesCommon.SettingCustomGen[] | typesCommon.SettingCLIGen[];
-    optionalOfSettings?: typesCommon.OptionalSettings;
+    optionalOfSettings?: typesCommon.OptionalSettingsCLIGen;
     rootPath: string;
 };
 

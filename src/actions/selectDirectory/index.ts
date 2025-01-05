@@ -14,11 +14,11 @@ const showWarningsAboutCheckMarkers = ({ template, newOutputPath }: types.ShowWa
     const messageForChanging = '\nYou changed outputPath:';
 
     const log = (text: string) => {
-        console.log(spaces + text);
+        console.warn(spaces + text);
     };
 
     const lastPartOfMessage = () => {
-        console.log(chalk.yellow('You have to check your markers !!!\nYour markers:'));
+        console.warn(chalk.yellow('You have to check your markers !!!\nYour markers:'));
         template.markers?.forEach((marker) => {
             if (typeof marker.pathToMarker === 'string') {
                 log(marker.pathToMarker);
@@ -32,12 +32,12 @@ const showWarningsAboutCheckMarkers = ({ template, newOutputPath }: types.ShowWa
     };
 
     if (typeof newOutputPath === 'string' && template.outputPath !== newOutputPath) {
-        console.log(chalk.yellow(messageForChanging));
+        console.warn(chalk.yellow(messageForChanging));
         log(newOutputPath);
         lastPartOfMessage();
     }
     if (Array.isArray(newOutputPath) && newOutputPath.some((newPath) => !template.outputPath.includes(newPath))) {
-        console.log(chalk.yellow(messageForChanging));
+        console.warn(chalk.yellow(messageForChanging));
         newOutputPath.forEach((newPath) => {
             if (!template.outputPath.includes(newPath)) {
                 log(newPath);

@@ -1,8 +1,25 @@
 // Core
-import { CLIGen, markersGen } from '../../src';
+import { customGen, CLIGen, markersGen } from '../../src';
 
 const folderForTesting = 'test'; // if folder changed, change it in package.json too (npm scripts) and in tsconfig.generate.json
 const pathToTemplate = `./${folderForTesting}/generate/templates`;
+
+// customGen([
+//     {
+//         stringsReplacers: [{ replaceVar: '__componentName__', value: 'lorem1' }],
+//         pathToTemplate: `${pathToTemplate}/component`,
+//         outputPath: `./${folderForTesting}/src/components/__componentName__(pascalCase)`,
+//         // selectDirectory: true,
+//         markers: [
+//             {
+//                 pattern: '// MarkerGen re-export1',
+//                 markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
+//                 pathToMarker: `./${folderForTesting}/src/components/index.ts`,
+//             },
+//         ],
+//         // onComplete: (result) => { console.log(`result >>> `, result) }
+//     },
+// ]);
 
 CLIGen(
     [
@@ -13,7 +30,7 @@ CLIGen(
                     stringsReplacers: '__componentName__',
                     pathToTemplate: `${pathToTemplate}/component`,
                     outputPath: `./${folderForTesting}/src/components/__componentName__(pascalCase)`,
-                    selectDirectory: true, //! todo
+                    // selectDirectory: true, //! todo
                     markers: [
                         {
                             pattern: '// MarkerGen re-export1', //! todo
@@ -64,6 +81,6 @@ CLIGen(
 //         ],
 //     },
 //     {
-//         rootPath: 1,
+//         rootPath: './',
 //     },
 // );

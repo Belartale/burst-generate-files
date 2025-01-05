@@ -34,8 +34,8 @@ export const createMarkers = ({ markers, selectedNames, rootPath }: types.Create
             settingsMarker.onceInsert &&
             checkIsOnceInsertMarker({ settingsMarker, nameConfigGenerateForOnceInsert: nameConfigGenerateForOnceInsertResolvedPath })
         ) {
-            console.log(chalk.yellow('This marker previously inserted !!!'));
-            console.log(settingsMarker);
+            console.warn(chalk.yellow('This marker previously inserted !!!'));
+            console.warn(settingsMarker);
 
             return;
         }
