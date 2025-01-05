@@ -11,6 +11,7 @@ import {
     createMarkers,
     onComplete,
     checkCustomGen,
+    checkMarkersGen,
 } from './actions';
 
 // Constants
@@ -19,7 +20,6 @@ import { PROJECT_ROOT } from './constants';
 // Types
 import * as typesCommon from './types';
 import * as typesActions from './actions/types';
-import { checkMarkersGen } from './actions/checkError/checkMarkersGen';
 
 const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActions) => {
     createFiles({
