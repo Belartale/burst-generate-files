@@ -1,8 +1,5 @@
-// Core
-import { z as zod } from 'zod';
-
 //Utils
-import { catchErrors, createErrorsZod, makeAbsolutePath } from './utils';
+import { catchErrors, makeAbsolutePath } from './utils';
 
 // Actions
 import {
@@ -19,13 +16,10 @@ import {
 // Constants
 import { PROJECT_ROOT } from './constants';
 
-// Schemas
-import { getSchemaMarkers } from './actions/checkError/schemas';
-
 // Types
 import * as typesCommon from './types';
 import * as typesActions from './actions/types';
-import { CreateErrorsZod } from './utils/types';
+import { checkMarkersGen } from './actions/checkError/checkMarkersGen';
 
 const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActions) => {
     createFiles({
@@ -129,46 +123,16 @@ export const CLIGen = async (
 };
 
 export const markersGen = (settings: typesCommon.SettingMarkersGen, optionalSettings: typesCommon.OptionalSettingsMarkersGen) => {
-    const errors: CreateErrorsZod['errors'] = [];
-
     const newRootPath =
         optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
             ? optionalSettings.rootPath
             : PROJECT_ROOT;
 
-    const selectedNamesSchema = zod.object({
-        replaceVar: zod.string(),
-        value: zod.string(),
+    checkMarkersGen({
+        settings,
+        optionalOfSettings: optionalSettings,
+        rootPath: newRootPath,
     });
-    const schemaSettings = zod.object({
-        selectedNames: selectedNamesSchema.or(zod.array(selectedNamesSchema)),
-        markers: getSchemaMarkers(newRootPath),
-    });
-
-    const schemaOptionalSettings = zod.object({
-        rootPath: zod.string(),
-    });
-
-    const validationResultSettingsMarker = schemaSettings.safeParse(settings);
-    const validationResultOptionalSettingsMarker = schemaOptionalSettings.safeParse(optionalSettings);
-
-    errors.push(
-        ...createErrorsZod({
-            validationResult: validationResultSettingsMarker,
-            whichParameter: 'first',
-            errors,
-        }),
-        ...createErrorsZod({
-            validationResult: validationResultOptionalSettingsMarker,
-            whichParameter: 'second',
-            errors,
-        }),
-    );
-
-    // Errors
-    if (errors.length > 0) {
-        throw errors;
-    }
 
     createMarkers({ ...settings, rootPath: newRootPath });
 };

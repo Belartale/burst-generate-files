@@ -5,22 +5,21 @@ import { z as zod } from 'zod';
 import { createErrorsZod } from '../../../utils';
 
 // Schemas
-import { commonSchemaOfOptionalSettings, getSchemaCustomGen } from '../schemas';
+import { commonSchemaOfOptionalSettings, getSchemaMarkersGen } from '../schemas';
 
 // Types
 import { CreateErrorsZod } from '../../../utils/types';
-import { OptionalSettingsCustomGen, SettingCustomGen } from '../../../types';
+import { OptionalSettingsMarkersGen, SettingMarkersGen } from '../../../types';
 import { CheckError } from '../types';
 
-export const checkCustomGen = ({ settings, optionalOfSettings, rootPath }: CheckError<SettingCustomGen[], OptionalSettingsCustomGen>) => {
+export const checkMarkersGen = ({ settings, optionalOfSettings, rootPath }: CheckError<SettingMarkersGen, OptionalSettingsMarkersGen>) => {
     const errors: CreateErrorsZod['errors'] = [];
 
-    const schemaSettings: zod.ZodType<SettingCustomGen[]> = getSchemaCustomGen(rootPath);
+    const schemaSettings: zod.ZodType<SettingMarkersGen> = getSchemaMarkersGen(rootPath);
 
-    const schemaOptionalSettings: zod.ZodType<OptionalSettingsCustomGen | undefined> = zod
+    const schemaOptionalSettings: zod.ZodType<OptionalSettingsMarkersGen | undefined> = zod
         .object({
             ...commonSchemaOfOptionalSettings,
-            showFullError: zod.boolean().optional(),
         })
         .optional();
 

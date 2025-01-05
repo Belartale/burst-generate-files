@@ -7,7 +7,7 @@ import { z as zod } from 'zod';
 import { checkRefineCallback, getRefineParams, validateMarkerPattern } from './utils';
 
 // Types
-import { SettingCLIGen, SettingCLIGenTemplate, SettingCustomGen, SettingStringsReplacersCustomGen } from '../../types';
+import { SettingCLIGen, SettingCLIGenTemplate, SettingCustomGen, SettingMarkersGen, SettingStringsReplacersCustomGen } from '../../types';
 import { SettingsMarker } from '../types';
 import { CheckError } from './types';
 
@@ -128,3 +128,14 @@ export const getSchemaCLIGen = (rootPath: CheckError['rootPath']): zod.ZodType<S
                 });
             });
         });
+
+const selectedNamesSchema = zod.object({
+    replaceVar: zod.string(),
+    value: zod.string(),
+});
+
+export const getSchemaMarkersGen = (rootPath: CheckError['rootPath']): zod.ZodType<SettingMarkersGen> =>
+    zod.object({
+        selectedNames: selectedNamesSchema.or(zod.array(selectedNamesSchema)),
+        markers: getSchemaMarkers(rootPath),
+    });

@@ -10,9 +10,9 @@ import { commonSchemaOfOptionalSettings, getSchemaCLIGen } from '../schemas';
 // Types
 import { CreateErrorsZod } from '../../../utils/types';
 import { OptionalSettingsCLIGen, SettingCLIGen } from '../../../types';
-import { CheckErrorCLIGen } from './types';
+import { CheckError } from '../types';
 
-export const checkCLIGen = ({ settings, optionalOfSettings, rootPath }: CheckErrorCLIGen) => {
+export const checkCLIGen = ({ settings, optionalOfSettings, rootPath }: CheckError<SettingCLIGen[], OptionalSettingsCLIGen>) => {
     const errors: CreateErrorsZod['errors'] = [];
 
     const schemaSettings: zod.ZodType<SettingCLIGen[]> = getSchemaCLIGen(rootPath);

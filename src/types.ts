@@ -51,7 +51,7 @@ export type SettingCLIGenRequiredOutputPath = {
 
 // Function markersGen
 export type SettingMarkersGen = Omit<CreateMarkers, 'rootPath'>;
-export type OptionalSettingsMarkersGen = Pick<CreateMarkers, 'rootPath'>;
+export type OptionalSettingsMarkersGen = Partial<Pick<CreateMarkers, 'rootPath'>>;
 
 // Function mainActions
 export type MainActions = {
