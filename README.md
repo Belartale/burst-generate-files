@@ -464,5 +464,32 @@ This is the string for changing root path of your project.
 
 This is the string for showing full message of error.
 
+## Additional tools
+
+`markersGen` - is the function for creating markers.
+
+```typescript
+markersGen(
+    {
+        selectedNames: [
+            {
+                replaceVar: '__exampleComponentName__',
+                value: 'wrapper',
+            },
+        ],
+        markers: [
+            {
+                pattern: '// Imports',
+                pathToMarker: './components/index.ts',
+                markerTemplate: './componentTemplate/.genignore/import.ts',
+            },
+        ],
+    },
+    {
+        rootPath: './',
+    },
+);
+```
+
 ## License
 [Apache 2.0 License](https://github.com/Belartale/burst-generate-files/blob/main/LICENSE)

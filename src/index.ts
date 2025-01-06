@@ -1,22 +1,25 @@
-// Core
-import { z as zod } from 'zod';
-
 //Utils
-import { catchErrors, createErrorsZod, makeAbsolutePath } from './utils';
+import { catchErrors, makeAbsolutePath } from './utils';
 
 // Actions
-import { checkError, getSelectedItem, getSelectedName, selectDirectory, createFiles, createMarkers, onComplete } from './actions';
+import {
+    checkCLIGen,
+    getSelectedItem,
+    getSelectedName,
+    selectDirectory,
+    createFiles,
+    createMarkers,
+    onComplete,
+    checkCustomGen,
+    checkMarkersGen,
+} from './actions';
 
 // Constants
 import { PROJECT_ROOT } from './constants';
 
-// Schemas
-import { getSchemaMarkers } from './actions/checkError/schemas';
-
 // Types
 import * as typesCommon from './types';
 import * as typesActions from './actions/types';
-import { CreateErrorsZod } from './utils/types';
 
 const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActions) => {
     createFiles({
@@ -38,41 +41,41 @@ const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActio
     }
 };
 
-export const customGen = (settings: typesCommon.SettingCustomGen[], optionalSettings?: typesCommon.OptionalSettings) => {
-    try {
-        const newRootPath =
-            optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
-                ? optionalSettings.rootPath
-                : PROJECT_ROOT;
+export const customGen = (settings: typesCommon.SettingCustomGen[], optionalSettings?: typesCommon.OptionalSettingsCustomGen) => {
+    const newRootPath =
+        optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
+            ? optionalSettings.rootPath
+            : PROJECT_ROOT;
 
-        checkError({
-            settings,
-            optionalOfSettings: optionalSettings,
+    checkCustomGen({
+        settings,
+        optionalOfSettings: optionalSettings,
+        rootPath: newRootPath,
+    });
+
+    settings.forEach((setting) => {
+        mainActions({
+            setting: makeAbsolutePath({
+                rootPath: newRootPath,
+                setting,
+            }) as typesCommon.SettingCustomGen,
+            selectedNames: setting.stringsReplacers,
             rootPath: newRootPath,
         });
-        settings.forEach((setting) => {
-            mainActions({
-                setting: makeAbsolutePath({
-                    rootPath: newRootPath,
-                    setting,
-                }) as typesCommon.SettingCustomGen,
-                selectedNames: setting.stringsReplacers,
-                rootPath: newRootPath,
-            });
-        });
-    } catch (error) {
-        catchErrors({ error, showFullError: optionalSettings?.showFullError });
-    }
+    });
 };
 
-export const CLIGen = async (settings: typesCommon.SettingCLIGen[], optionalSettings?: typesCommon.OptionalSettings): Promise<void> => {
+export const CLIGen = async (
+    settings: typesCommon.SettingCLIGen[],
+    optionalSettings?: typesCommon.OptionalSettingsCLIGen,
+): Promise<void> => {
     try {
         const newRootPath =
             optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
                 ? optionalSettings.rootPath
                 : PROJECT_ROOT;
 
-        checkError({
+        checkCLIGen({
             settings,
             optionalOfSettings: optionalSettings,
             rootPath: newRootPath,
@@ -120,46 +123,16 @@ export const CLIGen = async (settings: typesCommon.SettingCLIGen[], optionalSett
 };
 
 export const markersGen = (settings: typesCommon.SettingMarkersGen, optionalSettings: typesCommon.OptionalSettingsMarkersGen) => {
-    const errors: CreateErrorsZod['errors'] = [];
-
     const newRootPath =
         optionalSettings && optionalSettings.rootPath && typeof optionalSettings.rootPath === 'string'
             ? optionalSettings.rootPath
             : PROJECT_ROOT;
 
-    const selectedNamesSchema = zod.object({
-        replaceVar: zod.string(),
-        value: zod.string(),
+    checkMarkersGen({
+        settings,
+        optionalOfSettings: optionalSettings,
+        rootPath: newRootPath,
     });
-    const schemaSettings = zod.object({
-        selectedNames: selectedNamesSchema.or(zod.array(selectedNamesSchema)),
-        markers: getSchemaMarkers(newRootPath),
-    });
-
-    const schemaOptionalSettings = zod.object({
-        rootPath: zod.string(),
-    });
-
-    const validationResultSettingsMarker = schemaSettings.safeParse(settings);
-    const validationResultOptionalSettingsMarker = schemaOptionalSettings.safeParse(optionalSettings);
-
-    errors.push(
-        ...createErrorsZod({
-            validationResult: validationResultSettingsMarker,
-            whichParameter: 'first',
-            errors,
-        }),
-        ...createErrorsZod({
-            validationResult: validationResultOptionalSettingsMarker,
-            whichParameter: 'second',
-            errors,
-        }),
-    );
-
-    // Errors
-    if (errors.length > 0) {
-        throw errors;
-    }
 
     createMarkers({ ...settings, rootPath: newRootPath });
 };

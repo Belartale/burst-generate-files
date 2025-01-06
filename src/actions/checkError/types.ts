@@ -1,9 +1,8 @@
 import { z as zod } from 'zod';
-import * as typesCommon from '../../types';
 
-export type CheckError = {
-    settings: typesCommon.SettingCustomGen[] | typesCommon.SettingCLIGen[];
-    optionalOfSettings?: typesCommon.OptionalSettings;
+export type CheckError<Settings = unknown, OptionalOfSettings = unknown> = {
+    settings: Settings;
+    optionalOfSettings?: OptionalOfSettings;
     rootPath: string;
 };
 

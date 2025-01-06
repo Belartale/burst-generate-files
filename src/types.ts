@@ -15,24 +15,16 @@ export interface InterfaceOutputPath {
     outputPath: OutputPath;
 }
 
-// export interface Setting extends SettingCommonTypes {
-//     name: string
-//     stringsReplacers: string[]
-// }
-
-export type OptionalSettings = {
-    rootPath?: string;
-    showFullError?: boolean;
-};
-
 // Function customGen
 export type SettingStringsReplacersCustomGen = {
     replaceVar: string;
     value: string;
 };
-export interface SettingCustomGen extends SettingCommonTypes, InterfaceOutputPath {
+export interface SettingCustomGen extends Omit<SettingCommonTypes, 'selectDirectory'>, InterfaceOutputPath {
     stringsReplacers: SettingStringsReplacersCustomGen | SettingStringsReplacersCustomGen[];
 }
+
+export type OptionalSettingsCustomGen = Omit<OptionalSettingsCLIGen, 'showFullError'>;
 
 // Function CLIGen
 export interface SettingCLIGenTemplate extends SettingCommonTypes, Partial<InterfaceOutputPath> {
@@ -41,6 +33,11 @@ export interface SettingCLIGenTemplate extends SettingCommonTypes, Partial<Inter
 export type SettingCLIGen = {
     name: string;
     templates: SettingCLIGenTemplate[];
+};
+
+export type OptionalSettingsCLIGen = {
+    rootPath?: string;
+    showFullError?: boolean;
 };
 
 // Required OutputPath
@@ -54,7 +51,7 @@ export type SettingCLIGenRequiredOutputPath = {
 
 // Function markersGen
 export type SettingMarkersGen = Omit<CreateMarkers, 'rootPath'>;
-export type OptionalSettingsMarkersGen = Pick<CreateMarkers, 'rootPath'>;
+export type OptionalSettingsMarkersGen = Partial<Pick<CreateMarkers, 'rootPath'>>;
 
 // Function mainActions
 export type MainActions = {

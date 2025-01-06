@@ -4,13 +4,8 @@ import enquirer from 'enquirer';
 // Types
 import * as types from './types';
 
-type EnquirerPrompt = {
-    // todo - add native type, if possible
-    selectedName: string;
-};
-
 const getNameFromCLI = async ({ message, name }: types.GetName) => {
-    const gotValue: EnquirerPrompt = await enquirer.prompt({
+    const gotValue: types.GotValueOfEnquirerPrompt = await enquirer.prompt({
         type: 'input',
         name: name,
         message: message,
