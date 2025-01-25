@@ -12,6 +12,7 @@ import {
     onComplete,
     checkCustomGen,
     checkMarkersGen,
+    checkMarkersOfCLIGen,
 } from './actions';
 
 // Constants
@@ -83,6 +84,8 @@ export const CLIGen = async (
 
         const selectedConfigItem: typesCommon.SettingCLIGen = await getSelectedItem(settings);
 
+        let indexOfIteratorTemplate = 0;
+
         for await (const iteratorTemplate of selectedConfigItem.templates) {
             const selectedNames: typesActions.GetSelectedName[] = await getSelectedName(iteratorTemplate.stringsReplacers);
 
@@ -100,6 +103,14 @@ export const CLIGen = async (
                 await selectDirectory({
                     template: iteratorTemplateWithAbsolutePathsAndRequiredOutputPath,
                     selectedNames,
+                }).then(() => {
+                    if (iteratorTemplate.markers) {
+                        checkMarkersOfCLIGen({
+                            settings: iteratorTemplate,
+                            rootPath: newRootPath,
+                            index: indexOfIteratorTemplate,
+                        });
+                    }
                 });
 
                 mainActions({
@@ -116,6 +127,8 @@ export const CLIGen = async (
                 selectedNames,
                 rootPath: newRootPath,
             });
+
+            indexOfIteratorTemplate += 1;
         }
     } catch (error) {
         catchErrors({ error, showFullError: optionalSettings?.showFullError });

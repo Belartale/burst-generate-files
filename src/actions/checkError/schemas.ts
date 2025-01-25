@@ -7,7 +7,7 @@ import { z as zod } from 'zod';
 import { checkRefineCallback, getRefineParams, validateMarkerPattern } from './utils';
 
 // Types
-import { SettingCLIGen, SettingCLIGenTemplate, SettingCustomGen, SettingMarkersGen, SettingStringsReplacersCustomGen } from '../../types';
+import { SettingCLIGenTemplate, SettingCustomGen } from '../../types';
 import { SettingsMarker } from '../types';
 import { CheckError } from './types';
 
@@ -26,11 +26,6 @@ export const getSchemaMarkers = (rootPath: CheckError['rootPath'], path?: zod.Cu
         }),
     );
 
-const schemaStringsReplacers: zod.ZodType<SettingStringsReplacersCustomGen> = zod.object({
-    replaceVar: zod.string(),
-    value: zod.string(),
-});
-
 export const commonSchemaOfOptionalSettings = {
     rootPath: zod
         .string()
@@ -41,20 +36,26 @@ export const commonSchemaOfOptionalSettings = {
         .optional(),
 };
 
-const getCommonSchema = (rootPath: CheckError['rootPath']) => ({
-    pathToTemplate: zod.union([zod.string(), zod.array(zod.string())]),
+export const schemaOutputPath = {
     outputPath: zod.union([zod.string(), zod.array(zod.string())]),
+};
+
+export const getCommonSchema = (rootPath: CheckError['rootPath']) => ({
+    pathToTemplate: zod.union([zod.string(), zod.array(zod.string())]),
+    ...schemaOutputPath,
     markers: getSchemaMarkers(rootPath).optional(),
     onComplete: zod.function().args(zod.unknown()).returns(zod.void()).optional(),
 });
 
-const validateMarkerPatterns = ({
+export const validateMarkerPatterns = ({
     settings,
     pathCtx,
     ctx,
     rootPath,
 }: {
-    settings: SettingCustomGen[] | SettingCLIGenTemplate[];
+    settings:
+        | Pick<SettingCustomGen, 'markers' | 'outputPath'>[]
+        | Pick<SettingCLIGenTemplate, 'markers' | 'outputPath' | 'selectDirectory'>[];
     pathCtx?: (string | number)[];
     ctx: zod.RefinementCtx;
     rootPath: CheckError['rootPath'];
@@ -85,57 +86,3 @@ const validateMarkerPatterns = ({
         }
     });
 };
-
-export const getSchemaCustomGen = (rootPath: CheckError['rootPath']): zod.ZodType<SettingCustomGen[]> =>
-    zod
-        .array(
-            zod.object({
-                stringsReplacers: zod.union([schemaStringsReplacers, zod.array(schemaStringsReplacers)]),
-                selectDirectory: zod.undefined(),
-                ...getCommonSchema(rootPath),
-            }),
-        )
-        .superRefine((arraySettings, ctx) => {
-            validateMarkerPatterns({
-                settings: arraySettings,
-                pathCtx: [],
-                ctx,
-                rootPath,
-            });
-        });
-
-export const getSchemaCLIGen = (rootPath: CheckError['rootPath']): zod.ZodType<SettingCLIGen[]> =>
-    zod
-        .array(
-            zod.object({
-                name: zod.string(),
-                templates: zod.array(
-                    zod.object({
-                        stringsReplacers: zod.union([zod.string(), zod.array(zod.string())]),
-                        selectDirectory: zod.boolean().optional(),
-                        ...getCommonSchema(rootPath),
-                    }),
-                ),
-            }),
-        )
-        .superRefine((arraySettings, ctx) => {
-            arraySettings.forEach((setting, indexSetting) => {
-                validateMarkerPatterns({
-                    settings: setting.templates,
-                    pathCtx: [indexSetting, 'templates'],
-                    ctx,
-                    rootPath,
-                });
-            });
-        });
-
-const selectedNamesSchema = zod.object({
-    replaceVar: zod.string(),
-    value: zod.string(),
-});
-
-export const getSchemaMarkersGen = (rootPath: CheckError['rootPath']): zod.ZodType<SettingMarkersGen> =>
-    zod.object({
-        selectedNames: selectedNamesSchema.or(zod.array(selectedNamesSchema)),
-        markers: getSchemaMarkers(rootPath),
-    });
