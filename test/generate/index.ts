@@ -38,8 +38,9 @@ CLIGen(
                             pathToMarker: `./${folderForTesting}/src/components/index.ts`,
                         },
                     ],
-                    // onComplete: (result) => {
-                    //     console.log(`result >>> `, result);
+                    // onComplete: ({ init, result }) => {
+                    //     console.log('init:', init);
+                    //     console.log('result:', result);
                     // },
                 },
             ],
