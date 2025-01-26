@@ -5,7 +5,7 @@ import { z as zod } from 'zod';
 import { createErrorsZod } from '../../../utils';
 
 // Schemas
-import { commonSchemaOfOptionalSettings, getSchemaMarkersGen } from '../schemas';
+import { commonSchemaOfOptionalSettings, getSchemaMarkers } from '../schemas';
 
 // Types
 import { CreateErrorsZod } from '../../../utils/types';
@@ -15,7 +15,15 @@ import { CheckError } from '../types';
 export const checkMarkersGen = ({ settings, optionalOfSettings, rootPath }: CheckError<SettingMarkersGen, OptionalSettingsMarkersGen>) => {
     const errors: CreateErrorsZod['errors'] = [];
 
-    const schemaSettings: zod.ZodType<SettingMarkersGen> = getSchemaMarkersGen(rootPath);
+    const selectedNamesSchema = zod.object({
+        replaceVar: zod.string(),
+        value: zod.string(),
+    });
+
+    const schemaSettings: zod.ZodType<SettingMarkersGen> = zod.object({
+        selectedNames: selectedNamesSchema.or(zod.array(selectedNamesSchema)),
+        markers: getSchemaMarkers(rootPath),
+    });
 
     const schemaOptionalSettings: zod.ZodType<OptionalSettingsMarkersGen | undefined> = zod
         .object({
