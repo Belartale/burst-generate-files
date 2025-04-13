@@ -22,7 +22,7 @@ import { PROJECT_ROOT } from './constants';
 import * as typesCommon from './types';
 import * as typesActions from './actions/types';
 
-const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActions) => {
+const mainActions = ({ initSetting, setting, selectedNames, rootPath }: typesCommon.MainActions) => {
     createFiles({
         pathToTemplate: setting.pathToTemplate,
         outputPath: setting.outputPath,
@@ -38,7 +38,10 @@ const mainActions = ({ setting, selectedNames, rootPath }: typesCommon.MainActio
     }
 
     if (setting.onComplete) {
-        onComplete({ setting: setting });
+        onComplete({
+            init: initSetting,
+            result: setting,
+        });
     }
 };
 
@@ -55,7 +58,10 @@ export const customGen = (settings: typesCommon.SettingCustomGen[], optionalSett
     });
 
     settings.forEach((setting) => {
+        const settingCopy = structuredClone({ ...setting, onComplete: null });
+
         mainActions({
+            initSetting: settingCopy,
             setting: makeAbsolutePath({
                 rootPath: newRootPath,
                 setting,
@@ -87,6 +93,8 @@ export const CLIGen = async (
         let indexOfIteratorTemplate = 0;
 
         for await (const iteratorTemplate of selectedConfigItem.templates) {
+            const iteratorTemplateCopy = structuredClone({ ...iteratorTemplate, onComplete: null });
+
             const selectedNames: typesActions.GetSelectedName[] = await getSelectedName(iteratorTemplate.stringsReplacers);
 
             const iteratorTemplateWithAbsolutePaths = makeAbsolutePath({
@@ -114,6 +122,7 @@ export const CLIGen = async (
                 });
 
                 mainActions({
+                    initSetting: iteratorTemplateCopy as typesCommon.SettingCLIGenTemplateRequiredOutputPath,
                     setting: iteratorTemplateWithAbsolutePathsAndRequiredOutputPath,
                     selectedNames,
                     rootPath: newRootPath,
@@ -123,6 +132,7 @@ export const CLIGen = async (
             }
 
             mainActions({
+                initSetting: iteratorTemplateCopy as typesCommon.SettingCLIGenTemplateRequiredOutputPath,
                 setting: iteratorTemplateWithAbsolutePaths as typesCommon.SettingCLIGenTemplateRequiredOutputPath,
                 selectedNames,
                 rootPath: newRootPath,

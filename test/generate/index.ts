@@ -33,15 +33,15 @@ CLIGen(
                     selectDirectory: true,
                     markers: [
                         {
-                            pattern: '// MarkerGen re-export',
+                            pattern: /\/\/ MarkerGen re-export/,
                             markerTemplate: `${pathToTemplate}/component/.genignore/export.ts`,
                             pathToMarker: `./${folderForTesting}/src/components/index.ts`,
                         },
                     ],
-                    // onComplete: ({ init, result }) => {
-                    //     console.log('init:', init);
-                    //     console.log('result:', result);
-                    // },
+                    onComplete: ({ init, result }) => {
+                        console.log('init:', init);
+                        console.log('result:', result);
+                    },
                 },
             ],
         },
@@ -66,7 +66,7 @@ CLIGen(
     ],
     {
         rootPath: './',
-        // showFullError: true,
+        showFullError: true,
     },
 );
 

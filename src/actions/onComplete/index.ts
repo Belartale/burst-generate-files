@@ -1,8 +1,8 @@
 // Types
 import * as types from './types';
 
-export const onComplete = ({ setting }: types.OnComplete) => {
-    if (setting.onComplete) {
-        setting.onComplete(setting);
+export const onComplete = ({ init, result }: types.OnComplete) => {
+    if (result.onComplete) {
+        result.onComplete({ init, result });
     }
 };
