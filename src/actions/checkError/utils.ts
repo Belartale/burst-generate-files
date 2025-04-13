@@ -47,7 +47,7 @@ export const validateMarkerPattern = ({
 
         if (
             (typeof objectMarker.pattern === 'string' && !contentOfFile.includes(objectMarker.pattern)) ||
-            (objectMarker.pattern === RegExp(objectMarker.pattern) && objectMarker.pattern.test(contentOfFile))
+            (objectMarker.pattern === RegExp(objectMarker.pattern) && !objectMarker.pattern.test(contentOfFile))
         ) {
             ctx.addIssue({
                 code: zod.ZodIssueCode.invalid_date,
