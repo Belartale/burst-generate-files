@@ -431,24 +431,35 @@ This is the array to create lines into files.
 This is the function that will be executed after generation. If you want you can get the setting that was use. To get the object you need to use a callback.
 
 ```typescript
-onComplete: (obj) => {
-    console.log(obj);
-},
+CLIGen(
+    [
+        {
+            templates: [
+                {
+                    onComplete: ({ init, result }) => {
+                        console.log('init:', init);
+                        console.log('result:', result);
+                    },
+                },
+            ],
+        },
+    ],
+);
 ```
+
+**Note:** the `onComplete` key in the `result` object is omitted due to [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone) restrictions, which cannot serialize functions or non-cloneable objects.
 
 ## Optional settings
 
 ```typescript
 CLIGen(
     [
-        // ...
         {
             name:      "Generate new React component",
             templates: [
                 // ...
             ],
         },
-        // ...
     ],
     {
         // <= Optional settings here
