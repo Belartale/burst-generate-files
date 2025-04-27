@@ -2,5 +2,6 @@
 import * as typesCommon from '../../types';
 
 export type OnComplete = {
-    setting: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate;
+    init: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate;
+    result: typesCommon.SettingCustomGen | typesCommon.SettingCLIGenTemplate;
 };

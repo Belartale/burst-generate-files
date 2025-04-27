@@ -5,9 +5,9 @@ import { CreateMarkers, SettingsMarker } from './actions/createMarkers/types';
 // Common types
 export interface SettingCommonTypes {
     pathToTemplate: string | string[];
-    selectDirectory?: boolean; //todo remove for customGen
+    selectDirectory?: boolean;
     markers?: SettingsMarker[];
-    onComplete?: (result: unknown) => void; // todo add result type !!!
+    onComplete?: null | (({ init, result }: { init: unknown; result: unknown }) => void); // todo add types !!!
 }
 
 export type OutputPath = string | string[];
@@ -55,6 +55,7 @@ export type OptionalSettingsMarkersGen = Partial<Pick<CreateMarkers, 'rootPath'>
 
 // Function mainActions
 export type MainActions = {
+    initSetting: SettingCustomGen | SettingCLIGenTemplateRequiredOutputPath;
     setting: SettingCustomGen | SettingCLIGenTemplateRequiredOutputPath;
     selectedNames: GetSelectedName | GetSelectedName[];
     rootPath: string;
