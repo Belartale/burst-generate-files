@@ -20,15 +20,15 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            # - name: Check NPM Token
-            #   # id: check_token
-            #   run: |
-            #       if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
-            #         echo "NPM_TOKEN is not set"
-            #         exit 1
-            #       else
-            #         echo "NPM_TOKEN is set"
-            #       fi
+            - name: Check NPM Token
+              # id: check_token
+              run: |
+                  if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+                    echo "NPM_TOKEN is not set"
+                    exit 1
+                  else
+                    echo "NPM_TOKEN is set"
+                  fi
 
             - uses: googleapis/release-please-action@v4
               id: release
@@ -48,8 +48,12 @@ jobs:
               if: ${{ steps.release.outputs.release_created }}
               run: npm ci
 
-            # - name: Publish to NPM
-            #   if: ${{ steps.release.outputs.release_created }}
-            #   run: npm publish --provenance --access public
-            #   env:
-            #       NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+            - name: Build
+              if: ${{ steps.release.outputs.release_created }}
+              run: npm run build
+
+            - name: Publish to NPM
+              if: ${{ steps.release.outputs.release_created }}
+              run: npm publish --provenance --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
