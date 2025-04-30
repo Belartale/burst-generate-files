@@ -1,6 +1,6 @@
 {
     "name": "burst-generate-files",
-    "version": "0.13.1",
+    "version": "0.14.0",
     "description": "package module for generate files",
     "author": "Artur Bielan (belartale@gmail.com), Oleksandr Konik (arziburst@gmail.com)",
     "license": "Apache-2.0",
